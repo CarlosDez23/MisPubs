@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.mispubs.MainActivity;
 import com.example.mispubs.Modelo.Usuario;
 import com.example.mispubs.R;
+import com.example.mispubs.REST.APIUtils;
 import com.example.mispubs.REST.UsuarioRest;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -46,6 +47,7 @@ public class ActivityLogin extends AppCompatActivity {
         this.getSupportActionBar().hide();
 
         llamarVistas();
+        usuarioRest = APIUtils.getService();
     }
 
 
@@ -71,7 +73,10 @@ public class ActivityLogin extends AppCompatActivity {
                     break;
                 case R.id.relativeLoginBoton:
                     //Snackbar.make(v,"Botón entrar",Snackbar.LENGTH_LONG).show();
-                    comprobarUsuario();
+                    String correo = etLoginEmail.getText().toString();
+                    String password = etLoginPasssword.getText().toString();
+                    System.out.println(correo+" "+password);
+                    comprobarUsuario(correo,password);
                     break;
                 default:
                     break;
@@ -79,20 +84,23 @@ public class ActivityLogin extends AppCompatActivity {
         }
     };
 
-    private void comprobarUsuario(){
+    private void comprobarUsuario(String correo, String password){
 
-        Call<Usuario> call = usuarioRest.buscarPorCorreoPass(etLoginEmail.getText().toString(),etLoginPasssword.getText().toString());
+        Call<Usuario> call = usuarioRest.buscarPorCorreoPass(correo,password);
 
         call.enqueue(new Callback<Usuario>() {
             @Override
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                 if (response.isSuccessful()){
+                    Snackbar.make(getActividad().getWindow().getDecorView().getRootView(), "entrando", Snackbar.LENGTH_LONG).show();
                     if (response.code() == 200){
                         Snackbar.make(getActividad().getWindow().getDecorView().getRootView(), "TODO OK", Snackbar.LENGTH_LONG).show();
                         startActivity(new Intent(getActividad(), MainActivity.class));
                     }else{
                         Snackbar.make(getActividad().getWindow().getDecorView().getRootView(), "NO REGISTRADO", Snackbar.LENGTH_LONG).show();
                     }
+                }else {
+                    Snackbar.make(getActividad().getWindow().getDecorView().getRootView(), "mal", Snackbar.LENGTH_LONG).show();
                 }
             }
 

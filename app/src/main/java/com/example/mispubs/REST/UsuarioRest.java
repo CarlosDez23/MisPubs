@@ -8,7 +8,7 @@ import retrofit2.http.Path;
 
 public interface UsuarioRest {
 
-    @GET("usuario/{correo}/{password}")
+    @GET("usuarios/{correo}/{password}")
     Call<Usuario> buscarPorCorreoPass(@Path("correo") String correo, @Path("password") String password);
 
 }
