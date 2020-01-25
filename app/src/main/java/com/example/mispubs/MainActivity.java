@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         System.out.println("Commit inicial de Carlos");
         System.out.println("Commit inicial de Adrian");
+        System.out.println("Commit Splash");
     }
 
 }
