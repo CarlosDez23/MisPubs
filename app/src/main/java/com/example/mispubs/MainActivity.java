@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
         System.out.println("Commit inicial de Carlos");
+        System.out.println("Commit inicial de Adrian");
     }
 
 }
