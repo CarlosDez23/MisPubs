@@ -1,6 +1,6 @@
 package com.example.mispubs.ui.Login;
 
-import androidx.lifecycle.ViewModelProviders;
+
 
 import android.os.Bundle;
 
@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.example.mispubs.R;
 
@@ -30,7 +31,12 @@ public class FragmentRegistro extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+        ((ActivityLogin)getActivity()).getSupportActionBar().show();
 
     }
+
+
 
 }
