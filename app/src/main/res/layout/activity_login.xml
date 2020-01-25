@@ -22,6 +22,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp">
 
+
             <TextView
                 android:id="@+id/nice_to_see_you_text_view"
                 android:layout_width="wrap_content"
