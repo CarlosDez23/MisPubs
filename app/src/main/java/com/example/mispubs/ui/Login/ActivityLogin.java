@@ -1,4 +1,4 @@
-package com.example.mispubs;
+package com.example.mispubs.ui.Login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.mispubs.R;
 import com.google.android.material.snackbar.Snackbar;
 
 public class ActivityLogin extends AppCompatActivity {
