@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mispubs.MainActivity;
 import com.example.mispubs.Modelo.Usuario;
@@ -92,7 +93,7 @@ public class ActivityLogin extends AppCompatActivity {
             @Override
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                 if (response.isSuccessful()){
-                    Snackbar.make(getActividad().getWindow().getDecorView().getRootView(), "entrando", Snackbar.LENGTH_LONG).show();
+                    Toast.makeText(ActivityLogin.this, "Entrando", Toast.LENGTH_SHORT).show();
                     if (response.code() == 200){
                         Snackbar.make(getActividad().getWindow().getDecorView().getRootView(), "TODO OK", Snackbar.LENGTH_LONG).show();
                         startActivity(new Intent(getActividad(), MainActivity.class));
@@ -100,12 +101,13 @@ public class ActivityLogin extends AppCompatActivity {
                         Snackbar.make(getActividad().getWindow().getDecorView().getRootView(), "NO REGISTRADO", Snackbar.LENGTH_LONG).show();
                     }
                 }else {
-                    Snackbar.make(getActividad().getWindow().getDecorView().getRootView(), "mal", Snackbar.LENGTH_LONG).show();
+                    Toast.makeText(ActivityLogin.this, "Mal", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Usuario> call, Throwable t) {
+                Toast.makeText(ActivityLogin.this, "Mal", Toast.LENGTH_SHORT).show();
                 Log.e("ERROR: ", t.getMessage());
             }
         });
