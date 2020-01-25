@@ -7,4 +7,6 @@
     <color name="black_overlay">#66000000</color>
     <color name="colorCardViewBackground">#E9EAED</color>
     <color name="colorTitle">#313131</color>
+    <color name="gradient1">#D54FFA</color>
+    <color name="gradient2">#6D39F2</color>
 </resources>

@@ -11,6 +11,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
+
         >
 
         <RelativeLayout
@@ -25,7 +27,7 @@
                 android:layout_marginStart="15dp"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="Hola de nuevo"
+                android:text="Bienvenido a misPubs"
                 android:textColor="@color/black_overlay"
                 android:textSize="30dp"
                 android:textStyle="bold" />
@@ -124,38 +126,44 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/login_button_card_view"
-                android:layout_width="130dp"
-                android:layout_height="45dp"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="@dimen/button_height"
                 android:layout_below="@+id/login_input_parent"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="10dp"
+                android:layout_centerHorizontal="true"
                 app:cardBackgroundColor="@color/colorPrimary"
-                app:cardCornerRadius="22.5dp"
-                app:cardElevation="0dp">
+                app:cardCornerRadius="@dimen/button_corner_radius"
+                app:cardElevation="0dp"
+                android:layout_marginTop="20dp">
 
-                <RelativeLayout
-                    android:id="@+id/login_button"
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:clickable="false"
-                    android:focusable="false">
+                    android:background="@drawable/gradient_background_1">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:text="Login"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="18dp"
-                        android:textStyle="bold" />
 
-                </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/login_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:ellipsize="end"
+                            android:lines="1"
+                            android:text="Login"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/button_text_size"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+                </FrameLayout>
 
             </androidx.cardview.widget.CardView>
 
