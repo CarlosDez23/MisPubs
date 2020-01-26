@@ -72,7 +72,7 @@ android:layout_height="match_parent">
     <androidx.cardview.widget.CardView
         android:id="@+id/cvPerfilInformacion"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:layout_below="@id/profile_layout"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="30dp"
@@ -89,10 +89,11 @@ android:layout_height="match_parent">
         android:layout_centerHorizontal="true"
         app:cardBackgroundColor="@color/colorPrimary"
         app:cardCornerRadius="25dp"
-        app:cardElevation="0dp"
+        app:cardElevation="5dp"
         android:layout_below="@id/cvPerfilInformacion"
         android:layout_marginTop="20dp"
         android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="15dp">
 
         <FrameLayout
