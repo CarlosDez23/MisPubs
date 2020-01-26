@@ -252,7 +252,7 @@ public class FragmentRegistro extends Fragment {
                                 } else {
                                     Toast.makeText(getContext(),
                                             "Ya existe un usuario con ese correo",
-                                            Toast.LENGTH_LONG).show();
+                                             Toast.LENGTH_LONG).show();
                                 }
                             }
 
