@@ -103,7 +103,7 @@ android:layout_height="match_parent">
 
 
             <RelativeLayout
-                android:id="@+id/relativeLoginBoton"
+                android:id="@+id/btnPerfilEliminarUsuario"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clickable="true"
