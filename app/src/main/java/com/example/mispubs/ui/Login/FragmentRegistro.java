@@ -1,7 +1,6 @@
 package com.example.mispubs.ui.Login;
 
 
-
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,6 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,23 +22,34 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mispubs.R;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.mispubs.REST.APIUtils;
+import com.example.mispubs.REST.UsuarioRest;
+import com.example.mispubs.Modelo.Usuario;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class FragmentRegistro extends Fragment {
 
+    //Elementos de la interfaz
     private EditText email_input, password_input, usuario_input;
     private TextView email_error, password_error, usuario_error;
-    private CardView min8caraacteres, una_mayus,un_numero, emailok;
+    private CardView min8caraacteres, una_mayus, un_numero, emailok;
     private RelativeLayout btnRegistro;
     private CardView btnRegistroParent;
 
+    //Para validar el formulario
     private boolean
-    tieneCaracteres = false,
-    tieneMayus = false,
-    tieneNumero = false,
-    emailCorrecto = false,
-    esApto = false;
+            tieneCaracteres = false,
+            tieneMayus = false,
+            tieneNumero = false,
+            emailCorrecto = false,
+            esApto = false;
 
+    //Para consumir el servicio REST
+    private UsuarioRest usuarioRest;
 
 
     public static FragmentRegistro newInstance() {
@@ -58,10 +69,11 @@ public class FragmentRegistro extends Fragment {
         llamarVistas();
         inputChange();
         setOnClickRegistrarse();
+        usuarioRest = APIUtils.getService();
 
     }
 
-    private void llamarVistas(){
+    private void llamarVistas() {
 
         email_input = getView().findViewById(R.id.email_input_field);
         email_error = getView().findViewById(R.id.email_error_text);
@@ -85,7 +97,7 @@ public class FragmentRegistro extends Fragment {
         if (email.length() > 0 && email_error.getVisibility() == View.VISIBLE) {
             email_error.setVisibility(View.GONE);
         }
-        if(usuario.length() > 0 && usuario_error.getVisibility() == View.VISIBLE){
+        if (usuario.length() > 0 && usuario_error.getVisibility() == View.VISIBLE) {
             usuario_error.setVisibility(View.GONE);
         }
     }
@@ -107,7 +119,7 @@ public class FragmentRegistro extends Fragment {
                 email = email_input.getText().toString(),
                 usuario = usuario_input.getText().toString();
 
-        checkEmpty(email, password,usuario);
+        checkEmpty(email, password, usuario);
 
         if (password.length() >= 8) {
             tieneCaracteres = true;
@@ -131,10 +143,10 @@ public class FragmentRegistro extends Fragment {
             un_numero.setCardBackgroundColor(Color.parseColor(getString(R.color.colorCheckNo)));
         }
 
-        if (email.matches("^(.+)@(.+)$")){
+        if (email.matches("^(.+)@(.+)$")) {
             emailCorrecto = true;
             emailok.setCardBackgroundColor(Color.parseColor(getString(R.color.colorCheckOk)));
-        }else{
+        } else {
             emailCorrecto = false;
             emailok.setCardBackgroundColor(Color.parseColor(getString(R.color.colorCheckNo)));
         }
@@ -184,13 +196,14 @@ public class FragmentRegistro extends Fragment {
             public void onClick(View view) {
                 String email = email_input.getText().toString(),
                         password = password_input.getText().toString(),
-                                usuario = usuario_input.getText().toString();
+                        usuario = usuario_input.getText().toString();
 
                 if (email.length() > 0 && password.length() > 0 && usuario.length() > 0) {
                     if (esApto) {
-                        Toast.makeText(getContext(), "REGISTRADO", Toast.LENGTH_LONG).show();
-                    }else{
-                        Toast.makeText(getContext(),"Se deben cumplir todos los requisitos",
+                        Usuario u = new Usuario(usuario, email, password, null);
+                        insertarUsuario(u);
+                    } else {
+                        Toast.makeText(getContext(), "Se deben cumplir todos los requisitos",
                                 Toast.LENGTH_LONG).show();
                     }
                 } else {
@@ -200,7 +213,7 @@ public class FragmentRegistro extends Fragment {
                     if (password.length() == 0) {
                         password_error.setVisibility(View.VISIBLE);
                     }
-                    if (usuario.length() == 0){
+                    if (usuario.length() == 0) {
                         usuario_error.setVisibility(View.VISIBLE);
                     }
                 }
@@ -209,7 +222,56 @@ public class FragmentRegistro extends Fragment {
     }
 
 
+    /**
+     * Método para insertar un usuario utilizando el servicio REST. Primero comprobamos
+     * que no existe un usuario con ese nombre de usuario en la BBDD. Si no existe insertamos
+     */
 
+    private void insertarUsuario(Usuario usuario) {
+        Call<Usuario> call = usuarioRest.buscarPorNombreUsuario(usuario.getNombre());
+        call.enqueue(new Callback<Usuario>() {
+            @Override
+            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                if (response.isSuccessful()) {
+                    if (response.code() == 200) {
+                        Toast.makeText(getContext(), "El usuario ya existe",
+                                Toast.LENGTH_LONG).show();
+                    } else {
+                        Call<Usuario> callInsert = usuarioRest.insertarUsuario(usuario);
+                        callInsert.enqueue(new Callback<Usuario>() {
+                            @Override
+                            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
 
+                                if (response.code() == 200) {
+                                    Toast.makeText(getContext(), "Usuario registrado",
+                                            Toast.LENGTH_LONG).show();
 
+                                    getFragmentManager().beginTransaction()
+                                            .replace(R.id.fragment, new FragmentLogin()).commit();
+
+                                } else {
+                                    Toast.makeText(getContext(),
+                                            "Ya existe un usuario con ese correo",
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Usuario> call, Throwable t) {
+                                Log.e("ERROR: ", t.getMessage());
+                            }
+                        });
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Usuario> call, Throwable t) {
+                Toast.makeText(getContext(), "Mal", Toast.LENGTH_SHORT).show();
+                Log.e("ERROR: ", t.getMessage());
+            }
+        });
+
+    }
 }
