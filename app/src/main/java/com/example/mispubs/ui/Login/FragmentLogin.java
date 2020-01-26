@@ -102,8 +102,10 @@ public class FragmentLogin extends Fragment {
                 if (response.isSuccessful()){
                     Toast.makeText(getContext(), "Entrando", Toast.LENGTH_SHORT).show();
                     if (response.code() == 200){
-                        Snackbar.make(getView(), "TODO OK", Snackbar.LENGTH_LONG).show();
-                        startActivity(new Intent(getActivity(), MainActivity.class));
+                        Usuario usuario = response.body();
+                        Intent i = new Intent(getActivity(),MainActivity.class);
+                        i.putExtra("usuario", usuario);
+                        startActivity(i);
                     }else{
                         Snackbar.make(getView(), "NO REGISTRADO", Snackbar.LENGTH_LONG).show();
                     }

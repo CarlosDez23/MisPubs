@@ -3,7 +3,9 @@ package com.example.mispubs.Modelo;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Usuario {
+import java.io.Serializable;
+
+public class Usuario implements Serializable {
 
     @SerializedName("id")
     @Expose
