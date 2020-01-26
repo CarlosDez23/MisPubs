@@ -3,23 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_perfil">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.mispubs.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_perfil"
+        android:name="com.example.mispubs.ui.Perfil.FragmentPerfil"
+        android:label="@string/title_perfil"
+        tools:layout="@layout/fragment_perfil" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.mispubs.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
-
+        android:id="@+id/navigation_pubs"
+        android:name="com.example.mispubs.ui.Pubs.FragmentPubs"
+        android:label="@string/title_pubs"
+        tools:layout="@layout/fragment_pubs" />
+<!--
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.mispubs.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+        -->
 </navigation>

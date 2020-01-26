@@ -9,8 +9,11 @@
     <color name="colorTitle">#313131</color>
     <color name="gradient1">#D54FFA</color>
     <color name="gradient2">#6D39F2</color>
+    <color name="gradient3">#D32F2F</color>
+    <color name="gradient4">#E69419</color>
     <color name="colorCheckOk">#60D486</color>
     <color name="colorCheckNo">#838287</color>
     <color name="colorError">#F36D6C</color>
     <color name="colorBackgroundText">#DDDBDF</color>
+    <color name="colorBoton">#9343A8</color>
 </resources>
