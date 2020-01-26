@@ -16,19 +16,19 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mispubs.R;
+import com.google.android.material.snackbar.Snackbar;
 
 public class FragmentRegistro extends Fragment {
 
-    private EditText email_input, password_input;
-    private TextView email_error, password_error;
-    private CardView min8caraacteres, una_mayus,un_numero;
+    private EditText email_input, password_input, usuario_input;
+    private TextView email_error, password_error, usuario_error;
+    private CardView min8caraacteres, una_mayus,un_numero, emailok;
     private RelativeLayout btnRegistro;
     private CardView btnRegistroParent;
 
@@ -36,6 +36,7 @@ public class FragmentRegistro extends Fragment {
     tieneCaracteres = false,
     tieneMayus = false,
     tieneNumero = false,
+    emailCorrecto = false,
     esApto = false;
 
 
@@ -66,26 +67,32 @@ public class FragmentRegistro extends Fragment {
         email_error = getView().findViewById(R.id.email_error_text);
         password_error = getView().findViewById(R.id.password_error_text);
         password_input = getView().findViewById(R.id.password_input_field);
+        usuario_input = getView().findViewById(R.id.usuario_input_field);
+        usuario_error = getView().findViewById(R.id.usuario_error_text);
         min8caraacteres = getView().findViewById(R.id.p_item_1_icon_parent);
         una_mayus = getView().findViewById(R.id.p_item_2_icon_parent);
         un_numero = getView().findViewById(R.id.p_item_3_icon_parent);
+        emailok = getView().findViewById(R.id.p_item_4_icon_parent);
         btnRegistro = getView().findViewById(R.id.registration_button);
         btnRegistroParent = getView().findViewById(R.id.registration_button_parent);
 
     }
 
-    private void checkEmpty(String email, String password) {
+    private void checkEmpty(String email, String password, String usuario) {
         if (password.length() > 0 && password_error.getVisibility() == View.VISIBLE) {
             password_error.setVisibility(View.GONE);
         }
         if (email.length() > 0 && email_error.getVisibility() == View.VISIBLE) {
             email_error.setVisibility(View.GONE);
         }
+        if(usuario.length() > 0 && usuario_error.getVisibility() == View.VISIBLE){
+            usuario_error.setVisibility(View.GONE);
+        }
     }
 
     @SuppressLint("ResourceType")
     private void checkAllData(String email) {
-        if (tieneCaracteres && tieneMayus && tieneNumero && email.length() > 0) {
+        if (tieneCaracteres && tieneMayus && tieneNumero && emailCorrecto && email.length() > 0) {
             esApto = true;
             btnRegistroParent.setCardBackgroundColor(Color.parseColor(getString(R.color.colorCheckOk)));
         } else {
@@ -96,9 +103,11 @@ public class FragmentRegistro extends Fragment {
 
     @SuppressLint("ResourceType")
     private void registrationDataCheck() {
-        String password = password_input.getText().toString(), email = email_input.getText().toString();
+        String password = password_input.getText().toString(),
+                email = email_input.getText().toString(),
+                usuario = usuario_input.getText().toString();
 
-        checkEmpty(email, password);
+        checkEmpty(email, password,usuario);
 
         if (password.length() >= 8) {
             tieneCaracteres = true;
@@ -120,6 +129,14 @@ public class FragmentRegistro extends Fragment {
         } else {
             tieneNumero = false;
             un_numero.setCardBackgroundColor(Color.parseColor(getString(R.color.colorCheckNo)));
+        }
+
+        if (email.matches("^(.+)@(.+)$")){
+            emailCorrecto = true;
+            emailok.setCardBackgroundColor(Color.parseColor(getString(R.color.colorCheckOk)));
+        }else{
+            emailCorrecto = false;
+            emailok.setCardBackgroundColor(Color.parseColor(getString(R.color.colorCheckNo)));
         }
 
         checkAllData(email);
@@ -165,11 +182,16 @@ public class FragmentRegistro extends Fragment {
         btnRegistro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = email_input.getText().toString(), password = password_input.getText().toString();
+                String email = email_input.getText().toString(),
+                        password = password_input.getText().toString(),
+                                usuario = usuario_input.getText().toString();
 
-                if (email.length() > 0 && password.length() > 0) {
+                if (email.length() > 0 && password.length() > 0 && usuario.length() > 0) {
                     if (esApto) {
                         Toast.makeText(getContext(), "REGISTRADO", Toast.LENGTH_LONG).show();
+                    }else{
+                        Toast.makeText(getContext(),"Se deben cumplir todos los requisitos",
+                                Toast.LENGTH_LONG).show();
                     }
                 } else {
                     if (email.length() == 0) {
@@ -177,6 +199,9 @@ public class FragmentRegistro extends Fragment {
                     }
                     if (password.length() == 0) {
                         password_error.setVisibility(View.VISIBLE);
+                    }
+                    if (usuario.length() == 0){
+                        usuario_error.setVisibility(View.VISIBLE);
                     }
                 }
             }
