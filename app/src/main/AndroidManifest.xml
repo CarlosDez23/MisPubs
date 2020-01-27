@@ -20,12 +20,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.Login.ActivityLogin">
-
-        </activity>
-        <activity android:name=".ui.Login.Auxiliar" android:label="Registro">
         </activity>
         <activity
             android:name=".MainActivity"
+            android:noHistory="true"
             android:label="@string/app_name" />
     </application>
 
