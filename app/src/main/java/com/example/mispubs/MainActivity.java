@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         usuario = (Usuario) this.getIntent().getExtras().getSerializable("usuario");
         System.out.println("Merge pubs Carlos");
+        System.out.println("Merge update Adrian");
     }
 
 }
