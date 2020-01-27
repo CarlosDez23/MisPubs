@@ -106,6 +106,7 @@ public class FragmentLogin extends Fragment {
                         Intent i = new Intent(getActivity(),MainActivity.class);
                         i.putExtra("usuario", usuario);
                         startActivity(i);
+                        getActivity().finish();
                     }else{
                         Snackbar.make(getView(), "NO REGISTRADO", Snackbar.LENGTH_LONG).show();
                     }
@@ -121,6 +122,4 @@ public class FragmentLogin extends Fragment {
             }
         });
     }
-
-
 }

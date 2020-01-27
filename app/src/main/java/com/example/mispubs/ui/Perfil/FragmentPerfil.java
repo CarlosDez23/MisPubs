@@ -93,6 +93,7 @@ public class FragmentPerfil extends Fragment {
                         Toast.makeText(getContext(),response.body().getNombre()+" eliminado",
                                 Toast.LENGTH_LONG).show();
                         startActivity(new Intent(getActivity(), ActivityLogin.class));
+                        getActivity().finish();
                     }
                 }
 
