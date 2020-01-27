@@ -7,6 +7,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface UsuarioRest {
@@ -22,5 +23,8 @@ public interface UsuarioRest {
 
     @DELETE("usuarios/{id}")
     Call<Usuario> borrarUsuario(@Path("id") Integer id);
+
+    @PUT("usuarios/{id}")
+    Call<Usuario> modificarUsuario(@Path("id") Integer id, @Body Usuario usuario);
 
 }
