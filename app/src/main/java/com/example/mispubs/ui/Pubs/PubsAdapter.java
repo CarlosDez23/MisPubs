@@ -102,7 +102,6 @@ public class PubsAdapter extends RecyclerView.Adapter<PubsAdapter.ViewHolder> {
             MenuInflater inflater = activity.getMenuInflater();
             inflater.inflate(R.menu.popup_menu, menu);
 
-
         }
     }
 }
