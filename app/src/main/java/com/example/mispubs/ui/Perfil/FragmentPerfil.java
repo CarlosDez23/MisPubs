@@ -2,9 +2,14 @@ package com.example.mispubs.ui.Perfil;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,8 +38,9 @@ public class FragmentPerfil extends Fragment {
     private UsuarioRest usuarioRest;
 
     //Para la interfaz
-    private TextView tvPerfilNombre;
+    private EditText etPerfilNombre, etPerfilCorreo, etPerfilPassword;
     private RelativeLayout btnPerfilEliminarUsuario;
+    private ImageView imageViewEdit, imageViewModificar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -56,10 +62,19 @@ public class FragmentPerfil extends Fragment {
 
     private void llamarVistas(){
 
-        this.tvPerfilNombre = getView().findViewById(R.id.name);
-        this.tvPerfilNombre.setText(usuario.getNombre());
+        this.etPerfilNombre = getView().findViewById(R.id.etPerfilNombre);
+        this.etPerfilNombre.setText(usuario.getNombre());
+        this.etPerfilCorreo = getView().findViewById(R.id.etPerfilCorreo);
+        this.etPerfilCorreo.setText("Correo: " + usuario.getCorreo());
+        this.etPerfilPassword = getView().findViewById(R.id.etPerfilPassword);
+        this.etPerfilPassword.setText("Contraseña: " + usuario.getPassword());
         this.btnPerfilEliminarUsuario = getView().findViewById(R.id.btnPerfilEliminarUsuario);
         this.btnPerfilEliminarUsuario.setOnClickListener(listenerBotones);
+        this.imageViewEdit = getView().findViewById(R.id.edit);
+        this.imageViewEdit.setOnClickListener(listenerBotones);
+        this.imageViewModificar = getView().findViewById(R.id.ivPerfilModificar);
+        this.imageViewModificar.setOnClickListener(listenerBotones);
+
     }
 
 
@@ -72,6 +87,34 @@ public class FragmentPerfil extends Fragment {
                     System.out.println(usuario.toString());
                     eliminarUsuario();
                     break;
+                case R.id.edit:
+                    //ponemos invisible el boton pulsado, mostramos el de modificar y habilitamos los campos
+                    imageViewEdit.setVisibility(View.INVISIBLE);
+                    imageViewModificar.setVisibility(View.VISIBLE);
+                    etPerfilNombre.setEnabled(true);
+                    etPerfilCorreo.setEnabled(true);
+                    etPerfilPassword.setEnabled(true);
+
+
+                    break;
+                case R.id.ivPerfilModificar:
+                    //ponemos invisible el boton pulsado, mostramos el de editar y deshabilitamos los campos
+                    imageViewModificar.setVisibility(View.INVISIBLE);
+                    imageViewEdit.setVisibility(View.VISIBLE);
+                    String nombre = etPerfilNombre.getText().toString(),
+                            email = etPerfilCorreo.getText().toString(),
+                            password = etPerfilPassword.getText().toString();
+
+                    Usuario u = new Usuario(nombre, email, password, null);
+                    u.setId(usuario.getId());
+                    modificarUsuario(u);
+                    usuario.setCorreo(u.getCorreo());
+                    usuario.setNombre(u.getNombre());
+                    usuario.setPassword(u.getPassword());
+                    etPerfilNombre.setEnabled(false);
+                    etPerfilCorreo.setEnabled(false);
+                    etPerfilPassword.setEnabled(false);
+
                 default:
                     break;
             }
@@ -104,6 +147,25 @@ public class FragmentPerfil extends Fragment {
             @Override
             public void onFailure(Call<Usuario> call, Throwable t) {
                 System.out.println("Mal");
+            }
+        });
+
+    }
+
+    private void modificarUsuario(Usuario user){
+        Call<Usuario> call = usuarioRest.modificarUsuario(user.getId(), user);
+        call.enqueue(new Callback<Usuario>() {
+            @Override
+            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                System.out.println("Modificando");
+                if (response.code() == 200) {
+                    Toast.makeText(getContext(), "Usuario actualizado",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<Usuario> call, Throwable t) {
+                Log.e("ERROR: ", t.getMessage());
             }
         });
 
