@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.mispubs.MainActivity;
 import com.example.mispubs.Modelo.Usuario;
 import com.example.mispubs.R;
 import com.example.mispubs.REST.APIUtils;
@@ -45,10 +46,11 @@ public class FragmentPerfil extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        usuario = (Usuario) getActivity().getIntent().getExtras().getSerializable("usuario");
-
-        llamarVistas();
+        //Cojemos el objeto usuario
+        usuario = MainActivity.getUsuario();
         usuarioRest = APIUtils.getService();
+        llamarVistas();
+
 
     }
 
