@@ -89,40 +89,59 @@ public class FragmentPerfil extends Fragment {
                     break;
                 case R.id.edit:
                     //ponemos invisible el boton pulsado, mostramos el de modificar y habilitamos los campos
-                    imageViewEdit.setVisibility(View.INVISIBLE);
-                    imageViewModificar.setVisibility(View.VISIBLE);
-                    etPerfilNombre.setEnabled(true);
-                    etPerfilCorreo.setEnabled(true);
-                    etPerfilPassword.setEnabled(true);
-
-
-
-
+                    modoActualizar(true);
                     break;
                 case R.id.ivPerfilModificar:
                     //ponemos invisible el boton pulsado, mostramos el de editar y deshabilitamos los campos
-                    imageViewModificar.setVisibility(View.INVISIBLE);
-                    imageViewEdit.setVisibility(View.VISIBLE);
-                    String nombre = etPerfilNombre.getText().toString(),
-                            email = etPerfilCorreo.getText().toString(),
-                            password = etPerfilPassword.getText().toString();
-
-                    Usuario u = new Usuario(nombre, email, password, null);
-                    u.setId(usuario.getId());
-                    modificarUsuario(u);
-                    usuario.setCorreo(u.getCorreo());
-                    usuario.setNombre(u.getNombre());
-                    usuario.setPassword(u.getPassword());
-                    etPerfilNombre.setEnabled(false);
-                    etPerfilCorreo.setEnabled(false);
-                    etPerfilPassword.setEnabled(false);
-
+                    modoActualizar(false);
+                    crearActualizarUsuario();
                 default:
                     break;
             }
 
         }
     };
+
+    /**
+     * Metodo encargado de crear un usuario, para modificar el usuario de la sesion en la base de datos y en la sesion
+     */
+    private void crearActualizarUsuario(){
+        String
+                nombre = etPerfilNombre.getText().toString(),
+                email = etPerfilCorreo.getText().toString(),
+                password = etPerfilPassword.getText().toString();
+
+        Usuario u = new Usuario(nombre, email, password, null);
+        u.setId(usuario.getId());
+
+        usuario.setCorreo(u.getCorreo());
+        usuario.setNombre(u.getNombre());
+        usuario.setPassword(u.getPassword());
+
+        modificarUsuario(u);
+
+    }
+
+    /**
+     * Modo que utilizaremos para rellenar los campos del perfil de usuario y asi modificarlo
+     * @param modo
+     */
+    private void modoActualizar( boolean modo){
+
+        etPerfilNombre.setEnabled(modo);
+        etPerfilCorreo.setEnabled(modo);
+        etPerfilPassword.setEnabled(modo);
+
+        if (modo){
+            imageViewEdit.setVisibility(View.INVISIBLE);
+            imageViewModificar.setVisibility(View.VISIBLE);
+        }else{
+            imageViewModificar.setVisibility(View.INVISIBLE);
+            imageViewEdit.setVisibility(View.VISIBLE);
+        }
+
+    }
+
 
     /**
      * Eliminamos un usuario, el servicio ya se encarga de comprobar si existe
@@ -154,6 +173,10 @@ public class FragmentPerfil extends Fragment {
 
     }
 
+    /**
+     * Modificamos el usuario
+     * @param user
+     */
     private void modificarUsuario(Usuario user){
         Call<Usuario> call = usuarioRest.modificarUsuario(user.getId(), user);
         call.enqueue(new Callback<Usuario>() {
