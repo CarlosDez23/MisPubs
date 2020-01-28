@@ -57,7 +57,6 @@ public class FragmentPerfil extends Fragment {
         usuarioRest = APIUtils.getService();
         llamarVistas();
 
-
     }
 
     private void llamarVistas(){
@@ -65,9 +64,9 @@ public class FragmentPerfil extends Fragment {
         this.etPerfilNombre = getView().findViewById(R.id.etPerfilNombre);
         this.etPerfilNombre.setText(usuario.getNombre());
         this.etPerfilCorreo = getView().findViewById(R.id.etPerfilCorreo);
-        this.etPerfilCorreo.setText("Correo: " + usuario.getCorreo());
+        this.etPerfilCorreo.setText(usuario.getCorreo());
         this.etPerfilPassword = getView().findViewById(R.id.etPerfilPassword);
-        this.etPerfilPassword.setText("Contraseña: " + usuario.getPassword());
+        this.etPerfilPassword.setText(usuario.getPassword());
         this.btnPerfilEliminarUsuario = getView().findViewById(R.id.btnPerfilEliminarUsuario);
         this.btnPerfilEliminarUsuario.setOnClickListener(listenerBotones);
         this.imageViewEdit = getView().findViewById(R.id.edit);
@@ -98,7 +97,6 @@ public class FragmentPerfil extends Fragment {
                 default:
                     break;
             }
-
         }
     };
 
@@ -139,9 +137,7 @@ public class FragmentPerfil extends Fragment {
             imageViewModificar.setVisibility(View.INVISIBLE);
             imageViewEdit.setVisibility(View.VISIBLE);
         }
-
     }
-
 
     /**
      * Eliminamos un usuario, el servicio ya se encarga de comprobar si existe
@@ -170,7 +166,6 @@ public class FragmentPerfil extends Fragment {
                 System.out.println("Mal");
             }
         });
-
     }
 
     /**
@@ -193,6 +188,5 @@ public class FragmentPerfil extends Fragment {
                 Log.e("ERROR: ", t.getMessage());
             }
         });
-
     }
 }
