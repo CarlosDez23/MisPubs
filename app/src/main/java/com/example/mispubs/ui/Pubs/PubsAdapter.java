@@ -2,15 +2,14 @@ package com.example.mispubs.ui.Pubs;
 
 import android.app.Activity;
 import android.content.Context;
-import android.text.Layout;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -57,11 +56,32 @@ public class PubsAdapter extends RecyclerView.Adapter<PubsAdapter.ViewHolder> {
         final Pub pubLista = listaPubs.get(position);
         holder.tvPubsNombre.setText(pubLista.getNombre());
         holder.tvPubsEstilo.setText(pubLista.getEstilo());
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.ivMenu.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                setPosition(holder.getAdapterPosition());
-                return false;
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(context, holder.ivMenu);
+                popupMenu.inflate(R.menu.popup_menu);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.itemmenu1:
+                                Toast.makeText(context,"Ver "+pubLista.getNombre(),Toast.LENGTH_LONG).show();
+                                break;
+                            case R.id.itemmenu2:
+                                Toast.makeText(context,"Modificar "+pubLista.getNombre(),Toast.LENGTH_LONG).show();
+                                break;
+                            case R.id.itemmenu3:
+                                Toast.makeText(context,"Borrar "+pubLista.getNombre(),Toast.LENGTH_LONG).show();
+                                break;
+                            default:
+                                break;
+
+                        }
+                        return false;
+                    }
+                });
+                popupMenu.show();
             }
         });
 
@@ -78,7 +98,7 @@ public class PubsAdapter extends RecyclerView.Adapter<PubsAdapter.ViewHolder> {
         super.onViewRecycled(holder);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView ivPubs;
         private TextView tvPubsNombre;
@@ -93,15 +113,6 @@ public class PubsAdapter extends RecyclerView.Adapter<PubsAdapter.ViewHolder> {
             this.tvPubsEstilo = itemView.findViewById(R.id.tvPubsEstilo);
             this.ivMenu = itemView.findViewById(R.id.ivMenu);
             relativePubs = itemView.findViewById(R.id.relativePubs);
-            itemView.setOnCreateContextMenuListener(this);
-
-        }
-
-        @Override
-        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            MenuInflater inflater = activity.getMenuInflater();
-            inflater.inflate(R.menu.popup_menu, menu);
-
         }
     }
 }

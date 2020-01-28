@@ -50,8 +50,6 @@ public class FragmentPubs extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         pubRest = APIUtils.getServicePubs();
         llamarVistas();
-        registerForContextMenu(recyclerView);
-
 
     }
 
@@ -61,31 +59,6 @@ public class FragmentPubs extends Fragment {
         listarPubs();
     }
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        int position = -1;
-        try {
-            position = ((PubsAdapter)recyclerView.getAdapter()).getPosition();
-        } catch (Exception e) {
-            Log.d(TAG, e.getLocalizedMessage(), e);
-            return super.onContextItemSelected(item);
-        }
-        switch (item.getItemId()) {
-            case R.id.itemmenu1:
-                Toast.makeText(getContext(),"Ver "+listaPubs.get(position).getNombre(),Toast.LENGTH_LONG).show();
-                break;
-            case R.id.itemmenu2:
-                Toast.makeText(getContext(),"Modificar "+listaPubs.get(position).getNombre(),Toast.LENGTH_LONG).show();
-                break;
-            case R.id.itemmenu3:
-                Toast.makeText(getContext(),"Borrar "+listaPubs.get(position).getNombre(),Toast.LENGTH_LONG).show();
-                break;
-            default:
-                break;
-
-        }
-        return super.onContextItemSelected(item);
-    }
 
 
     /**
