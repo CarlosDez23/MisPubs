@@ -96,6 +96,8 @@ public class FragmentPerfil extends Fragment {
                     etPerfilPassword.setEnabled(true);
 
 
+
+
                     break;
                 case R.id.ivPerfilModificar:
                     //ponemos invisible el boton pulsado, mostramos el de editar y deshabilitamos los campos
