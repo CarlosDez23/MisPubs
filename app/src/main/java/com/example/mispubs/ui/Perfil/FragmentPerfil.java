@@ -94,6 +94,7 @@ public class FragmentPerfil extends Fragment {
                     //ponemos invisible el boton pulsado, mostramos el de editar y deshabilitamos los campos
                     modoActualizar(false);
                     crearActualizarUsuario();
+                    break;
                 default:
                     break;
             }
