@@ -84,7 +84,12 @@ public class FragmentLogin extends Fragment {
                     String correo = etLoginEmail.getText().toString();
                     String password = etLoginPasssword.getText().toString();
                     System.out.println(correo+" "+password);
-                    comprobarUsuario(correo,password);
+                    if (correo.isEmpty() || password.isEmpty()){
+                        Toast.makeText(getContext(), "Debes rellenar todos los campos", Toast.LENGTH_SHORT).show();
+                    }else{
+                        comprobarUsuario(correo,password);
+                    }
+
                     break;
                 default:
                     break;
@@ -100,7 +105,7 @@ public class FragmentLogin extends Fragment {
             @Override
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                 if (response.isSuccessful()){
-                    Toast.makeText(getContext(), "Entrando", Toast.LENGTH_SHORT).show();
+
                     if (response.code() == 200){
                         Usuario usuario = response.body();
                         Intent i = new Intent(getActivity(),MainActivity.class);
@@ -111,13 +116,13 @@ public class FragmentLogin extends Fragment {
                         Snackbar.make(getView(), "NO REGISTRADO", Snackbar.LENGTH_LONG).show();
                     }
                 }else {
-                    Toast.makeText(getContext(), "Mal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "No se obtuvo respuesta", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Usuario> call, Throwable t) {
-                Toast.makeText(getContext(), "Mal", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Servicio no activo", Toast.LENGTH_SHORT).show();
                 Log.e("ERROR: ", t.getMessage());
             }
         });
