@@ -24,6 +24,8 @@ public class ActivitySplash extends AppCompatActivity {
             public void run() {
                 Intent intent = new Intent(ActivitySplash.this, ActivityLogin.class);
                 startActivity(intent);
+
+
                 finish();
             }
         },1000);//tiempo que debe estar ejecutandose
