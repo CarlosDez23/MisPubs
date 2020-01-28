@@ -1,5 +1,7 @@
 package com.example.mispubs.ui.Perfil;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -84,7 +86,7 @@ public class FragmentPerfil extends Fragment {
             switch (v.getId()){
                 case R.id.btnPerfilEliminarUsuario:
                     System.out.println(usuario.toString());
-                    eliminarUsuario();
+                    mostrarDialogoEliminar();
                     break;
                 case R.id.edit:
                     //ponemos invisible el boton pulsado, mostramos el de modificar y habilitamos los campos
@@ -138,6 +140,29 @@ public class FragmentPerfil extends Fragment {
             imageViewModificar.setVisibility(View.INVISIBLE);
             imageViewEdit.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void mostrarDialogoEliminar(){
+        AlertDialog.Builder deleteDialog = new AlertDialog.Builder(getContext());
+        deleteDialog.setTitle(usuario.getNombre()+", ¿estás seguro de querer eliminar tu cuenta?");
+        String[] deleteDialogitems = {"Sí", "No"};
+        deleteDialog.setItems(deleteDialogitems, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case 0:
+                        eliminarUsuario();
+                        break;
+                    case 1:
+                        Toast.makeText(getContext(), "Cuenta no eliminada",
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        deleteDialog.show();
     }
 
     /**
