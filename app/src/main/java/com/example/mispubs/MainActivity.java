@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
         usuario = (Usuario) this.getIntent().getExtras().getSerializable("usuario");
-        System.out.println("Perfil Usuario Terminado");
+        System.out.println("Detalle Pubs iniciado");
     }
 
 }
