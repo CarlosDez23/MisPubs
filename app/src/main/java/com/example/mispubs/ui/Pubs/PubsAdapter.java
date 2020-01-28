@@ -31,6 +31,8 @@ public class PubsAdapter extends RecyclerView.Adapter<PubsAdapter.ViewHolder> {
     public PubsAdapter(ArrayList<Pub> listaPubs, Context context, Activity activity) {
         this.listaPubs = listaPubs;
         this.context = context;
+
+
         this.activity = activity;
     }
 
