@@ -11,12 +11,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.mispubs.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -29,6 +32,7 @@ import java.util.ArrayList;
 public class FragmentMapas extends Fragment implements OnMapReadyCallback,GoogleMap.OnMarkerClickListener {
 
     private GoogleMap map;
+    private SupportMapFragment supportMapFragment;
     private FusedLocationProviderClient mPosicion;
     private Location ultimaLocalizacion;
     private LatLng posicionActual;
@@ -42,6 +46,17 @@ public class FragmentMapas extends Fragment implements OnMapReadyCallback,Google
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+
+        //pintamos el mapa
+        mPosicion = LocationServices.getFusedLocationProviderClient(getActivity());
+        FragmentManager fm = getChildFragmentManager();
+        supportMapFragment = (SupportMapFragment) fm.findFragmentById(R.id.map);
+        if (supportMapFragment == null) {
+            supportMapFragment = SupportMapFragment.newInstance();
+            fm.beginTransaction().replace(R.id.map, supportMapFragment).commit();
+        }
+        supportMapFragment.getMapAsync(this);
     }
 
     @Override
