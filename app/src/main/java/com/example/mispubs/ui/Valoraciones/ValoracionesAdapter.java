@@ -26,6 +26,8 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
     public ValoracionesAdapter(ArrayList<Valoracion> listValoraciones, Context context) {
         this.listValoraciones = listValoraciones;
         this.context = context;
+
+
     }
 
     @NonNull
