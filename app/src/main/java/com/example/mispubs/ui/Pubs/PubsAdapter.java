@@ -13,10 +13,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mispubs.Modelo.Pub;
 import com.example.mispubs.R;
+import com.example.mispubs.ui.Valoraciones.FragmentValoraciones;
 
 import java.util.ArrayList;
 
@@ -25,15 +28,15 @@ public class PubsAdapter extends RecyclerView.Adapter<PubsAdapter.ViewHolder> {
     private ArrayList<Pub> listaPubs = new ArrayList<>();
     private Context context;
     private Activity activity;
+    private FragmentManager fm;
 
     private int position;
 
-    public PubsAdapter(ArrayList<Pub> listaPubs, Context context, Activity activity) {
+    public PubsAdapter(ArrayList<Pub> listaPubs, Context context, Activity activity, FragmentManager fm) {
         this.listaPubs = listaPubs;
         this.context = context;
-
-
         this.activity = activity;
+        this.fm = fm;
     }
 
     public int getPosition() {
@@ -84,6 +87,18 @@ public class PubsAdapter extends RecyclerView.Adapter<PubsAdapter.ViewHolder> {
                     }
                 });
                 popupMenu.show();
+            }
+        });
+
+        holder.relativePubs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                FragmentValoraciones fragmentValoraciones = new FragmentValoraciones(pubLista);
+                FragmentTransaction transaction = fm.beginTransaction();
+                transaction.replace(R.id.nav_host_fragment, fragmentValoraciones);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 

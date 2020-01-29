@@ -72,12 +72,15 @@ public class FragmentPubs extends Fragment {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.fabPubs:
+
                     FragmentDetallePubs detallePubs = new FragmentDetallePubs();
                     FragmentManager fm = getFragmentManager();
                     FragmentTransaction transaction = fm.beginTransaction();
                     transaction.replace(R.id.nav_host_fragment,detallePubs );
                     transaction.addToBackStack(null);
                     transaction.commit();
+
+
                     break;
                 default:
                     break;
@@ -98,7 +101,7 @@ public class FragmentPubs extends Fragment {
             public void onResponse(Call<List<Pub>> call, Response<List<Pub>> response) {
                 if (response.isSuccessful()){
                     listaPubs = (ArrayList<Pub>) response.body();
-                    recyclerView.setAdapter(new PubsAdapter(listaPubs,getContext(),getActivity()));
+                    recyclerView.setAdapter(new PubsAdapter(listaPubs,getContext(),getActivity(), getFragmentManager()));
                 }
             }
             @Override
