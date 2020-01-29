@@ -19,6 +19,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.mispubs.MainActivity;
 import com.example.mispubs.Modelo.Usuario;
@@ -26,6 +28,9 @@ import com.example.mispubs.R;
 import com.example.mispubs.REST.APIUtils;
 import com.example.mispubs.REST.UsuarioRest;
 import com.example.mispubs.ui.Login.ActivityLogin;
+import com.example.mispubs.ui.Mapas.FragmentMapas;
+import com.example.mispubs.ui.Pubs.FragmentDetallePubs;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,6 +48,7 @@ public class FragmentPerfil extends Fragment {
     private EditText etPerfilNombre, etPerfilCorreo, etPerfilPassword;
     private RelativeLayout btnPerfilEliminarUsuario;
     private ImageView imageViewEdit, imageViewModificar;
+    FloatingActionButton floatingActionButton;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -76,6 +82,9 @@ public class FragmentPerfil extends Fragment {
         this.imageViewModificar = getView().findViewById(R.id.ivPerfilModificar);
         this.imageViewModificar.setOnClickListener(listenerBotones);
 
+        this.floatingActionButton = getView().findViewById(R.id.mapasFF);
+        this.floatingActionButton.setOnClickListener(listenerBotones);
+
     }
 
 
@@ -96,6 +105,14 @@ public class FragmentPerfil extends Fragment {
                     //ponemos invisible el boton pulsado, mostramos el de editar y deshabilitamos los campos
                     modoActualizar(false);
                     crearActualizarUsuario();
+                    break;
+                case R.id.mapasFF:
+                    FragmentMapas mapa = new FragmentMapas();
+                    FragmentManager fm = getFragmentManager();
+                    FragmentTransaction transaction = fm.beginTransaction();
+                    transaction.replace(R.id.nav_host_fragment,mapa );
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                     break;
                 default:
                     break;
