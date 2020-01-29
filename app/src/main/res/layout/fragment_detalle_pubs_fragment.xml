@@ -119,6 +119,7 @@
                     android:layout_height="match_parent"
                     android:layout_margin="15dp"
                     android:clickable="true"
+                    android:src="@drawable/ic_menos"
 
                     >
 
@@ -129,10 +130,8 @@
                     android:layout_height="match_parent"
                     android:layout_margin="15dp"
                     android:clickable="true"
-                    android:backgroundTint="@color/colorCheckNo"
-                    android:src="@mipmap/ic_sumar_fondo"
 
-                    >
+                    android:src="@drawable/ic_mas">
 
                 </com.google.android.material.floatingactionbutton.FloatingActionButton>
             </LinearLayout>
