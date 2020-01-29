@@ -16,4 +16,8 @@ public class APIUtils {
     public static PubRest getServicePubs(){
         return RetrofitClient.getClient(API_URL).create(PubRest.class);
     }
+
+    public static ValoracionRest getServiceValoraciones(){
+        return RetrofitClient.getClient(API_URL).create(ValoracionRest.class);
+    }
 }

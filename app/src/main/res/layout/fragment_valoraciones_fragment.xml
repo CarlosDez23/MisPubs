@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.Valoraciones.FragmentValoraciones">
+    <RatingBar
+        android:id="@+id/rbValoracionesGeneral"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize=".5"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp">
+    </RatingBar>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerValoraciones"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/rbValoracionesGeneral">
+
+    </androidx.recyclerview.widget.RecyclerView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabValoracionesAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recyclerValoraciones"
+        android:layout_marginTop="-100dp"
+        android:layout_marginEnd="18dp"
+        android:layout_alignParentEnd="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@android:drawable/ic_menu_add" />
+
+</RelativeLayout>
