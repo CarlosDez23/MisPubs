@@ -35,6 +35,7 @@ public class FragmentPubs extends Fragment {
 
     private RecyclerView recyclerView;
     private FloatingActionButton fabPub;
+    private int modoVer = 1;
 
 
 

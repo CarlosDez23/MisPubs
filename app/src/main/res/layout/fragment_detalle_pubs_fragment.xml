@@ -21,7 +21,7 @@
         android:src="@drawable/fondo_por_defecto" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/ibDetallePubsCamara"
+        android:id="@+id/fabDetallePubsCamara"
         style="@android:style/Widget.Material.ImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -74,16 +74,18 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="false" />
+                />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <Spinner
             android:id="@+id/spinnerDetallePubsEstilos"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="60dp"
             android:layout_below="@id/tvDetallePubsWeb"
             android:layout_centerHorizontal="true"
+            android:layout_marginEnd="100dp"
+            android:layout_alignParentEnd="true"
             android:layout_marginTop="10dp" />
 
 
@@ -92,11 +94,11 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="150dp"
             android:layout_below="@id/spinnerDetallePubsEstilos"
-            android:layout_marginTop="10dp"
             android:background="#FFFFFF"
-
+            android:layout_alignTop="@id/spinnerDetallePubsEstilos"
+            android:layout_alignParentEnd="true"
+            android:layout_alignEnd="@id/spinnerDetallePubsEstilos"
             android:hint="Visitas">
 
 
@@ -106,6 +108,8 @@
                 android:inputType="number" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <!--
 
         <Button
             android:id="@+id/btnSumarVisita"
@@ -118,17 +122,16 @@
             android:background="@drawable/ic_mas"
             android:backgroundTint="@color/black_overlay"
             />
-
+-->
 
 
 
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabDetalleJuegoInsertar"
+            android:id="@+id/fabDetallePubsMapa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/btnSumarVisita"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="5dp"
             android:layout_marginTop="50dp"
