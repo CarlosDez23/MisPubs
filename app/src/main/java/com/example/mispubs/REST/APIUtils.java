@@ -2,7 +2,7 @@ package com.example.mispubs.REST;
 
 public class APIUtils {
 
-    private static final String server = "192.168.137.81";//"80.102.104.105";
+    private static final String server = "80.102.104.105";
     private static final String port = "6969";
     private static final String API_URL = "http://"+server+":"+port+"/";
 
