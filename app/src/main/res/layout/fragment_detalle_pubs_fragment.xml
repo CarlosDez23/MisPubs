@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     tools:context=".ui.Pubs.FragmentDetallePubs">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
 
     <ImageView
@@ -14,7 +18,7 @@
         android:layout_height="250dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:src="@mipmap/ic_mispubs_foreground" />
+        android:src="@drawable/fondo_por_defecto" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/ibDetallePubsCamara"
@@ -34,9 +38,10 @@
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="0dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="100dp"
         android:layout_below="@id/ivDetallePubs"
         android:background="#FFFFFF">
 
@@ -81,61 +86,40 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp" />
 
-        <LinearLayout
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tvDetallePubsVisitas"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_below="@id/spinnerDetallePubsEstilos">
+            android:layout_marginEnd="150dp"
+            android:layout_below="@id/spinnerDetallePubsEstilos"
+            android:layout_marginTop="10dp"
+            android:background="#FFFFFF"
 
-            <LinearLayout
+            android:hint="Visitas">
+
+
+            <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:inputType="number" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tvDetallePubsVisitas"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                    android:layout_width="0dp"
-                    android:layout_weight="4"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/spinnerDetallePubsEstilos"
-                    android:layout_marginTop="10dp"
-                    android:background="#FFFFFF"
+        </com.google.android.material.textfield.TextInputLayout>
 
-                    android:hint="Visitas">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="number" />
-
-                </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:id="@+id/btnSumarVisita"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignEnd="@id/tvDetallePubsVisitas"
+            android:layout_alignTop="@id/tvDetallePubsVisitas"
+            android:layout_marginEnd="5dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/ic_mas"
+            android:backgroundTint="@color/black_overlay"
+            />
 
 
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="15dp"
-                    android:clickable="true"
-                    android:src="@drawable/ic_menos"
-
-                    >
-
-                </com.google.android.material.floatingactionbutton.FloatingActionButton>
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="15dp"
-                    android:clickable="true"
-
-                    android:src="@drawable/ic_mas">
-
-                </com.google.android.material.floatingactionbutton.FloatingActionButton>
-            </LinearLayout>
-        </LinearLayout>
 
 
 
@@ -144,13 +128,23 @@
             android:id="@+id/fabDetalleJuegoInsertar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/btnSumarVisita"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="9dp"
-            android:layout_marginBottom="100dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="20dp"
             android:clickable="true"
             android:backgroundTint="@color/colorBoton"
             android:src="@drawable/ic_modificar" />
 
+        <!--
+
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="9dp"
+            android:layout_marginBottom="100dp"
+        -->
+
     </RelativeLayout>
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>
