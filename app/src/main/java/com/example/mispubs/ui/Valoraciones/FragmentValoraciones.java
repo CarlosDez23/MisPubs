@@ -1,6 +1,8 @@
 package com.example.mispubs.ui.Valoraciones;
 
 
+import android.app.AlertDialog;
+import android.media.Rating;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,13 +15,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.example.mispubs.MainActivity;
 import com.example.mispubs.Modelo.Pub;
 import com.example.mispubs.Modelo.Valoracion;
 import com.example.mispubs.R;
 import com.example.mispubs.REST.APIUtils;
 import com.example.mispubs.REST.UsuarioRest;
 import com.example.mispubs.REST.ValoracionRest;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +40,7 @@ public class FragmentValoraciones extends Fragment {
     //Elementos de la interfaz
     private RecyclerView recyclerView;
     private RatingBar rbGeneral;
+    private FloatingActionButton fabValoracionesAdd;
 
 
 
@@ -46,6 +54,7 @@ public class FragmentValoraciones extends Fragment {
     private ValoracionRest valoracionRest;
     private UsuarioRest usuarioRest;
 
+    View root;
 
     public FragmentValoraciones(Pub pub) {
         this.pub = pub;
@@ -54,7 +63,8 @@ public class FragmentValoraciones extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_valoraciones_fragment, container, false);
+        root = inflater.inflate(R.layout.fragment_valoraciones_fragment, container, false);
+        return root;
     }
 
     @Override
@@ -70,10 +80,22 @@ public class FragmentValoraciones extends Fragment {
     private void llamarVistas(){
         rbGeneral = getView().findViewById(R.id.rbValoracionesGeneral);
         recyclerView = getView().findViewById(R.id.recyclerValoraciones);
-        GridLayoutManager manager = new GridLayoutManager(getActivity(),2,GridLayoutManager.VERTICAL,false);
+        GridLayoutManager manager = new GridLayoutManager(getActivity(),
+                2,GridLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(manager);
         listarValoraciones();
+        fabValoracionesAdd = getView().findViewById(R.id.fabValoracionesAdd);
+        fabValoracionesAdd.setOnClickListener(listenerBotones);
     }
+
+    private View.OnClickListener listenerBotones = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ValoracionDialog dialog = new ValoracionDialog(pub.getId(), valoracionRest);
+            dialog.show(getFragmentManager(),"Mi valoración");
+
+        }
+    };
 
     private void listarValoraciones(){
         Call<List<Valoracion>> call = valoracionRest.findValoracionesPub(pub.getId());
@@ -83,7 +105,8 @@ public class FragmentValoraciones extends Fragment {
                 if (response.isSuccessful()){
                     if (response.code() == 200){
                         listaValoraciones = (ArrayList<Valoracion>) response.body();
-                        recyclerView.setAdapter(new ValoracionesAdapter(listaValoraciones,getContext(),usuarioRest));
+                        recyclerView.setAdapter(new ValoracionesAdapter
+                                (listaValoraciones,getContext(),usuarioRest));
                         establecerValoracionGeneral();
                     }
 
