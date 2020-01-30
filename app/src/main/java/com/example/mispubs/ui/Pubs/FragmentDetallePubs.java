@@ -22,11 +22,16 @@ import android.widget.Toast;
 
 import com.example.mispubs.Modelo.Pub;
 import com.example.mispubs.R;
+import com.example.mispubs.REST.PubRest;
 import com.example.mispubs.ui.Mapas.FragmentMapas;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FragmentDetallePubs extends Fragment {
 
@@ -52,6 +57,7 @@ public class FragmentDetallePubs extends Fragment {
     private TextView tvDetallePubsModoBoton;
     private CardView cvDetallePubBotonModo;
     private RelativeLayout btnDetallePubBotonModo;
+    private PubRest pubRest;
 
 
     public FragmentDetallePubs() {
@@ -163,12 +169,15 @@ public class FragmentDetallePubs extends Fragment {
         switch (modo){
             case guardar:
                 Toast.makeText(getContext(),"guardar", Toast.LENGTH_LONG).show();
+                guardarPub(this.pub);
                 break;
             case modificar:
                 Toast.makeText(getContext(),"modificar", Toast.LENGTH_LONG).show();
+                //modificarPub();
                 break;
             case eliminar:
                 Toast.makeText(getContext(),"eliminar", Toast.LENGTH_LONG).show();
+                //eliminarPub();
                 break;
             default:
                 break;
@@ -213,6 +222,44 @@ public class FragmentDetallePubs extends Fragment {
                 spinnerEstilos.setSelection(5);
                 break;
         }
+    }
+
+    private void guardarPub(Pub guardarPub){
+        Call<Pub> call = pubRest.buscarPorNombreDelPub(this.pub.getNombre());
+        call.enqueue(new Callback<Pub>() {
+            @Override
+            public void onResponse(Call<Pub> call, Response<Pub> response) {
+                if (response.isSuccessful()){
+                    if (response.code() == 204){
+
+                        Call<Pub> callInsert = pubRest.insertarPub(guardarPub);
+                        callInsert.enqueue(new Callback<Pub>() {
+                            @Override
+                            public void onResponse(Call<Pub> call, Response<Pub> response) {
+                                if (response.code() == 200){
+
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Pub> call, Throwable t) {
+
+                            }
+                        });
+
+                    }else{
+                        Toast.makeText(getContext(), "El Pub ya existe",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Pub> call, Throwable t) {
+
+            }
+        });
     }
 
 }
