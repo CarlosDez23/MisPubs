@@ -110,6 +110,8 @@ public class FragmentValoraciones extends Fragment {
                         recyclerView.setAdapter(new ValoracionesAdapter
                                 (listaValoraciones,getContext(),usuarioRest, getFragmentManager()));
                         establecerValoracionGeneral();
+
+
                     }
 
                 }
