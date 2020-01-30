@@ -35,6 +35,8 @@ public class FragmentValoraciones extends Fragment {
     private RatingBar rbGeneral;
 
 
+
+
     //Para datos
     private ArrayList<Valoracion> listaValoraciones = new ArrayList<>();
     private Pub pub;
