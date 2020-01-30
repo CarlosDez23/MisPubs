@@ -85,7 +85,7 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                 if(response.isSuccessful()){
                     if (response.code() == 200){
-                        Usuario u = (Usuario) response.body();
+                        Usuario u = response.body();
                         holder.tvValoracionUsuario.setText(u.getNombre());
                     }
                 }
