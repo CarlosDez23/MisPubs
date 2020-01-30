@@ -64,6 +64,7 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
                                 holder.rbValoracion.getRating(),
                                 holder.tvValoracionDetalle.getText().toString());
                 dialog.show(fm,"Detalle");
+
             }
         });
 
