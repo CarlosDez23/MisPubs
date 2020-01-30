@@ -27,4 +27,7 @@ public interface UsuarioRest {
     @PUT("usuarios/{id}")
     Call<Usuario> modificarUsuario(@Path("id") Integer id, @Body Usuario usuario);
 
+    @GET("usuarios/{id}")
+    Call<Usuario> findByIdUsuarios(@Path("id") Integer id);
+
 }

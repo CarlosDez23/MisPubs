@@ -18,6 +18,7 @@ import com.example.mispubs.Modelo.Pub;
 import com.example.mispubs.Modelo.Valoracion;
 import com.example.mispubs.R;
 import com.example.mispubs.REST.APIUtils;
+import com.example.mispubs.REST.UsuarioRest;
 import com.example.mispubs.REST.ValoracionRest;
 
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class FragmentValoraciones extends Fragment {
 
     //Para el REST
     private ValoracionRest valoracionRest;
+    private UsuarioRest usuarioRest;
 
 
     public FragmentValoraciones(Pub pub) {
@@ -57,6 +59,7 @@ public class FragmentValoraciones extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         valoracionRest = APIUtils.getServiceValoraciones();
+        usuarioRest = APIUtils.getService();
 
         llamarVistas();
 
@@ -78,7 +81,7 @@ public class FragmentValoraciones extends Fragment {
                 if (response.isSuccessful()){
                     if (response.code() == 200){
                         listaValoraciones = (ArrayList<Valoracion>) response.body();
-                        recyclerView.setAdapter(new ValoracionesAdapter(listaValoraciones,getContext()));
+                        recyclerView.setAdapter(new ValoracionesAdapter(listaValoraciones,getContext(),usuarioRest));
                         establecerValoracionGeneral();
                     }
 
@@ -102,6 +105,7 @@ public class FragmentValoraciones extends Fragment {
         }
         float media = (float) suma / (float) listaValoraciones.size();
         rbGeneral.setRating(media);
+        rbGeneral.setIsIndicator(true);
     }
 
 }
