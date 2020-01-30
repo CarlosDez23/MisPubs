@@ -1,6 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <RatingBar
+        android:id="@+id/rbValoracionDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:numStars="5"
+        android:stepSize=".5"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp">
+    </RatingBar>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tvValoracionValoracion"
+        android:layout_below="@id/rbValoracionDialog"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="#FFFFFF"
+        android:hint="Introduce tu valoración">
 
-</LinearLayout>
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="3"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <FrameLayout
+        android:layout_below="@id/tvValoracionValoracion"
+        android:layout_width="200dp"
+        android:layout_marginTop="30dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/gradient_background_1">
+
+
+        <RelativeLayout
+            android:id="@+id/relativeLoginBoton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="Realizar"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/button_text_size"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+    </FrameLayout>
+
+</RelativeLayout>
