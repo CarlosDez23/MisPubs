@@ -1,39 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.Valoraciones.FragmentValoraciones">
-    <RatingBar
-        android:id="@+id/rbValoracionesGeneral"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:numStars="5"
-        android:stepSize=".5"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp">
-    </RatingBar>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerValoraciones"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_marginBottom="60dp"
-        android:layout_height="match_parent"
-        android:layout_below="@id/rbValoracionesGeneral">
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/valoracionGeneralBack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_splash"
+            android:elevation="4dp"
+            android:paddingBottom="30dp">
+            <RatingBar
+                android:id="@+id/rbValoracionesGeneral"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize=".5"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:theme="@style/RatingBar">
+            </RatingBar>
 
-    </androidx.recyclerview.widget.RecyclerView>
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabValoracionesAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/recyclerValoraciones"
-        android:layout_marginTop="-130dp"
-        android:layout_marginEnd="18dp"
-        android:layout_alignParentEnd="true"
-        android:clickable="true"
-        android:focusable="true"
-        android:src="@android:drawable/ic_menu_add" />
 
-</RelativeLayout>
+        </RelativeLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerValoraciones"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="60dp"
+            android:layout_height="match_parent"
+            android:layout_below="@id/valoracionGeneralBack">
+
+        </androidx.recyclerview.widget.RecyclerView>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabValoracionesAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recyclerValoraciones"
+            android:layout_marginTop="-130dp"
+            android:layout_marginEnd="18dp"
+            android:layout_alignParentEnd="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@android:drawable/ic_menu_add" />
+
+    </RelativeLayout>
+
+
+</ScrollView>
