@@ -75,6 +75,7 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
                     if (response.code() == 200){
                         Usuario u = (Usuario) response.body();
                         holder.tvValoracionUsuario.setText(u.getNombre());
+
                     }
                 }
             }
