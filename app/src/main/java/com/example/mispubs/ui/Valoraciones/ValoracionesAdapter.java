@@ -1,12 +1,12 @@
 package com.example.mispubs.ui.Valoraciones;
 
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -36,8 +36,6 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
         this.listValoraciones = listValoraciones;
         this.context = context;
         this.usuarioRest = usuarioRest;
-
-
     }
 
     @NonNull
@@ -54,18 +52,32 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
         final Valoracion v = listValoraciones.get(position);
         holder.rbValoracion.setRating((float)v.getValoracion());
         buscarNombreUsuario(v.getIdusuario(),holder);
-        holder.tvValoracionDetalle.setText(v.getDetalle());
+        holder.tvValoracionDetalle.setText(adaptarValoracion(v.getDetalle()));
         holder.tvCardValoracion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,"Pulsada",Toast.LENGTH_LONG).show();
+
             }
         });
 
 
     }
 
+    private String adaptarValoracion(String valoracion){
+        String adaptada = valoracion;
+        if (valoracion.length() > 60){
+            adaptada = valoracion.substring(0,51)+"...";
+        }
+        return adaptada;
+    }
 
+    /**
+     * Buscamos en nombre del usuario en nuestro servicio REST utilizando el id de usuario
+     * que sacamos de la valoracion. Le pasamos el holder para que directamente le añada el
+     * texto a nuestro item del recyclerview
+     * @param usuario
+     * @param holder
+     */
     private void buscarNombreUsuario (int usuario, ValoracionesAdapter.ViewHolder holder){
         Call<Usuario> call = usuarioRest.findByIdUsuarios(usuario);
         call.enqueue(new Callback<Usuario>() {
@@ -75,7 +87,6 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
                     if (response.code() == 200){
                         Usuario u = (Usuario) response.body();
                         holder.tvValoracionUsuario.setText(u.getNombre());
-
                     }
                 }
             }
@@ -86,8 +97,6 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
             }
         });
     }
-
-
 
     @Override
     public int getItemCount() {
