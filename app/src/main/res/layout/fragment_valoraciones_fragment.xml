@@ -16,8 +16,20 @@
             android:background="@drawable/gradient_splash"
             android:elevation="4dp"
             android:paddingBottom="30dp">
+            <TextView
+                android:id="@+id/tvNombrePub"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"
+                android:text="Adrian"
+                android:textColor="#fff"
+                android:textSize="24sp"
+                android:textStyle="bold"/>
+
             <RatingBar
                 android:id="@+id/rbValoracionesGeneral"
+                android:layout_below="@id/tvNombrePub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:numStars="5"

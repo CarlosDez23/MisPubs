@@ -14,7 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RatingBar;
-
+import android.widget.TextView;
 
 
 import com.example.mispubs.Modelo.Pub;
@@ -39,6 +39,7 @@ public class FragmentValoraciones extends Fragment {
     private RecyclerView recyclerView;
     private RatingBar rbGeneral;
     private FloatingActionButton fabValoracionesAdd;
+    private TextView tvNombrePub;
 
 
 
@@ -88,6 +89,8 @@ public class FragmentValoraciones extends Fragment {
         listarValoraciones();
         fabValoracionesAdd = getView().findViewById(R.id.fabValoracionesAdd);
         fabValoracionesAdd.setOnClickListener(listenerBotones);
+        tvNombrePub = getView().findViewById(R.id.tvNombrePub);
+        tvNombrePub.setText(pub.getNombre());
     }
 
     private View.OnClickListener listenerBotones = new View.OnClickListener() {
@@ -110,10 +113,7 @@ public class FragmentValoraciones extends Fragment {
                         recyclerView.setAdapter(new ValoracionesAdapter
                                 (listaValoraciones,getContext(),usuarioRest, getFragmentManager()));
                         establecerValoracionGeneral();
-
-
                     }
-
                 }
             }
 
