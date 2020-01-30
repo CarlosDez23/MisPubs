@@ -54,7 +54,7 @@
                 android:layout_marginRight="5dp"
                 android:ellipsize="end"
                 android:lines="1"
-                android:text="Realizar"
+                android:text="Valorar"
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/button_text_size"
                 android:textStyle="bold" />
