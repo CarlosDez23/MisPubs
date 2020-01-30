@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         pedirPermisos();
 
         usuario = (Usuario) this.getIntent().getExtras().getSerializable("usuario");
-        System.out.println("MODOS PUBS");
+        System.out.println("AÑADIR PUB");
     }
 
     private void pedirPermisos(){
