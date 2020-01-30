@@ -97,7 +97,7 @@ public class PubsAdapter extends RecyclerView.Adapter<PubsAdapter.ViewHolder> {
         holder.relativePubs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentDetallePubs detallePubs = new FragmentDetallePubs();
+                FragmentDetallePubs detallePubs = new FragmentDetallePubs(listaPubs.get(position),0);
                 FragmentTransaction transaction = fm.beginTransaction();
                 transaction.replace(R.id.nav_host_fragment,detallePubs );
                 transaction.addToBackStack(null);
