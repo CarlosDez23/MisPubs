@@ -108,7 +108,7 @@ public class FragmentValoraciones extends Fragment {
                     if (response.code() == 200){
                         listaValoraciones = (ArrayList<Valoracion>) response.body();
                         recyclerView.setAdapter(new ValoracionesAdapter
-                                (listaValoraciones,getContext(),usuarioRest));
+                                (listaValoraciones,getContext(),usuarioRest, getFragmentManager()));
                         establecerValoracionGeneral();
                     }
 

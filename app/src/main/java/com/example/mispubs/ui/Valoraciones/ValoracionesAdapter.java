@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mispubs.Modelo.Usuario;
@@ -28,14 +29,16 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
 
     private ArrayList<Valoracion> listValoraciones;
     private Context context;
+    private FragmentManager fm;
 
     private UsuarioRest usuarioRest;
 
 
-    public ValoracionesAdapter(ArrayList<Valoracion> listValoraciones, Context context, UsuarioRest usuarioRest) {
+    public ValoracionesAdapter(ArrayList<Valoracion> listValoraciones, Context context, UsuarioRest usuarioRest, FragmentManager fm) {
         this.listValoraciones = listValoraciones;
         this.context = context;
         this.usuarioRest = usuarioRest;
+        this.fm = fm;
     }
 
     @NonNull
@@ -56,7 +59,11 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
         holder.tvCardValoracion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ValoracionDetalleDialog dialog = new ValoracionDetalleDialog
+                        (holder.tvValoracionUsuario.getText().toString(),
+                                holder.rbValoracion.getRating(),
+                                holder.tvValoracionDetalle.getText().toString());
+                dialog.show(fm,"Detalle");
             }
         });
 

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp">
+    <RatingBar
+        android:id="@+id/rbValoracionDetalle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:numStars="5"
+        android:stepSize=".5"
+        android:rating="0.0"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp">
+    </RatingBar>
+    <TextView
+        android:id="@+id/tvValoracionDetalleNombreUsuario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:textColor="@color/black_overlay"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@id/rbValoracionDetalle">
+
+    </TextView>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tvCadena"
+        android:layout_below="@id/tvValoracionDetalleNombreUsuario"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="#FFFFFF"
+        android:hint="Valoracion">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:textColor="@color/black_overlay"
+            android:lines="3"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</RelativeLayout>
