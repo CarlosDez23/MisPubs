@@ -30,15 +30,20 @@ public class ValoracionDialog extends AppCompatDialogFragment {
     //Vista
     private View root;
 
+    //Fragment de valoraciones, para actualizarlo cuando insertemos una valoración
+    FragmentValoraciones fragmentValoraciones;
+
+
     //Id del pub valorado (la id del usuario la cojemos del main activity)
     int idPub;
 
     //Para el REST
-    ValoracionRest valoracionRest;
+    private ValoracionRest valoracionRest;
 
-    public ValoracionDialog(int idPub, ValoracionRest valoracionRest) {
+    public ValoracionDialog(int idPub, ValoracionRest valoracionRest, FragmentValoraciones fragmentValoraciones) {
         this.idPub = idPub;
         this.valoracionRest = valoracionRest;
+        this.fragmentValoraciones = fragmentValoraciones;
     }
 
     @Override
@@ -70,8 +75,6 @@ public class ValoracionDialog extends AppCompatDialogFragment {
                                     idPub, (int) rbValoracion.getRating(),
                                     tvValoracion.getEditText().getText().toString());
                             realizarValoracion(v);
-                            Toast.makeText(root.getContext(), "Valoración realizada",
-                                    Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -87,7 +90,8 @@ public class ValoracionDialog extends AppCompatDialogFragment {
             @Override
             public void onResponse(Call<Valoracion> call, Response<Valoracion> response) {
                 if (response.isSuccessful()) {
-
+                    Toast.makeText(root.getContext(), "Valoración realizada",
+                            Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -101,6 +105,7 @@ public class ValoracionDialog extends AppCompatDialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-
+        //Actualizamos la lista de valoraciones
+        fragmentValoraciones.listarValoraciones();
     }
 }

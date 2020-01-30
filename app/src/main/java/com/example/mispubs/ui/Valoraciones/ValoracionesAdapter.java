@@ -52,7 +52,7 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
         final Valoracion v = listValoraciones.get(position);
         holder.rbValoracion.setRating((float)v.getValoracion());
         buscarNombreUsuario(v.getIdusuario(),holder);
-        holder.tvValoracionDetalle.setText(adaptarValoracion(v.getDetalle()));
+        holder.tvValoracionDetalle.setText(v.getDetalle());
         holder.tvCardValoracion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,14 +61,6 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
         });
 
 
-    }
-
-    private String adaptarValoracion(String valoracion){
-        String adaptada = valoracion;
-        if (valoracion.length() > 60){
-            adaptada = valoracion.substring(0,51)+"...";
-        }
-        return adaptada;
     }
 
     /**

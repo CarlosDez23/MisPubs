@@ -1,8 +1,7 @@
 package com.example.mispubs.ui.Valoraciones;
 
 
-import android.app.AlertDialog;
-import android.media.Rating;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,10 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import com.example.mispubs.MainActivity;
+
+
 import com.example.mispubs.Modelo.Pub;
 import com.example.mispubs.Modelo.Valoracion;
 import com.example.mispubs.R;
@@ -26,7 +24,7 @@ import com.example.mispubs.REST.APIUtils;
 import com.example.mispubs.REST.UsuarioRest;
 import com.example.mispubs.REST.ValoracionRest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputLayout;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +58,10 @@ public class FragmentValoraciones extends Fragment {
         this.pub = pub;
     }
 
+    public FragmentValoraciones getFragment(){
+        return this;
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -91,13 +93,13 @@ public class FragmentValoraciones extends Fragment {
     private View.OnClickListener listenerBotones = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            ValoracionDialog dialog = new ValoracionDialog(pub.getId(), valoracionRest);
+            ValoracionDialog dialog = new ValoracionDialog(pub.getId(), valoracionRest, getFragment());
             dialog.show(getFragmentManager(),"Mi valoración");
 
         }
     };
 
-    private void listarValoraciones(){
+    public void listarValoraciones(){
         Call<List<Valoracion>> call = valoracionRest.findValoracionesPub(pub.getId());
         call.enqueue(new Callback<List<Valoracion>>() {
             @Override
