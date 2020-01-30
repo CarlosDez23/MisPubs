@@ -29,6 +29,8 @@ public class PubsAdapter extends RecyclerView.Adapter<PubsAdapter.ViewHolder> {
     private Context context;
     private Activity activity;
     private FragmentManager fm;
+    FragmentDetallePubs detallePubs;
+    FragmentTransaction transaction;
 
     private int position;
 
@@ -72,16 +74,26 @@ public class PubsAdapter extends RecyclerView.Adapter<PubsAdapter.ViewHolder> {
                         switch (item.getItemId()) {
                             case R.id.itemmenu1:
                                 FragmentValoraciones fragmentValoraciones = new FragmentValoraciones(pubLista);
-                                FragmentTransaction transaction = fm.beginTransaction();
+                                transaction = fm.beginTransaction();
                                 transaction.replace(R.id.nav_host_fragment, fragmentValoraciones);
                                 transaction.addToBackStack(null);
                                 transaction.commit();
                                 break;
                             case R.id.itemmenu2:
-                                Toast.makeText(context,"Modificar "+pubLista.getNombre(),Toast.LENGTH_LONG).show();
+                                //Toast.makeText(context,"Modificar "+pubLista.getNombre(),Toast.LENGTH_LONG).show();
+                                detallePubs = new FragmentDetallePubs(listaPubs.get(position),2);
+                                transaction = fm.beginTransaction();
+                                transaction.replace(R.id.nav_host_fragment,detallePubs );
+                                transaction.addToBackStack(null);
+                                transaction.commit();
                                 break;
                             case R.id.itemmenu3:
-                                Toast.makeText(context,"Borrar "+pubLista.getNombre(),Toast.LENGTH_LONG).show();
+                                //Toast.makeText(context,"Borrar "+pubLista.getNombre(),Toast.LENGTH_LONG).show();
+                                FragmentDetallePubs detallePubs = new FragmentDetallePubs(listaPubs.get(position),3);
+                                transaction = fm.beginTransaction();
+                                transaction.replace(R.id.nav_host_fragment,detallePubs );
+                                transaction.addToBackStack(null);
+                                transaction.commit();
                                 break;
                             default:
                                 break;
@@ -97,8 +109,8 @@ public class PubsAdapter extends RecyclerView.Adapter<PubsAdapter.ViewHolder> {
         holder.relativePubs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentDetallePubs detallePubs = new FragmentDetallePubs(listaPubs.get(position),0);
-                FragmentTransaction transaction = fm.beginTransaction();
+                detallePubs = new FragmentDetallePubs(listaPubs.get(position),1);
+                transaction = fm.beginTransaction();
                 transaction.replace(R.id.nav_host_fragment,detallePubs );
                 transaction.addToBackStack(null);
                 transaction.commit();

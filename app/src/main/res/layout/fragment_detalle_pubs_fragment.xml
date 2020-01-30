@@ -81,10 +81,10 @@
         <Spinner
             android:id="@+id/spinnerDetallePubsEstilos"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="70dp"
             android:layout_below="@id/tvDetallePubsWeb"
             android:layout_centerHorizontal="true"
-            android:layout_marginEnd="100dp"
+            android:layout_marginEnd="120dp"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="10dp" />
 
@@ -92,13 +92,12 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tvDetallePubsVisitas"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-            android:layout_width="match_parent"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/spinnerDetallePubsEstilos"
             android:background="#FFFFFF"
             android:layout_alignTop="@id/spinnerDetallePubsEstilos"
             android:layout_alignParentEnd="true"
-            android:layout_alignEnd="@id/spinnerDetallePubsEstilos"
             android:hint="Visitas">
 
 
@@ -109,24 +108,8 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!--
 
-        <Button
-            android:id="@+id/btnSumarVisita"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignEnd="@id/tvDetallePubsVisitas"
-            android:layout_alignTop="@id/tvDetallePubsVisitas"
-            android:layout_marginEnd="5dp"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/ic_mas"
-            android:backgroundTint="@color/black_overlay"
-            />
 -->
-
-
-
-
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabDetallePubsMapa"
@@ -137,16 +120,57 @@
             android:layout_marginTop="50dp"
             android:layout_marginBottom="20dp"
             android:clickable="true"
+            android:layout_below="@id/tvDetallePubsVisitas"
             android:backgroundTint="@color/colorBoton"
-            android:src="@drawable/ic_modificar" />
+            android:src="@android:drawable/ic_dialog_map" />
 
-        <!--
 
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="9dp"
-            android:layout_marginBottom="100dp"
-        -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvDetallePubBotonModo"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:cardBackgroundColor="@color/colorPrimary"
+            app:cardCornerRadius="25dp"
+            android:layout_below="@id/spinnerDetallePubsEstilos"
+            android:layout_marginTop="55dp"
+            android:layout_marginRight="130dp"
+            android:layout_marginLeft="10dp"
+            app:cardElevation="5dp"
+            >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_eliminar">
+
+
+                <RelativeLayout
+                    android:id="@+id/btnDetallePubBotonModo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/tvDetallePubsModoBoton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:text="Eliminar Pub"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/button_text_size"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+            </FrameLayout>
+
+        </androidx.cardview.widget.CardView>
+
 
     </RelativeLayout>
     </RelativeLayout>

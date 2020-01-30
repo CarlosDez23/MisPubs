@@ -48,7 +48,6 @@ public class FragmentPerfil extends Fragment {
     private EditText etPerfilNombre, etPerfilCorreo, etPerfilPassword;
     private RelativeLayout btnPerfilEliminarUsuario;
     private ImageView imageViewEdit, imageViewModificar;
-    FloatingActionButton floatingActionButton;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -82,8 +81,6 @@ public class FragmentPerfil extends Fragment {
         this.imageViewModificar = getView().findViewById(R.id.ivPerfilModificar);
         this.imageViewModificar.setOnClickListener(listenerBotones);
 
-        this.floatingActionButton = getView().findViewById(R.id.mapasFF);
-        this.floatingActionButton.setOnClickListener(listenerBotones);
 
     }
 
@@ -105,14 +102,6 @@ public class FragmentPerfil extends Fragment {
                     //ponemos invisible el boton pulsado, mostramos el de editar y deshabilitamos los campos
                     modoActualizar(false);
                     crearActualizarUsuario();
-                    break;
-                case R.id.mapasFF:
-                    FragmentMapas mapa = new FragmentMapas();
-                    FragmentManager fm = getFragmentManager();
-                    FragmentTransaction transaction = fm.beginTransaction();
-                    transaction.replace(R.id.nav_host_fragment,mapa );
-                    transaction.addToBackStack(null);
-                    transaction.commit();
                     break;
                 default:
                     break;
