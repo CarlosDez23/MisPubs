@@ -87,8 +87,11 @@ public class FragmentLogin extends Fragment {
                     if (correo.isEmpty() || password.isEmpty()){
                         Toast.makeText(getContext(), "Debes rellenar todos los campos", Toast.LENGTH_SHORT).show();
                     }else{
+                        relativeLoginBoton.setClickable(false);
                         comprobarUsuario(correo,password);
+
                     }
+
 
                     break;
                 default:
@@ -114,9 +117,11 @@ public class FragmentLogin extends Fragment {
                         getActivity().finish();
                     }else{
                         Snackbar.make(getView(), "NO REGISTRADO", Snackbar.LENGTH_LONG).show();
+                        relativeLoginBoton.setClickable(true);
                     }
                 }else {
                     Toast.makeText(getContext(), "No se obtuvo respuesta", Toast.LENGTH_SHORT).show();
+                    relativeLoginBoton.setClickable(true);
                 }
             }
 
@@ -124,6 +129,7 @@ public class FragmentLogin extends Fragment {
             public void onFailure(Call<Usuario> call, Throwable t) {
                 Toast.makeText(getContext(), "Servicio no activo", Toast.LENGTH_SHORT).show();
                 Log.e("ERROR: ", t.getMessage());
+                relativeLoginBoton.setClickable(true);
             }
         });
     }
