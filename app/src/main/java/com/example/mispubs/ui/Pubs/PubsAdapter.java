@@ -71,7 +71,11 @@ public class PubsAdapter extends RecyclerView.Adapter<PubsAdapter.ViewHolder> {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.itemmenu1:
-                                Toast.makeText(context,"Ver "+pubLista.getNombre(),Toast.LENGTH_LONG).show();
+                                FragmentValoraciones fragmentValoraciones = new FragmentValoraciones(pubLista);
+                                FragmentTransaction transaction = fm.beginTransaction();
+                                transaction.replace(R.id.nav_host_fragment, fragmentValoraciones);
+                                transaction.addToBackStack(null);
+                                transaction.commit();
                                 break;
                             case R.id.itemmenu2:
                                 Toast.makeText(context,"Modificar "+pubLista.getNombre(),Toast.LENGTH_LONG).show();
@@ -93,15 +97,13 @@ public class PubsAdapter extends RecyclerView.Adapter<PubsAdapter.ViewHolder> {
         holder.relativePubs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                FragmentValoraciones fragmentValoraciones = new FragmentValoraciones(pubLista);
+                FragmentDetallePubs detallePubs = new FragmentDetallePubs();
                 FragmentTransaction transaction = fm.beginTransaction();
-                transaction.replace(R.id.nav_host_fragment, fragmentValoraciones);
+                transaction.replace(R.id.nav_host_fragment,detallePubs );
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
-
     }
 
     @Override
