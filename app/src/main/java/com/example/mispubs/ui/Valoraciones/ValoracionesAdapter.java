@@ -20,8 +20,8 @@ import java.util.ArrayList;
 
 public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapter.ViewHolder> {
 
-    ArrayList<Valoracion> listValoraciones;
-    Context context;
+    private ArrayList<Valoracion> listValoraciones;
+    private Context context;
 
     public ValoracionesAdapter(ArrayList<Valoracion> listValoraciones, Context context) {
         this.listValoraciones = listValoraciones;

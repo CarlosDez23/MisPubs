@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 
 import com.example.mispubs.Modelo.Pub;
 import com.example.mispubs.Modelo.Valoracion;
@@ -28,19 +29,23 @@ import retrofit2.Response;
 
 public class FragmentValoraciones extends Fragment {
 
+    //Elementos de la interfaz
     private RecyclerView recyclerView;
+    private RatingBar rbGeneral;
 
 
+    //Para datos
     private ArrayList<Valoracion> listaValoraciones = new ArrayList<>();
-
     private Pub pub;
+
+
+    //Para el REST
+    private ValoracionRest valoracionRest;
+
 
     public FragmentValoraciones(Pub pub) {
         this.pub = pub;
     }
-
-    //Para el REST
-    private ValoracionRest valoracionRest;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -58,11 +63,11 @@ public class FragmentValoraciones extends Fragment {
     }
 
     private void llamarVistas(){
+        rbGeneral = getView().findViewById(R.id.rbValoracionesGeneral);
         recyclerView = getView().findViewById(R.id.recyclerValoraciones);
         GridLayoutManager manager = new GridLayoutManager(getActivity(),2,GridLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(manager);
         listarValoraciones();
-
     }
 
     private void listarValoraciones(){
@@ -74,6 +79,7 @@ public class FragmentValoraciones extends Fragment {
                     if (response.code() == 200){
                         listaValoraciones = (ArrayList<Valoracion>) response.body();
                         recyclerView.setAdapter(new ValoracionesAdapter(listaValoraciones,getContext()));
+                        establecerValoracionGeneral();
                     }
 
                 }
@@ -84,6 +90,18 @@ public class FragmentValoraciones extends Fragment {
 
             }
         });
+    }
+
+    /**
+     * Método para sacar la valoración media
+     */
+    private void establecerValoracionGeneral(){
+        int suma = 0;
+        for (int i = 0; i < listaValoraciones.size(); i++){
+            suma += listaValoraciones.get(i).getValoracion();
+        }
+        float media = (float) suma / (float) listaValoraciones.size();
+        rbGeneral.setRating(media);
     }
 
 }
