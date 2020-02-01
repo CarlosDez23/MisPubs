@@ -140,6 +140,7 @@
                                 android:layout_marginRight="15dp"
                                 android:background="@null"
                                 android:hint="usuario"
+                                android:maxLength="15"
                                 android:imeOptions="actionNext"
                                 android:inputType="text"
                                 android:maxLines="1"
@@ -211,6 +212,7 @@
                                 android:inputType="textPassword"
                                 android:maxLines="1"
                                 android:hint="password"
+                                android:maxLength="15"
                                 android:paddingStart="10dp"
                                 android:textColor="@color/black_overlay"
                                 android:textSize="15dp"/>
