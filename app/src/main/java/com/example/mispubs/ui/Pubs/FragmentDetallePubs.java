@@ -3,7 +3,6 @@ package com.example.mispubs.ui.Pubs;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
 
@@ -11,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.mispubs.Modelo.Pub;
 import com.example.mispubs.R;
+import com.example.mispubs.REST.APIUtils;
 import com.example.mispubs.REST.PubRest;
 import com.example.mispubs.ui.Mapas.FragmentMapas;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -84,11 +85,16 @@ public class FragmentDetallePubs extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        pubRest = APIUtils.getServicePubs();
+
         llamarVistas();
 
         gestionarModo(this.modo);
     }
 
+    /**
+     * Metodo para cargar las vistas de nuestra interfaz
+     */
     private void llamarVistas(){
         this.nombrePub = getView().findViewById(R.id.tvDetallePubsNombre);
         this.webPub = getView().findViewById(R.id.tvDetallePubsWeb);
@@ -106,6 +112,9 @@ public class FragmentDetallePubs extends Fragment {
         spinnerEstilos.setAdapter(adapter);
     }
 
+    /**
+     * Metodo para controlar el onClick de los elementos de nuestra vista
+     */
     private View.OnClickListener listenerBotones = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -129,6 +138,9 @@ public class FragmentDetallePubs extends Fragment {
     };
 
 
+    /**
+     * Metodo para rellenar los campos segun el pub selecionado
+     */
     private void rellenarCampos(){
         this.nombrePub.getEditText().setText(this.pub.getNombre());
         this.webPub.getEditText().setText(this.pub.getWeb());
@@ -137,6 +149,10 @@ public class FragmentDetallePubs extends Fragment {
         seleccionarEstiloPub();
     }
 
+    /**
+     * Gestion del modo en el que entramos al fragmen
+     * @param modo
+     */
     private void gestionarModo(int modo){
 
         switch (modo){
@@ -164,20 +180,43 @@ public class FragmentDetallePubs extends Fragment {
         }
     }
 
+    /**
+     * Gestion del modo que adoptara el boton segun el modo en el que se entro al fragment
+     * @param modo
+     */
     private void gestionarModoBoton(String modo){
 
         switch (modo){
             case guardar:
+                double d = 0.0;
+                Pub insertarPub =  new Pub(
+                        nombrePub.getEditText().getText().toString(),
+                        d,
+                        d,
+                        spinnerEstilos.getSelectedItem().toString(),
+                        Integer.parseInt(visitasPub.getEditText().getText().toString()),
+                        webPub.getEditText().getText().toString(),
+                        "foto"
+                );
                 Toast.makeText(getContext(),"guardar", Toast.LENGTH_LONG).show();
-                guardarPub(this.pub);
+                guardarPub(insertarPub);
                 break;
             case modificar:
                 Toast.makeText(getContext(),"modificar", Toast.LENGTH_LONG).show();
-                //modificarPub();
+                String
+                        nombre = nombrePub.getEditText().getText().toString(),
+                        web = webPub.getEditText().getText().toString(),
+                        estilo = spinnerEstilos.getSelectedItem().toString();
+                int visitas  = Integer.parseInt(visitasPub.getEditText().getText().toString());
+
+                Pub p = new Pub(nombre, 0.0,0.0,estilo,visitas,web,"Foto");
+                p.setId(pub.getId());
+
+                modificarPub(p);
                 break;
             case eliminar:
                 Toast.makeText(getContext(),"eliminar", Toast.LENGTH_LONG).show();
-                //eliminarPub();
+                eliminarPub();
                 break;
             default:
                 break;
@@ -186,6 +225,11 @@ public class FragmentDetallePubs extends Fragment {
     }
 
 
+    /**
+     * Metodo para habilitar o deshabilitar los elementos de la interfaz
+     * segun el modo en el que accedemos al fragment
+     * @param accion
+     */
     private void habilitarDeshabilitar(boolean accion){
         this.nombrePub.setEnabled(accion);
         this.webPub.setEnabled(accion);
@@ -200,7 +244,9 @@ public class FragmentDetallePubs extends Fragment {
     }
 
 
-
+    /**
+     * Metodo para seleccionar el estilo del pub en el spinner segun el pub selecionado
+     */
     public void seleccionarEstiloPub() {
         switch (this.pub.getEstilo()) {
             case "Rock":
@@ -224,8 +270,13 @@ public class FragmentDetallePubs extends Fragment {
         }
     }
 
+    /**
+     * Metodo para insertar un pub en la base de datos utilizando el servicio REST. Primero comprobamos
+     * que no exista para asi poder guardarlo
+     * @param guardarPub
+     */
     private void guardarPub(Pub guardarPub){
-        Call<Pub> call = pubRest.buscarPorNombreDelPub(this.pub.getNombre());
+        Call<Pub> call = pubRest.buscarPorNombreDelPub(guardarPub.getNombre());
         call.enqueue(new Callback<Pub>() {
             @Override
             public void onResponse(Call<Pub> call, Response<Pub> response) {
@@ -237,13 +288,22 @@ public class FragmentDetallePubs extends Fragment {
                             @Override
                             public void onResponse(Call<Pub> call, Response<Pub> response) {
                                 if (response.code() == 200){
+                                    Toast.makeText(getContext(), "Pub registrado",
+                                            Toast.LENGTH_LONG).show();
+
+                                    FragmentPubs pubs = new FragmentPubs();
+                                    FragmentManager fm = getFragmentManager();
+                                    FragmentTransaction transaction = fm.beginTransaction();
+                                    transaction.replace(R.id.nav_host_fragment,pubs );
+                                    transaction.addToBackStack(null);
+                                    transaction.commit();
 
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<Pub> call, Throwable t) {
-
+                                Log.e("ERROR: ", t.getMessage());
                             }
                         });
 
@@ -257,9 +317,67 @@ public class FragmentDetallePubs extends Fragment {
 
             @Override
             public void onFailure(Call<Pub> call, Throwable t) {
-
+                Log.e("ERROR: ", t.getMessage());
             }
         });
     }
+
+    private void modificarPub(Pub modificarPub){
+
+        Call<Pub> call = pubRest.modificarPub(modificarPub.getId(), modificarPub);
+        call.enqueue(new Callback<Pub>() {
+            @Override
+            public void onResponse(Call<Pub> call, Response<Pub> response) {
+                if (response.code() == 200){
+                    Toast.makeText(getContext(), "Pub actualizado",
+                            Toast.LENGTH_LONG).show();
+
+                    FragmentPubs pubs = new FragmentPubs();
+                    FragmentManager fm = getFragmentManager();
+                    FragmentTransaction transaction = fm.beginTransaction();
+                    transaction.replace(R.id.nav_host_fragment,pubs );
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Pub> call, Throwable t) {
+                Log.e("ERROR: ", t.getMessage());
+            }
+        });
+    }
+
+    private void eliminarPub(){
+        Call<Pub> call = pubRest.eliminarPub(this.pub.getId());
+        call.enqueue(new Callback<Pub>() {
+            @Override
+            public void onResponse(Call<Pub> call, Response<Pub> response) {
+                if (response.isSuccessful()){
+                    if (response.code()==200){
+                        Toast.makeText(getContext(),response.body().getNombre()+"Eliminado",
+                                Toast.LENGTH_LONG).show();
+
+                        FragmentPubs pubs = new FragmentPubs();
+                        FragmentManager fm = getFragmentManager();
+                        FragmentTransaction transaction = fm.beginTransaction();
+                        transaction.replace(R.id.nav_host_fragment,pubs );
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Pub> call, Throwable t) {
+                Log.e("ERROR: ", t.getMessage());
+            }
+        });
+    }
+
+
+
+
+
 
 }

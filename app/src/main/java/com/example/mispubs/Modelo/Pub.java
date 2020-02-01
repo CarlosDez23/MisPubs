@@ -15,11 +15,11 @@ public class Pub {
 
     @SerializedName("latitud")
     @Expose
-    private Long latitud;
+    private double latitud;
 
     @SerializedName("longitud")
     @Expose
-    private Long longitud;
+    private double longitud;
 
     @SerializedName("estilo")
     @Expose
@@ -40,7 +40,7 @@ public class Pub {
     public Pub() {
     }
 
-    public Pub(String nombre, Long latitud, Long longitud, String estilo, Integer visitas, String web, String imagen) {
+    public Pub(String nombre, double latitud, double longitud, String estilo, Integer visitas, String web, String imagen) {
         this.nombre = nombre;
         this.latitud = latitud;
         this.longitud = longitud;
@@ -66,19 +66,19 @@ public class Pub {
         this.nombre = nombre;
     }
 
-    public Long getLatitud() {
+    public double getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(Long latitud) {
+    public void setLatitud(double latitud) {
         this.latitud = latitud;
     }
 
-    public Long getLongitud() {
+    public double getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(Long longitud) {
+    public void setLongitud(double longitud) {
         this.longitud = longitud;
     }
 
