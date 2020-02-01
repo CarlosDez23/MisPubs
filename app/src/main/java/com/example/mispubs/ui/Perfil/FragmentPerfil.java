@@ -54,7 +54,7 @@ public class FragmentPerfil extends Fragment {
 
     //Para la interfaz
     private EditText etPerfilNombre, etPerfilCorreo, etPerfilPassword;
-    private RelativeLayout btnPerfilEliminarUsuario;
+    private RelativeLayout btnPerfilEliminarUsuario , btnPerfilCerrarSesion;
     private ImageView imageViewEdit, imageViewModificar, ivImagenPerfil;
 
     //Para la gestión de imágenes
@@ -88,6 +88,8 @@ public class FragmentPerfil extends Fragment {
         this.etPerfilPassword.setText(usuario.getPassword());
         this.btnPerfilEliminarUsuario = getView().findViewById(R.id.btnPerfilEliminarUsuario);
         this.btnPerfilEliminarUsuario.setOnClickListener(listenerBotones);
+        this.btnPerfilCerrarSesion = getView().findViewById(R.id.btnPerfilCerrarSesion);
+        this.btnPerfilCerrarSesion.setOnClickListener(listenerBotones);
         this.imageViewEdit = getView().findViewById(R.id.edit);
         this.imageViewEdit.setOnClickListener(listenerBotones);
         this.imageViewModificar = getView().findViewById(R.id.ivPerfilModificar);
@@ -129,6 +131,8 @@ public class FragmentPerfil extends Fragment {
                 case R.id.profile:
                     gestionImagen();
                     break;
+                case R.id.btnPerfilCerrarSesion:
+                    mostrarDialogoCerrarSesion();
                 default:
                     break;
             }
@@ -182,7 +186,7 @@ public class FragmentPerfil extends Fragment {
 
     private void mostrarDialogoEliminar() {
         AlertDialog.Builder deleteDialog = new AlertDialog.Builder(getContext());
-        deleteDialog.setTitle(usuario.getNombre() + ", ¿estás seguro de querer eliminar tu cuenta?");
+        deleteDialog.setTitle(usuario.getNombre() + ", ¿Estás seguro de querer eliminar tu cuenta?");
         String[] deleteDialogitems = {"Sí", "No"};
         deleteDialog.setItems(deleteDialogitems, new DialogInterface.OnClickListener() {
             @Override
@@ -201,6 +205,35 @@ public class FragmentPerfil extends Fragment {
             }
         });
         deleteDialog.show();
+    }
+
+    private void mostrarDialogoCerrarSesion(){
+        AlertDialog.Builder deleteDialog = new AlertDialog.Builder(getContext());
+        deleteDialog.setTitle(usuario.getNombre() + ", ¿Estás seguro de querer cerrar sesion?");
+        String[] deleteDialogitems = {"Sí", "No"};
+        deleteDialog.setItems(deleteDialogitems, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        cerrarSesion();
+                        break;
+                    case 1:
+                        Toast.makeText(getContext(), "De acuerdo",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        deleteDialog.show();
+    }
+
+
+    private void cerrarSesion(){
+        startActivity(new Intent(getActivity(), ActivityLogin.class));
+        getActivity().finish();
     }
 
     private void gestionImagen() {
