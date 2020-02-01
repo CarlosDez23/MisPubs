@@ -1,5 +1,7 @@
 package com.example.mispubs.REST;
 
+
+
 public class APIUtils {
 
     private static final String server = "80.102.104.105";
@@ -19,5 +21,9 @@ public class APIUtils {
 
     public static ValoracionRest getServiceValoraciones(){
         return RetrofitClient.getClient(API_URL).create(ValoracionRest.class);
+    }
+
+    public static SesionRest getServiceSesiones(){
+        return RetrofitClient.getClient(API_URL).create(SesionRest.class);
     }
 }
