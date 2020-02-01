@@ -6,11 +6,13 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
 import com.example.mispubs.R;
+import com.example.mispubs.Utilidades.Util;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class ValoracionDetalleDialog extends AppCompatDialogFragment {
@@ -19,18 +21,21 @@ public class ValoracionDetalleDialog extends AppCompatDialogFragment {
     private TextView tvValoracionUsuario;
     private TextInputLayout tvValoracionDetalle;
     private RatingBar rbValoracionDetalle;
+    private ImageView ivUsuario;
 
 
     //Datos que necesitamos
-    String nombreUsuario;
-    float valoracion;
-    String texto;
+    private String nombreUsuario;
+    private float valoracion;
+    private String texto;
+    private String img;
 
 
-    public ValoracionDetalleDialog(String nombreUsuario, float valoracion, String texto) {
+    public ValoracionDetalleDialog(String nombreUsuario, float valoracion, String texto, String img) {
         this.nombreUsuario = nombreUsuario;
         this.valoracion = valoracion;
         this.texto = texto;
+        this.img = img;
     }
 
     @Override
@@ -51,11 +56,13 @@ public class ValoracionDetalleDialog extends AppCompatDialogFragment {
         rbValoracionDetalle = view.findViewById(R.id.rbValoracionDetalle);
         tvValoracionUsuario = view.findViewById(R.id.tvValoracionDetalleNombreUsuario);
         tvValoracionDetalle = view.findViewById(R.id.tvCadena);
-
+        ivUsuario = view.findViewById(R.id.ivImagenUsuario);
+        //Metemos los valores
         rbValoracionDetalle.setRating(valoracion);
         rbValoracionDetalle.setIsIndicator(true);
         tvValoracionUsuario.setText(nombreUsuario);
         tvValoracionDetalle.getEditText().setText(texto);
+        ivUsuario.setImageBitmap(Util.base64ToBitmap(img));
 
         return builder.create();
     }

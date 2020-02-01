@@ -2,9 +2,12 @@ package com.example.mispubs.ui.Valoraciones;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -17,6 +20,7 @@ import com.example.mispubs.Modelo.Usuario;
 import com.example.mispubs.Modelo.Valoracion;
 import com.example.mispubs.R;
 import com.example.mispubs.REST.UsuarioRest;
+import com.example.mispubs.Utilidades.Util;
 
 
 import java.util.ArrayList;
@@ -32,6 +36,9 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
     private FragmentManager fm;
 
     private UsuarioRest usuarioRest;
+
+    //Necesitamos la imagen para pasársela al detalle de la valoración
+    private String imgUsuario;
 
 
     public ValoracionesAdapter(ArrayList<Valoracion> listValoraciones, Context context, UsuarioRest usuarioRest, FragmentManager fm) {
@@ -53,25 +60,21 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
     @Override
     public void onBindViewHolder(@NonNull ValoracionesAdapter.ViewHolder holder, int position) {
         final Valoracion v = listValoraciones.get(position);
+
         holder.rbValoracion.setRating((float)v.getValoracion());
         buscarNombreUsuario(v.getIdusuario(),holder);
         holder.tvValoracionDetalle.setText(v.getDetalle());
         holder.tvCardValoracion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 ValoracionDetalleDialog dialog = new ValoracionDetalleDialog
                         (holder.tvValoracionUsuario.getText().toString(),
                                 holder.rbValoracion.getRating(),
-                                holder.tvValoracionDetalle.getText().toString());
+                                holder.tvValoracionDetalle.getText().toString(),
+                                Util.bitmapToBase64(((BitmapDrawable)holder.ivImagenUsuario.getDrawable()).getBitmap()));
                 dialog.show(fm,"Detalle");
-
-
             }
         });
-
-
     }
 
     /**
@@ -90,6 +93,8 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
                     if (response.code() == 200){
                         Usuario u = response.body();
                         holder.tvValoracionUsuario.setText(u.getNombre());
+                        holder.ivImagenUsuario.setImageBitmap(Util.base64ToBitmap(u.getImagen()));
+                        imgUsuario = u.getImagen();
                     }
                 }
             }
@@ -110,6 +115,7 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
         private RatingBar rbValoracion;
         private TextView tvValoracionUsuario;
         private TextView tvValoracionDetalle;
+        private ImageView ivImagenUsuario;
         private CardView tvCardValoracion;
 
         public ViewHolder(@NonNull View itemView) {
@@ -117,6 +123,7 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
             this.rbValoracion = itemView.findViewById(R.id.rbValoracion);
             this.tvValoracionUsuario = itemView.findViewById(R.id.tvValoracionUsuario);
             this.tvValoracionDetalle = itemView.findViewById(R.id.tvValoracionDetalle);
+            this.ivImagenUsuario = itemView.findViewById(R.id.ivImagenUsuario);
             tvCardValoracion = itemView.findViewById(R.id.cardValoracion);
 
         }

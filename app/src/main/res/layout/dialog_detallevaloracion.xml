@@ -3,11 +3,39 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/contenedorInfoUsuario">
+        <TextView
+            android:id="@+id/tvValoracionDetalleNombreUsuario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:textColor="@color/black_overlay"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp">
+
+        </TextView>
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_toEndOf="@id/tvValoracionDetalleNombreUsuario"
+            android:id="@+id/ivImagenUsuario"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:elevation="5dp"
+            android:padding="5dp"
+            android:src="@drawable/man"
+            android:layout_marginBottom="10dp"
+            android:layout_alignParentRight="true"
+            />
+    </RelativeLayout>
     <RatingBar
         android:id="@+id/rbValoracionDetalle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_below="@id/contenedorInfoUsuario"
         android:numStars="5"
         android:stepSize=".5"
         android:rating="0.0"
@@ -16,20 +44,10 @@
         android:layout_gravity="center"
         android:layout_marginTop="20dp">
     </RatingBar>
-    <TextView
-        android:id="@+id/tvValoracionDetalleNombreUsuario"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18dp"
-        android:textColor="@color/black_overlay"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_below="@id/rbValoracionDetalle">
 
-    </TextView>
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tvCadena"
-        android:layout_below="@id/tvValoracionDetalleNombreUsuario"
+        android:layout_below="@id/rbValoracionDetalle"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
