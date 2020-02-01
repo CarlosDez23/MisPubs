@@ -36,6 +36,7 @@ public class ValoracionDetalleDialog extends AppCompatDialogFragment {
         this.valoracion = valoracion;
         this.texto = texto;
         this.img = img;
+
     }
 
     @Override
