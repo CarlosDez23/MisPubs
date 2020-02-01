@@ -10,30 +10,30 @@ public class Sesion {
     @Expose
     private Integer id;
 
-    @SerializedName("id_usuario")
+    @SerializedName("idusuario")
     @Expose
-    private Integer id_usuario;
+    private Integer idusuario;
 
     @SerializedName("token")
     @Expose
     private String token;
 
-    @SerializedName("fecha_inicio")
+    @SerializedName("fechainicio")
     @Expose
-    private String fecha_inicio;
+    private String fechainicio;
 
-    @SerializedName("fecha_fin")
+    @SerializedName("fechafin")
     @Expose
-    private String fecha_fin;
+    private String fechafin;
 
     public Sesion() {
     }
 
-    public Sesion(Integer id_usuario, String token, String fecha_inicio, String fecha_fin) {
-        this.id_usuario = id_usuario;
+    public Sesion(Integer idusuario, String token, String fechainicio, String fechafin) {
+        this.idusuario = idusuario;
         this.token = token;
-        this.fecha_inicio = fecha_inicio;
-        this.fecha_fin = fecha_fin;
+        this.fechainicio = fechainicio;
+        this.fechafin = fechafin;
     }
 
     public Integer getId() {
@@ -44,12 +44,12 @@ public class Sesion {
         this.id = id;
     }
 
-    public Integer getId_usuario() {
-        return id_usuario;
+    public Integer getIdusuario() {
+        return idusuario;
     }
 
-    public void setId_usuario(Integer id_usuario) {
-        this.id_usuario = id_usuario;
+    public void setIdusuario(Integer idusuario) {
+        this.idusuario = idusuario;
     }
 
     public String getToken() {
@@ -60,30 +60,30 @@ public class Sesion {
         this.token = token;
     }
 
-    public String getFecha_inicio() {
-        return fecha_inicio;
+    public String getFechainicio() {
+        return fechainicio;
     }
 
-    public void setFecha_inicio(String fecha_inicio) {
-        this.fecha_inicio = fecha_inicio;
+    public void setFechainicio(String fechainicio) {
+        this.fechainicio = fechainicio;
     }
 
-    public String getFecha_fin() {
-        return fecha_fin;
+    public String getFechafin() {
+        return fechafin;
     }
 
-    public void setFecha_fin(String fecha_fin) {
-        this.fecha_fin = fecha_fin;
+    public void setFechafin(String fechafin) {
+        this.fechafin = fechafin;
     }
 
     @Override
     public String toString() {
         return "Sesion{" +
                 "id=" + id +
-                ", id_usuario=" + id_usuario +
+                ", idusuario=" + idusuario +
                 ", token='" + token + '\'' +
-                ", fecha_inicio='" + fecha_inicio + '\'' +
-                ", fecha_fin='" + fecha_fin + '\'' +
+                ", fechainicio='" + fechainicio + '\'' +
+                ", fechafin='" + fechafin + '\'' +
                 '}';
     }
 }

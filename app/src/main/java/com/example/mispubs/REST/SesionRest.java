@@ -11,8 +11,8 @@ import retrofit2.http.Path;
 
 public interface SesionRest {
 
-    @GET("sesiones/{id_usuario}")
-    Call<Sesion> buscarSesion(@Path("id_usuario") Integer id_usuario);
+    @GET("sesiones/{idusuario}")
+    Call<Sesion> buscarSesion(@Path("idusuario") Integer id_usuario);
 
     @POST("sesiones/nueva")
     Call<Sesion> nuevaSesion(@Body Sesion sesion);
