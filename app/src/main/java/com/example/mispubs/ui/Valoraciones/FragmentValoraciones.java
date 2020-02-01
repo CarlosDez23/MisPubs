@@ -1,7 +1,10 @@
 package com.example.mispubs.ui.Valoraciones;
 
 
-
+import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.hardware.biometrics.BiometricPrompt;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,11 +13,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.CancellationSignal;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.mispubs.Modelo.Pub;
@@ -28,6 +33,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,8 +49,6 @@ public class FragmentValoraciones extends Fragment {
     private TextView tvNombrePub;
 
 
-
-
     //Para datos
     private ArrayList<Valoracion> listaValoraciones = new ArrayList<>();
     private Pub pub;
@@ -53,13 +58,14 @@ public class FragmentValoraciones extends Fragment {
     private ValoracionRest valoracionRest;
     private UsuarioRest usuarioRest;
 
+
     View root;
 
     public FragmentValoraciones(Pub pub) {
         this.pub = pub;
     }
 
-    public FragmentValoraciones getFragment(){
+    public FragmentValoraciones getFragment() {
         return this;
     }
 
@@ -77,14 +83,13 @@ public class FragmentValoraciones extends Fragment {
         usuarioRest = APIUtils.getService();
 
         llamarVistas();
-
     }
 
-    private void llamarVistas(){
+    private void llamarVistas() {
         rbGeneral = getView().findViewById(R.id.rbValoracionesGeneral);
         recyclerView = getView().findViewById(R.id.recyclerValoraciones);
         GridLayoutManager manager = new GridLayoutManager(getActivity(),
-                2,GridLayoutManager.VERTICAL,false);
+                2, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
         listarValoraciones();
         fabValoracionesAdd = getView().findViewById(R.id.fabValoracionesAdd);
@@ -97,21 +102,20 @@ public class FragmentValoraciones extends Fragment {
         @Override
         public void onClick(View v) {
             ValoracionDialog dialog = new ValoracionDialog(pub.getId(), valoracionRest, getFragment());
-            dialog.show(getFragmentManager(),"Mi valoración");
-
+            dialog.show(getFragmentManager(), "Mi valoración");
         }
     };
 
-    public void listarValoraciones(){
+    public void listarValoraciones() {
         Call<List<Valoracion>> call = valoracionRest.findValoracionesPub(pub.getId());
         call.enqueue(new Callback<List<Valoracion>>() {
             @Override
             public void onResponse(Call<List<Valoracion>> call, Response<List<Valoracion>> response) {
-                if (response.isSuccessful()){
-                    if (response.code() == 200){
+                if (response.isSuccessful()) {
+                    if (response.code() == 200) {
                         listaValoraciones = (ArrayList<Valoracion>) response.body();
                         recyclerView.setAdapter(new ValoracionesAdapter
-                                (listaValoraciones,getContext(),usuarioRest, getFragmentManager()));
+                                (listaValoraciones, getContext(), usuarioRest, getFragmentManager()));
                         establecerValoracionGeneral();
                     }
                 }
@@ -127,9 +131,9 @@ public class FragmentValoraciones extends Fragment {
     /**
      * Método para sacar la valoración media
      */
-    private void establecerValoracionGeneral(){
+    private void establecerValoracionGeneral() {
         int suma = 0;
-        for (int i = 0; i < listaValoraciones.size(); i++){
+        for (int i = 0; i < listaValoraciones.size(); i++) {
             suma += listaValoraciones.get(i).getValoracion();
         }
         float media = (float) suma / (float) listaValoraciones.size();

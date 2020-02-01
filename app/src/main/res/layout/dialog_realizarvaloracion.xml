@@ -9,6 +9,9 @@
         android:layout_centerHorizontal="true"
         android:numStars="5"
         android:stepSize=".5"
+        android:progressTint="#FFD100"
+        android:backgroundTint="#FFD100"
+        android:secondaryProgressTint="#FFD100"
         android:rating="0.0"
         android:layout_gravity="center"
         android:layout_marginTop="20dp">

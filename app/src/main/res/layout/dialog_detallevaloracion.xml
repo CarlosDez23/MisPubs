@@ -11,6 +11,8 @@
         android:numStars="5"
         android:stepSize=".5"
         android:rating="0.0"
+        android:progressTint="#FFD100"
+        android:secondaryProgressTint="#FFD100"
         android:layout_gravity="center"
         android:layout_marginTop="20dp">
     </RatingBar>
@@ -35,12 +37,13 @@
         android:background="#FFFFFF"
         android:hint="Valoracion">
 
+
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="false"
             android:textColor="@color/black_overlay"
-            android:lines="3"/>
+            android:lines="5"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

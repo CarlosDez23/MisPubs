@@ -27,6 +27,9 @@
                 android:stepSize=".5"
                 style="?android:attr/ratingBarStyleSmall"
                 android:layout_gravity="center"
+                android:progressTint="#FFD100"
+                android:secondaryProgressTint="#FFD100"
+                android:progressBackgroundTint="#FFD100"
                 android:layout_marginTop="20dp">
             </RatingBar>
 
