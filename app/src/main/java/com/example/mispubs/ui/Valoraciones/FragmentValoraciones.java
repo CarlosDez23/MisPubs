@@ -87,6 +87,7 @@ public class FragmentValoraciones extends Fragment {
 
     private void llamarVistas() {
         rbGeneral = getView().findViewById(R.id.rbValoracionesGeneral);
+        rbGeneral.setIsIndicator(true);
         recyclerView = getView().findViewById(R.id.recyclerValoraciones);
         GridLayoutManager manager = new GridLayoutManager(getActivity(),
                 2, GridLayoutManager.VERTICAL, false);
@@ -138,7 +139,7 @@ public class FragmentValoraciones extends Fragment {
         }
         float media = (float) suma / (float) listaValoraciones.size();
         rbGeneral.setRating(media);
-        rbGeneral.setIsIndicator(true);
+
     }
 
 }
