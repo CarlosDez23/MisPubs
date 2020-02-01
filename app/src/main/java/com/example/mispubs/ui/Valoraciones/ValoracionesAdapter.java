@@ -59,6 +59,8 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
         holder.tvCardValoracion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 ValoracionDetalleDialog dialog = new ValoracionDetalleDialog
                         (holder.tvValoracionUsuario.getText().toString(),
                                 holder.rbValoracion.getRating(),
