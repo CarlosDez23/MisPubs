@@ -32,13 +32,18 @@ public class Util {
 
     }
 
+    /**
+     * Método para comprimir una imagen antes de transformarla a Base64
+     * @param myBitmap
+     * @return
+     */
     public static Bitmap comprimirImagen(Bitmap myBitmap) {
         Bitmap bitmap = null;
         try{
             float porcentaje = 360 / (float) myBitmap.getWidth();
             bitmap= Bitmap.createScaledBitmap(myBitmap, 360, (int) (myBitmap.getHeight()*porcentaje), false);
         }catch(Exception ex){
-
+            System.out.println(ex.getMessage());
         }
         return bitmap;
     }

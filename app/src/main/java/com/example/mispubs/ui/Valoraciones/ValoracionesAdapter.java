@@ -2,6 +2,8 @@ package com.example.mispubs.ui.Valoraciones;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +37,9 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
 
     private UsuarioRest usuarioRest;
 
+    //Necesitamos la imagen para pasársela al detalle de la valoración
+    private String imgUsuario;
+
 
     public ValoracionesAdapter(ArrayList<Valoracion> listValoraciones, Context context, UsuarioRest usuarioRest, FragmentManager fm) {
         this.listValoraciones = listValoraciones;
@@ -55,6 +60,7 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
     @Override
     public void onBindViewHolder(@NonNull ValoracionesAdapter.ViewHolder holder, int position) {
         final Valoracion v = listValoraciones.get(position);
+
         holder.rbValoracion.setRating((float)v.getValoracion());
         buscarNombreUsuario(v.getIdusuario(),holder);
         holder.tvValoracionDetalle.setText(v.getDetalle());
@@ -64,7 +70,8 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
                 ValoracionDetalleDialog dialog = new ValoracionDetalleDialog
                         (holder.tvValoracionUsuario.getText().toString(),
                                 holder.rbValoracion.getRating(),
-                                holder.tvValoracionDetalle.getText().toString());
+                                holder.tvValoracionDetalle.getText().toString(),
+                                Util.bitmapToBase64(((BitmapDrawable)holder.ivImagenUsuario.getDrawable()).getBitmap()));
                 dialog.show(fm,"Detalle");
             }
         });
@@ -87,6 +94,7 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
                         Usuario u = response.body();
                         holder.tvValoracionUsuario.setText(u.getNombre());
                         holder.ivImagenUsuario.setImageBitmap(Util.base64ToBitmap(u.getImagen()));
+                        imgUsuario = u.getImagen();
                     }
                 }
             }
