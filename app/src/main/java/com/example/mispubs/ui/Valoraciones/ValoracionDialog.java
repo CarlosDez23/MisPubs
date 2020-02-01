@@ -64,18 +64,24 @@ public class ValoracionDialog extends AppCompatDialogFragment {
                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (rbValoracion.getRating() == 0.0) {
-                            Toast.makeText(getContext(), "Tienes que valorar el pub",
-                                    Toast.LENGTH_LONG).show();
-                        } else if (tvValoracion.getEditText().getText().toString().isEmpty()) {
-                            Toast.makeText(getContext(), "Tienes que realizar un comentario",
-                                    Toast.LENGTH_LONG).show();
-                        } else {
-                            Valoracion v = new Valoracion(MainActivity.getUsuario().getId(),
-                                    idPub, (int) rbValoracion.getRating(),
-                                    tvValoracion.getEditText().getText().toString());
-                            realizarValoracion(v);
+                        boolean valido = false;
+                        while (!valido) {
+                            if (rbValoracion.getRating() == 0.0) {
+                                Toast.makeText(getContext(), "Tienes que valorar el pub",
+                                        Toast.LENGTH_LONG).show();
+                            } else if (tvValoracion.getEditText().getText().toString().isEmpty()) {
+                                Toast.makeText(getContext(), "Tienes que realizar un comentario",
+                                        Toast.LENGTH_LONG).show();
+                            } else {
+                                valido = true;
+
+                            }
                         }
+
+                        Valoracion v = new Valoracion(MainActivity.getUsuario().getId(),
+                                idPub, (int) rbValoracion.getRating(),
+                                tvValoracion.getEditText().getText().toString());
+                        realizarValoracion(v);
                     }
                 });
 
