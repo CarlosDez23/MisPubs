@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -17,6 +18,7 @@ import com.example.mispubs.Modelo.Usuario;
 import com.example.mispubs.Modelo.Valoracion;
 import com.example.mispubs.R;
 import com.example.mispubs.REST.UsuarioRest;
+import com.example.mispubs.Utilidades.Util;
 
 
 import java.util.ArrayList;
@@ -59,19 +61,13 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
         holder.tvCardValoracion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 ValoracionDetalleDialog dialog = new ValoracionDetalleDialog
                         (holder.tvValoracionUsuario.getText().toString(),
                                 holder.rbValoracion.getRating(),
                                 holder.tvValoracionDetalle.getText().toString());
                 dialog.show(fm,"Detalle");
-
-
             }
         });
-
-
     }
 
     /**
@@ -90,6 +86,7 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
                     if (response.code() == 200){
                         Usuario u = response.body();
                         holder.tvValoracionUsuario.setText(u.getNombre());
+                        holder.ivImagenUsuario.setImageBitmap(Util.base64ToBitmap(u.getImagen()));
                     }
                 }
             }
@@ -110,6 +107,7 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
         private RatingBar rbValoracion;
         private TextView tvValoracionUsuario;
         private TextView tvValoracionDetalle;
+        private ImageView ivImagenUsuario;
         private CardView tvCardValoracion;
 
         public ViewHolder(@NonNull View itemView) {
@@ -117,6 +115,7 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
             this.rbValoracion = itemView.findViewById(R.id.rbValoracion);
             this.tvValoracionUsuario = itemView.findViewById(R.id.tvValoracionUsuario);
             this.tvValoracionDetalle = itemView.findViewById(R.id.tvValoracionDetalle);
+            this.ivImagenUsuario = itemView.findViewById(R.id.ivImagenUsuario);
             tvCardValoracion = itemView.findViewById(R.id.cardValoracion);
 
         }

@@ -94,8 +94,12 @@ public class FragmentPerfil extends Fragment {
         this.imageViewModificar.setOnClickListener(listenerBotones);
         this.ivImagenPerfil = getView().findViewById(R.id.profile);
         this.ivImagenPerfil.setEnabled(false);
+
+        //Para la gestión de imágenes
         if (usuario.getImagen() != null){
             this.ivImagenPerfil.setImageBitmap(Util.base64ToBitmap(usuario.getImagen()));
+        }else{
+            this.ivImagenPerfil.setImageResource(R.drawable.man);
         }
 
         ivImagenPerfil.setOnClickListener(listenerBotones);
@@ -141,7 +145,8 @@ public class FragmentPerfil extends Fragment {
                 password = etPerfilPassword.getText().toString();
 
         Bitmap img = ((BitmapDrawable)ivImagenPerfil.getDrawable()).getBitmap();
-        String convertida = Util.bitmapToBase64(img);
+        Bitmap comprimido = Util.comprimirImagen(img);
+        String convertida = Util.bitmapToBase64(comprimido);
 
         Usuario u = new Usuario(nombre, email, password, convertida);
         u.setId(usuario.getId());
@@ -241,22 +246,16 @@ public class FragmentPerfil extends Fragment {
                 Uri contentURI = data.getData();
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), contentURI);
-                    //b64 = convertirenBytes(bitmap);
-
                     this.ivImagenPerfil.setImageBitmap(bitmap);
-
                 } catch (IOException e) {
                     Snackbar.make(getView(), "Fallo en la galería", Snackbar.LENGTH_LONG).show();
-
                 }
             }
         } else if (requestCode == CAMARA) {
             Bitmap thumbnail = null;
             try {
                 thumbnail = (Bitmap) data.getExtras().get("data");
-                //b64 = convertirenBytes(thumbnail);
                 this.ivImagenPerfil.setImageBitmap(thumbnail);
-
             } catch (Exception e) {
                 Snackbar.make(getView(), "Fallo en la cámara", Snackbar.LENGTH_LONG).show();
             }

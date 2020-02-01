@@ -32,4 +32,15 @@ public class Util {
 
     }
 
+    public static Bitmap comprimirImagen(Bitmap myBitmap) {
+        Bitmap bitmap = null;
+        try{
+            float porcentaje = 360 / (float) myBitmap.getWidth();
+            bitmap= Bitmap.createScaledBitmap(myBitmap, 360, (int) (myBitmap.getHeight()*porcentaje), false);
+        }catch(Exception ex){
+
+        }
+        return bitmap;
+    }
+
 }
