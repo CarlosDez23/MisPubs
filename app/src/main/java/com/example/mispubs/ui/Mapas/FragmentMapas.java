@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.mispubs.Modelo.Pub;
 import com.example.mispubs.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -21,8 +22,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -36,6 +39,17 @@ public class FragmentMapas extends Fragment implements OnMapReadyCallback,Google
     private FusedLocationProviderClient mPosicion;
     private Location ultimaLocalizacion;
     private LatLng posicionActual;
+    private Marker marcador;
+    private LatLng posicionPub;
+    private Pub pub;
+
+    public FragmentMapas(LatLng posPub, Pub pubMapa) {
+        this.posicionPub = posPub;
+        this.pub = pubMapa;
+    }
+
+    public FragmentMapas() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,6 +71,8 @@ public class FragmentMapas extends Fragment implements OnMapReadyCallback,Google
             fm.beginTransaction().replace(R.id.map, supportMapFragment).commit();
         }
         supportMapFragment.getMapAsync(this);
+
+
     }
 
     @Override
@@ -74,6 +90,7 @@ public class FragmentMapas extends Fragment implements OnMapReadyCallback,Google
         UiSettings uiSettings = map.getUiSettings();
         uiSettings.setMapToolbarEnabled(true);
         obtenerPosicion();
+        addMarcador(this.posicionPub, this.pub);
     }
 
     /**
@@ -103,5 +120,15 @@ public class FragmentMapas extends Fragment implements OnMapReadyCallback,Google
         } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
+    }
+
+
+    public void addMarcador(LatLng pos, Pub pub) {
+        marcador = map.addMarker(new MarkerOptions()
+                .position(pos)
+                .title(pub.getNombre())
+                .snippet(pub.getEstilo())
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcador))//defaultMarker(BitmapDescriptorFactory.HUE_VIOLET
+        );
     }
 }

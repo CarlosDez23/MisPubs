@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,7 +28,13 @@ import com.example.mispubs.R;
 import com.example.mispubs.REST.APIUtils;
 import com.example.mispubs.REST.PubRest;
 import com.example.mispubs.ui.Mapas.FragmentMapas;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
@@ -61,6 +68,10 @@ public class FragmentDetallePubs extends Fragment {
     private CardView cvDetallePubBotonModo;
     private RelativeLayout btnDetallePubBotonModo;
     private PubRest pubRest;
+    private FusedLocationProviderClient mPosicion;
+    private Location ultimaLocalizacion;
+    private LatLng posicionPub;
+    double latitude, longitude;
 
 
     public FragmentDetallePubs() {
@@ -70,6 +81,10 @@ public class FragmentDetallePubs extends Fragment {
     public FragmentDetallePubs(Pub pub, int modo) {
         this.pub = pub;
         this.modo = modo;
+    }
+
+    private Pub getPub(){
+        return this.pub;
     }
 
     public static FragmentDetallePubs newInstance() {
@@ -105,6 +120,7 @@ public class FragmentDetallePubs extends Fragment {
         this.mapaPub = getView().findViewById(R.id.fabDetallePubsMapa);
         this.spinnerEstilos = getView().findViewById(R.id.spinnerDetallePubsEstilos);
         this.mapaPub = getView().findViewById(R.id.fabDetallePubsMapa);
+        this.mapaPub.hide();
         this.mapaPub.setOnClickListener(listenerBotones);
         this.tvDetallePubsModoBoton = getView().findViewById(R.id.tvDetallePubsModoBoton);
         this.cvDetallePubBotonModo = getView().findViewById(R.id.cvDetallePubBotonModo);
@@ -123,12 +139,15 @@ public class FragmentDetallePubs extends Fragment {
 
             switch (v.getId()) {
                 case R.id.fabDetallePubsMapa:
-                    FragmentMapas mapa = new FragmentMapas();
+                    posicionPub = new LatLng(getPub().getLatitud(),getPub().getLongitud());
+                    FragmentMapas mapa = new FragmentMapas(posicionPub,getPub());
                     FragmentManager fm = getFragmentManager();
                     FragmentTransaction transaction = fm.beginTransaction();
                     transaction.replace(R.id.nav_host_fragment, mapa);
                     transaction.addToBackStack(null);
                     transaction.commit();
+
+
                     break;
                 case R.id.btnDetallePubBotonModo:
                     gestionarModoBoton(tvDetallePubsModoBoton.getText().toString());
@@ -160,12 +179,14 @@ public class FragmentDetallePubs extends Fragment {
 
         switch (modo) {
             case modoNuevo:
+                obtenerPosicionActualMapa();
                 habilitarDeshabilitar(true);
                 this.tvDetallePubsModoBoton.setText(guardar);
                 break;
             case modoVer:
                 habilitarDeshabilitar(false);
                 rellenarCampos();
+                this.mapaPub.show();
                 this.cvDetallePubBotonModo.setVisibility(View.INVISIBLE);
                 break;
             case modoModificar:
@@ -192,13 +213,12 @@ public class FragmentDetallePubs extends Fragment {
 
         switch (modo) {
             case guardar:
-
                 if (comprobarCampos()) {
                     double d = 0.0;
                     Pub insertarPub = new Pub(
                             nombrePub.getEditText().getText().toString(),
-                            d,
-                            d,
+                            latitude,
+                            longitude,
                             spinnerEstilos.getSelectedItem().toString(),
                             Integer.parseInt(visitasPub.getEditText().getText().toString()),
                             webPub.getEditText().getText().toString(),
@@ -235,6 +255,9 @@ public class FragmentDetallePubs extends Fragment {
 
     }
 
+    /**
+     * Metodo para mostrar un dialogo para estar seguro de que se desea eliminar el pub
+     */
     private void mostrarDialogoEliminar(){
         AlertDialog.Builder deleteDialog = new AlertDialog.Builder(getContext());
         deleteDialog.setTitle("¿Estás seguro de querer eliminar el"+pub.getNombre()+"?");
@@ -258,6 +281,10 @@ public class FragmentDetallePubs extends Fragment {
         deleteDialog.show();
     }
 
+    /**
+     * Metodo para comprobar que los campos no se quedan vacios al guardar o modificar
+     * @return
+     */
     private boolean comprobarCampos() {
         boolean
                 resultado = false,
@@ -298,7 +325,6 @@ public class FragmentDetallePubs extends Fragment {
         this.webPub.setEnabled(accion);
         this.visitasPub.setEnabled(accion);
         this.spinnerEstilos.setEnabled(accion);
-        this.mapaPub.setEnabled(accion);
         if (accion == true) {
             this.cambiarFotoPub.show();
         } else {
@@ -386,6 +412,10 @@ public class FragmentDetallePubs extends Fragment {
         });
     }
 
+    /**
+     * Metodo para modificar un pub selecionado utilizando el servicio REST
+     * @param modificarPub
+     */
     private void modificarPub(Pub modificarPub) {
 
         Call<Pub> call = pubRest.modificarPub(modificarPub.getId(), modificarPub);
@@ -412,6 +442,9 @@ public class FragmentDetallePubs extends Fragment {
         });
     }
 
+    /**
+     * Metodo para eliminar el pub selecionado utilizando el servicio REST
+     */
     private void eliminarPub() {
         Call<Pub> call = pubRest.eliminarPub(this.pub.getId());
         call.enqueue(new Callback<Pub>() {
@@ -438,6 +471,37 @@ public class FragmentDetallePubs extends Fragment {
             }
         });
     }
+
+
+    private void obtenerPosicionActualMapa() {
+        try {
+            mPosicion = LocationServices.getFusedLocationProviderClient(getActivity());
+            Task<Location> local = mPosicion.getLastLocation();
+            local.addOnCompleteListener(getActivity(), new OnCompleteListener<Location>() {
+                @Override
+                public void onComplete(@NonNull Task<Location> task) {
+                    if (task.isSuccessful()) {
+                        ultimaLocalizacion = task.getResult();
+                        if (ultimaLocalizacion != null) {
+                            latitude = ultimaLocalizacion.getLatitude();
+                            longitude = ultimaLocalizacion.getLongitude();
+
+                        } else {
+                            Snackbar.make(getView(), "No se puede establecer la posición actual",
+                                    Snackbar.LENGTH_LONG).show();
+                        }
+
+                    } else {
+                        Log.d("GPS", "No se encuetra la última posición.");
+                    }
+                }
+            });
+
+        } catch (SecurityException e) {
+            Log.e("Exception: %s", e.getMessage());
+        }
+    }
+
 
 
 }
