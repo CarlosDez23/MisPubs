@@ -6,18 +6,24 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,6 +33,7 @@ import com.example.mispubs.Modelo.Pub;
 import com.example.mispubs.R;
 import com.example.mispubs.REST.APIUtils;
 import com.example.mispubs.REST.PubRest;
+import com.example.mispubs.Utilidades.Util;
 import com.example.mispubs.ui.Mapas.FragmentMapas;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -37,6 +44,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -58,6 +66,7 @@ public class FragmentDetallePubs extends Fragment {
             modoModificar = 2,
             modoEliminar = 3;
     private Spinner spinnerEstilos;
+    private ImageView ivDetallePubs;
     private ArrayList<String> listaEstilos = new ArrayList<String>();
     private TextInputLayout
             nombrePub,
@@ -72,6 +81,10 @@ public class FragmentDetallePubs extends Fragment {
     private Location ultimaLocalizacion;
     private LatLng posicionPub;
     double latitude, longitude;
+
+    //Para la gestión de imágenes
+    private static final int GALERIA = 1;
+    private static final int CAMARA = 2;
 
 
     public FragmentDetallePubs() {
@@ -114,9 +127,11 @@ public class FragmentDetallePubs extends Fragment {
      */
     private void llamarVistas() {
         this.nombrePub = getView().findViewById(R.id.tvDetallePubsNombre);
+        this.ivDetallePubs = getView().findViewById(R.id.ivDetallePubs);
         this.webPub = getView().findViewById(R.id.tvDetallePubsWeb);
         this.visitasPub = getView().findViewById(R.id.tvDetallePubsVisitas);
         this.cambiarFotoPub = getView().findViewById(R.id.fabDetallePubsCamara);
+        this.cambiarFotoPub.setOnClickListener(listenerBotones);
         this.mapaPub = getView().findViewById(R.id.fabDetallePubsMapa);
         this.spinnerEstilos = getView().findViewById(R.id.spinnerDetallePubsEstilos);
         this.mapaPub = getView().findViewById(R.id.fabDetallePubsMapa);
@@ -128,6 +143,9 @@ public class FragmentDetallePubs extends Fragment {
         this.btnDetallePubBotonModo.setOnClickListener(listenerBotones);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.estilos, android.R.layout.simple_spinner_dropdown_item);
         spinnerEstilos.setAdapter(adapter);
+
+
+
     }
 
     /**
@@ -146,17 +164,77 @@ public class FragmentDetallePubs extends Fragment {
                     transaction.replace(R.id.nav_host_fragment, mapa);
                     transaction.addToBackStack(null);
                     transaction.commit();
-
-
                     break;
                 case R.id.btnDetallePubBotonModo:
                     gestionarModoBoton(tvDetallePubsModoBoton.getText().toString());
+                    break;
+                case R.id.fabDetallePubsCamara:
+                    gestionImagen();
                     break;
                 default:
                     break;
             }
         }
     };
+
+    private void gestionImagen() {
+        AlertDialog.Builder fotoDialogo = new AlertDialog.Builder(getContext());
+        fotoDialogo.setTitle("Elige un método de entrada");
+        String[] fotoDialogoItems = {
+                "Seleccionar fotografía de galería",
+                "Capturar fotografía desde la cámara"};
+        fotoDialogo.setItems(fotoDialogoItems,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                elegirFotoGaleria();
+                                break;
+                            case 1:
+                                tomarFotoCamara();
+                                break;
+                        }
+                    }
+                });
+        fotoDialogo.show();
+    }
+
+    private void elegirFotoGaleria(){
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, GALERIA);
+    }
+
+
+    private void tomarFotoCamara(){
+        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, CAMARA);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == GALERIA) {
+            if (data != null) {
+                Uri contentURI = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), contentURI);
+                    this.ivDetallePubs.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    Snackbar.make(getView(), "Fallo en la galería", Snackbar.LENGTH_LONG).show();
+                }
+            }
+        } else if (requestCode == CAMARA) {
+            Bitmap thumbnail = null;
+            try {
+                thumbnail = (Bitmap) data.getExtras().get("data");
+                this.ivDetallePubs.setImageBitmap(thumbnail);
+            } catch (Exception e) {
+                Snackbar.make(getView(), "Fallo en la cámara", Snackbar.LENGTH_LONG).show();
+            }
+        }
+    }
 
 
     /**
@@ -166,6 +244,7 @@ public class FragmentDetallePubs extends Fragment {
         this.nombrePub.getEditText().setText(this.pub.getNombre());
         this.webPub.getEditText().setText(this.pub.getWeb());
         this.visitasPub.getEditText().setText(Integer.toString(this.pub.getVisitas()));
+        this.ivDetallePubs.setImageBitmap(Util.base64ToBitmap(this.pub.getImagen()));
 
         seleccionarEstiloPub();
     }
@@ -184,23 +263,37 @@ public class FragmentDetallePubs extends Fragment {
                 this.tvDetallePubsModoBoton.setText(guardar);
                 break;
             case modoVer:
+                comprobarImagen();
                 habilitarDeshabilitar(false);
                 rellenarCampos();
                 this.mapaPub.show();
                 this.cvDetallePubBotonModo.setVisibility(View.INVISIBLE);
                 break;
             case modoModificar:
+                comprobarImagen();
                 habilitarDeshabilitar(true);
                 rellenarCampos();
                 this.tvDetallePubsModoBoton.setText(modificar);
                 break;
             case modoEliminar:
+                comprobarImagen();
                 habilitarDeshabilitar(false);
                 rellenarCampos();
                 this.tvDetallePubsModoBoton.setText(eliminar);
                 break;
             default:
                 break;
+        }
+    }
+
+    private void comprobarImagen(){
+        //Para la gestión de imágenes
+        if (pub.getImagen() != null){
+            Bitmap bitmap = Util.base64ToBitmap(pub.getImagen());
+            this.ivDetallePubs.setImageBitmap(bitmap);
+            this.ivDetallePubs.setBackgroundColor(Util.getColorDominante(bitmap));
+        }else {
+            this.ivDetallePubs.setImageResource(R.drawable.fondo_por_defecto);
         }
     }
 
@@ -214,7 +307,12 @@ public class FragmentDetallePubs extends Fragment {
         switch (modo) {
             case guardar:
                 if (comprobarCampos()) {
-                    double d = 0.0;
+
+                    Bitmap img = ((BitmapDrawable)ivDetallePubs.getDrawable()).getBitmap();
+                    Bitmap comprimido = Util.comprimirImagen(img);
+                    String convertida = Util.bitmapToBase64(comprimido);
+
+
                     Pub insertarPub = new Pub(
                             nombrePub.getEditText().getText().toString(),
                             latitude,
@@ -222,7 +320,7 @@ public class FragmentDetallePubs extends Fragment {
                             spinnerEstilos.getSelectedItem().toString(),
                             Integer.parseInt(visitasPub.getEditText().getText().toString()),
                             webPub.getEditText().getText().toString(),
-                            "foto"
+                            convertida
                     );
 
                     guardarPub(insertarPub);
@@ -231,6 +329,10 @@ public class FragmentDetallePubs extends Fragment {
                 break;
             case modificar:
 
+                Bitmap img = ((BitmapDrawable)ivDetallePubs.getDrawable()).getBitmap();
+                Bitmap comprimido = Util.comprimirImagen(img);
+                String convertida = Util.bitmapToBase64(comprimido);
+
                 if (comprobarCampos()) {
                     String
                             nombre = nombrePub.getEditText().getText().toString(),
@@ -238,7 +340,7 @@ public class FragmentDetallePubs extends Fragment {
                             estilo = spinnerEstilos.getSelectedItem().toString();
                     int visitas = Integer.parseInt(visitasPub.getEditText().getText().toString());
 
-                    Pub p = new Pub(nombre, 0.0, 0.0, estilo, visitas, web, "Foto");
+                    Pub p = new Pub(nombre, 0.0, 0.0, estilo, visitas, web, convertida);
                     p.setId(pub.getId());
 
                     modificarPub(p);
@@ -501,7 +603,6 @@ public class FragmentDetallePubs extends Fragment {
             Log.e("Exception: %s", e.getMessage());
         }
     }
-
 
 
 }

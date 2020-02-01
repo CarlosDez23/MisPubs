@@ -17,8 +17,9 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
-        android:src="@drawable/fondo_por_defecto" />
+        android:scaleType="fitCenter"
+        android:src="@drawable/fondo_por_defecto"
+        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabDetallePubsCamara"
