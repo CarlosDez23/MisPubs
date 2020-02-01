@@ -30,6 +30,7 @@ import com.example.mispubs.MainActivity;
 import com.example.mispubs.Modelo.Usuario;
 import com.example.mispubs.R;
 import com.example.mispubs.REST.APIUtils;
+import com.example.mispubs.REST.SesionRest;
 import com.example.mispubs.REST.UsuarioRest;
 import com.example.mispubs.Utilidades.Util;
 import com.example.mispubs.ui.Login.ActivityLogin;
@@ -51,6 +52,7 @@ public class FragmentPerfil extends Fragment {
 
     //Para consumir el servicio REST
     private UsuarioRest usuarioRest;
+    private SesionRest sesionRest;
 
     //Para la interfaz
     private EditText etPerfilNombre, etPerfilCorreo, etPerfilPassword;
@@ -74,6 +76,7 @@ public class FragmentPerfil extends Fragment {
         //Cojemos el objeto usuario
         usuario = MainActivity.getUsuario();
         usuarioRest = APIUtils.getService();
+        sesionRest = APIUtils.getServiceSesiones();
         llamarVistas();
 
     }
