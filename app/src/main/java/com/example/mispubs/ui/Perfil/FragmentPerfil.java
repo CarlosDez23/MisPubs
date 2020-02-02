@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -50,10 +51,12 @@ public class FragmentPerfil extends Fragment {
 
     //Usuario logeado
     private Usuario usuario;
+    private Usuario actualizarUsuario;
 
     //Para consumir el servicio REST
     private UsuarioRest usuarioRest;
     private SesionRest sesionRest;
+    private FragmentManager fm;
 
     //Para la interfaz
     private EditText etPerfilNombre, etPerfilCorreo, etPerfilPassword;
@@ -63,6 +66,10 @@ public class FragmentPerfil extends Fragment {
     //Para la gestión de imágenes
     private static final int GALERIA = 1;
     private static final int CAMARA = 2;
+
+    public FragmentPerfil getFragment(){
+        return this;
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -75,6 +82,7 @@ public class FragmentPerfil extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //Cojemos el objeto usuario
+        fm = getFragmentManager();
         usuario = MainActivity.getUsuario();
         usuarioRest = APIUtils.getService();
         sesionRest = APIUtils.getServiceSesiones();
@@ -124,13 +132,42 @@ public class FragmentPerfil extends Fragment {
                     break;
                 case R.id.edit:
                     //ponemos invisible el boton pulsado, mostramos el de modificar y habilitamos los campos
-                    modoActualizar(true);
+                    //modoActualizar(true);
+                    imageViewEdit.setVisibility(View.INVISIBLE);
+                    imageViewModificar.setVisibility(View.VISIBLE);
+                    ivImagenPerfil.setEnabled(true);
+                    ActualizarDialog dialog = new ActualizarDialog(getFragment(), usuario);
+                    dialog.show(fm, "Actualizar Usuario");
+                    ivImagenPerfil.setEnabled(true);
+
 
                     break;
                 case R.id.ivPerfilModificar:
+
+                    cambiarImagen();
+
                     //ponemos invisible el boton pulsado, mostramos el de editar y deshabilitamos los campos
-                    modoActualizar(false);
-                    crearActualizarUsuario();
+                    imageViewModificar.setVisibility(View.INVISIBLE);
+                    imageViewEdit.setVisibility(View.VISIBLE);
+                    ivImagenPerfil.setEnabled(true);
+
+
+                    String u = usuario.toString();
+                    String us = actualizarUsuario.toString();
+
+                    //Comprobamos si ha cambiado algo el usuario
+                    if (u.equals(us)){
+
+                        Toast.makeText(getContext(), "No has realizado ningun cambio",
+                                Toast.LENGTH_LONG).show();
+                    }else{
+                        modificarUsuario(actualizarUsuario);
+
+                        etPerfilNombre.setText(usuario.getNombre());
+                        etPerfilCorreo.setText(usuario.getCorreo());
+                        ivImagenPerfil.setImageBitmap(Util.base64ToBitmap(usuario.getImagen()));
+                    }
+
                     break;
                 case R.id.profile:
                     gestionImagen();
@@ -146,33 +183,25 @@ public class FragmentPerfil extends Fragment {
     /**
      * Metodo encargado de crear un usuario, para modificar el usuario de la sesion en la base de datos y en la sesion
      */
-    private void crearActualizarUsuario() {
-        String
-                nombre = etPerfilNombre.getText().toString(),
-                email = etPerfilCorreo.getText().toString(),
-                password = etPerfilPassword.getText().toString();
+    public void crearActualizarUsuario(String nombre, String email, String password) {
+
+        actualizarUsuario = new Usuario(nombre, email, password, "imagen");
+        actualizarUsuario.setId(usuario.getId());
+    }
+
+    /**
+     * Para modificar la imagen en el nuevo usuario
+     */
+    private void cambiarImagen(){
 
         Bitmap img = ((BitmapDrawable)ivImagenPerfil.getDrawable()).getBitmap();
         Bitmap comprimido = Util.comprimirImagen(img);
         String convertida = Util.bitmapToBase64(comprimido);
-
-        Usuario u = new Usuario(nombre, email, password, convertida);
-        u.setId(usuario.getId());
-
-        //Actualizamos el usuario de la sesión
-        usuario.setCorreo(u.getCorreo());
-        usuario.setNombre(u.getNombre());
-        usuario.setPassword(u.getPassword());
-        usuario.setImagen(u.getImagen());
-        modificarUsuario(u);
+        actualizarUsuario.setImagen(convertida);
     }
 
-    /**
-     * Modo que utilizaremos para rellenar los campos del perfil de usuario y asi modificarlo
-     *
-     * @param modo
-     */
-    private void modoActualizar(boolean modo) {
+
+   /* private void modoActualizar(boolean modo) {
 
         etPerfilNombre.setEnabled(modo);
         etPerfilCorreo.setEnabled(modo);
@@ -188,7 +217,7 @@ public class FragmentPerfil extends Fragment {
             imageViewEdit.setVisibility(View.VISIBLE);
             etPerfilPassword.setText("PASSWORD");
         }
-    }
+    }*/
 
     private void mostrarDialogoEliminar() {
         AlertDialog.Builder deleteDialog = new AlertDialog.Builder(getContext());
@@ -302,6 +331,31 @@ public class FragmentPerfil extends Fragment {
     }
 
     /**
+     * Modificamos el usuario
+     *
+     * @param user
+     */
+    private void modificarUsuario(Usuario user) {
+        Call<Usuario> call = usuarioRest.modificarUsuario(user.getId(), user);
+        call.enqueue(new Callback<Usuario>() {
+            @Override
+            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                System.out.println("Modificando");
+                if (response.code() == 200) {
+                    Toast.makeText(getContext(), "Usuario actualizado",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Usuario> call, Throwable t) {
+                Log.e("ERROR: ", t.getMessage());
+            }
+        });
+    }
+
+
+    /**
      * Eliminamos un usuario, el servicio ya se encarga de comprobar si existe
      */
     private void eliminarUsuario() {
@@ -330,27 +384,5 @@ public class FragmentPerfil extends Fragment {
         });
     }
 
-    /**
-     * Modificamos el usuario
-     *
-     * @param user
-     */
-    private void modificarUsuario(Usuario user) {
-        Call<Usuario> call = usuarioRest.modificarUsuario(user.getId(), user);
-        call.enqueue(new Callback<Usuario>() {
-            @Override
-            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
-                System.out.println("Modificando");
-                if (response.code() == 200) {
-                    Toast.makeText(getContext(), "Usuario actualizado",
-                            Toast.LENGTH_LONG).show();
-                }
-            }
 
-            @Override
-            public void onFailure(Call<Usuario> call, Throwable t) {
-                Log.e("ERROR: ", t.getMessage());
-            }
-        });
-    }
 }
