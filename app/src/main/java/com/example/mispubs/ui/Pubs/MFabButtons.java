@@ -1,6 +1,8 @@
 package com.example.mispubs.ui.Pubs;
 
 import android.content.Context;
+import android.content.Intent;
+import android.speech.RecognizerIntent;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
@@ -11,6 +13,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.mispubs.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.Locale;
+
 public class MFabButtons {
 
     private FloatingActionButton fab_button_1, fab_button_2, fab_button_3;
@@ -20,13 +24,16 @@ public class MFabButtons {
     private int speed = 250;
     private Context context;
     private FragmentManager fm;
+    private FragmentPubs fragmentPubs;
 
-    public MFabButtons(Context context, FloatingActionButton fab_button_1, FloatingActionButton fab_button_2, FloatingActionButton fab_button_3, FragmentManager fm) {
+
+    public MFabButtons(Context context, FloatingActionButton fab_button_1, FloatingActionButton fab_button_2, FloatingActionButton fab_button_3, FragmentManager fm, FragmentPubs fragmentPubs) {
         this.fab_button_1 = fab_button_1;
         this.fab_button_2 = fab_button_2;
         this.fab_button_3 = fab_button_3;
         this.context = context;
         this.fm = fm;
+        this.fragmentPubs = fragmentPubs;
 
         setFabTranslationY();
         setFabClicks();
@@ -65,7 +72,7 @@ public class MFabButtons {
             @Override
             public void onClick(View v) {
                 menuCheck();
-                Toast.makeText(context, "Pulsado voz", Toast.LENGTH_LONG).show();
+                fragmentPubs.activarControlVoz();
 
             }
         });
@@ -111,4 +118,10 @@ public class MFabButtons {
             fabMenuOpen();
         }
     }
+
+
+
+
+
+
 }

@@ -23,7 +23,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -34,7 +34,7 @@
             android:clickable="true"
             android:focusable="true"
             android:layout_marginBottom="10dp"
-            android:src="@drawable/ic_popupmenu"
+            android:src="@drawable/ic_voz"
             app:borderWidth="0dp"
             app:fabSize="mini"
             android:layout_gravity="center_horizontal"/>
@@ -47,12 +47,10 @@
             android:clickable="true"
             android:focusable="true"
             android:layout_marginBottom="10dp"
-            android:src="@drawable/ic_popupmenu"
+            android:src="@drawable/ic_mas"
             app:borderWidth="0dp"
             app:fabSize="mini"
             android:layout_gravity="center_horizontal"/>
-
-
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabMenu"
@@ -64,7 +62,7 @@
             android:backgroundTint="@color/colorBoton"
             android:clickable="true"
             android:focusable="true"
-            app:srcCompat="@android:drawable/btn_star" />
+            android:src="@drawable/ic_menufab" />
 
     </LinearLayout>
 

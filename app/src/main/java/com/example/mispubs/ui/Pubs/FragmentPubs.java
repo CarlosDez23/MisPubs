@@ -1,6 +1,8 @@
 package com.example.mispubs.ui.Pubs;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -27,11 +29,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.app.Activity.RESULT_OK;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class FragmentPubs extends Fragment {
@@ -44,11 +48,14 @@ public class FragmentPubs extends Fragment {
     private int modoVer = 1;
 
     //Clase para gestion del menú de fabs
-    MFabButtons menuFabs;
+    private MFabButtons menuFabs;
 
 
     //Lista de pubs
     private ArrayList<Pub> listaPubs = new ArrayList<>();
+
+    //Para el control por voz
+    private static final int VOZ = 10;
 
 
     //Para el REST
@@ -68,7 +75,7 @@ public class FragmentPubs extends Fragment {
 
     }
 
-    private void llamarVistas(){
+    private void llamarVistas() {
         recyclerView = getView().findViewById(R.id.rvPubs);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         listarPubs();
@@ -80,24 +87,27 @@ public class FragmentPubs extends Fragment {
     /**
      * Para gestionar el menú de FABS
      */
-    private void gestionMenuFabs(){
+    private void gestionMenuFabs() {
 
         this.fabPub = getView().findViewById(R.id.fabPubs);
         this.fabMenu = getView().findViewById(R.id.fabMenu);
         this.fabVoz = getView().findViewById(R.id.fabVoz);
-        menuFabs = new MFabButtons(getContext(),fabMenu, fabPub, fabVoz, getFragmentManager());
+        menuFabs = new MFabButtons(getContext(), fabMenu, fabPub, fabVoz, getFragmentManager(), this);
 
     }
 
 
-    private void gestionSpinner(){
+    /**
+     * Para gestionar los filtros musicales a través del spinner
+     */
+    private void gestionSpinner() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.filtroEstilos, android.R.layout.simple_spinner_dropdown_item);
         spinnerFiltros.setAdapter(adapter);
         spinnerFiltros.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String tipoFiltro = "";
-                switch(spinnerFiltros.getSelectedItemPosition()){
+                switch (spinnerFiltros.getSelectedItemPosition()) {
                     case 1:
                         tipoFiltro = "Rock";
                         break;
@@ -119,9 +129,9 @@ public class FragmentPubs extends Fragment {
                     default:
                         break;
                 }
-                if (tipoFiltro.equals("")){
+                if (tipoFiltro.equals("")) {
                     listarPubs();
-                }else{
+                } else {
                     listarEstilos(tipoFiltro);
                 }
             }
@@ -133,22 +143,92 @@ public class FragmentPubs extends Fragment {
         });
     }
 
+    /**
+     * CONTROL POR VOZ
+     */
+
+    public void activarControlVoz() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        //reconoce en el idioma del telefono
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "¿Qué estilo buscas?");
+        try {
+            startActivityForResult(intent, VOZ);
+        } catch (Exception e) {
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == getActivity().RESULT_CANCELED) {
+            return;
+        }
+
+
+        if (requestCode == VOZ) {
+            if (resultCode == RESULT_OK && data != null) {
+                ArrayList<String> voz = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+                String secuencia = "";
+
+                for (String v : voz) {
+                    secuencia += " " + v;
+                }
+
+                if (secuencia != null) {
+                    componerFiltro(secuencia);
+                }
+            }
+
+        }
+    }
+
+    private void componerFiltro(String secuencia){
+        String palabraClave = "";
+
+        if (secuencia.contains("rock")){
+            palabraClave = "Rock";
+            spinnerFiltros.setSelection(1);
+        }else if(secuencia.contains("reggaeton")){
+            palabraClave = "Reggaeton";
+            spinnerFiltros.setSelection(2);
+        }else if(secuencia.contains("clasica")){
+            palabraClave = "Clasica";
+            spinnerFiltros.setSelection(3);
+        }else if(secuencia.contains("electronica")){
+            palabraClave = "Electronica";
+        }else if(secuencia.contains("indie")){
+            palabraClave = "Indie";
+            spinnerFiltros.setSelection(4);
+        }else if(secuencia.contains("pop")){
+            palabraClave = "Pop";
+            spinnerFiltros.setSelection(5);
+        }
+
+        if (palabraClave.equals("")){
+            listarPubs();
+        }else{
+            listarEstilos(palabraClave);
+        }
+    }
 
 
     /**
      * Método para consumir REST y que nos devuelva todos los pubs que
      * hay listados
      */
-    private void listarPubs(){
+    private void listarPubs() {
         Call<List<Pub>> call = pubRest.findAllPubs();
         call.enqueue(new Callback<List<Pub>>() {
             @Override
             public void onResponse(Call<List<Pub>> call, Response<List<Pub>> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     listaPubs = (ArrayList<Pub>) response.body();
-                    recyclerView.setAdapter(new PubsAdapter(listaPubs,getContext(),getActivity(), getFragmentManager()));
+                    recyclerView.setAdapter(new PubsAdapter(listaPubs, getContext(), getActivity(), getFragmentManager()));
                 }
             }
+
             @Override
             public void onFailure(Call<List<Pub>> call, Throwable t) {
 
@@ -160,15 +240,15 @@ public class FragmentPubs extends Fragment {
     /**
      * Método para consumir el REST, esta vez utilizando algún tipo de filtro
      */
-    private void listarEstilos (String estilo){
+    private void listarEstilos(String estilo) {
         Call<List<Pub>> call = pubRest.findByEstilo(estilo);
         call.enqueue(new Callback<List<Pub>>() {
             @Override
             public void onResponse(Call<List<Pub>> call, Response<List<Pub>> response) {
-                if (response.isSuccessful()){
-                    if (response.code() == 200){
+                if (response.isSuccessful()) {
+                    if (response.code() == 200) {
                         listaPubs = (ArrayList<Pub>) response.body();
-                        recyclerView.setAdapter(new PubsAdapter(listaPubs,getContext(),getActivity(), getFragmentManager()));
+                        recyclerView.setAdapter(new PubsAdapter(listaPubs, getContext(), getActivity(), getFragmentManager()));
                     }
                 }
             }
