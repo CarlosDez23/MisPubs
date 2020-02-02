@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,7 +44,10 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -262,7 +266,7 @@ public class FragmentDetallePubs extends Fragment {
 
         switch (modo) {
             case modoNuevo:
-                obtenerPosicionActualMapa();
+                intentarObtenerLoc();
                 habilitarDeshabilitar(true);
                 this.tvDetallePubsModoBoton.setText(guardar);
                 break;
@@ -331,9 +335,7 @@ public class FragmentDetallePubs extends Fragment {
                     }else{
                         Toast.makeText(getContext(), "Debes activar la localización para" +
                                 " añadir un pub", Toast.LENGTH_LONG).show();
-                        obtenerPosicionActualMapa();
                     }
-
                 }
 
                 break;
@@ -586,7 +588,28 @@ public class FragmentDetallePubs extends Fragment {
         });
     }
 
+    /**
+     * Nos creamos un TimerTask que intentará coger la ubicación continuamente, en caso de que
+     * el usuario la active conforme ve el aviso de que tiene que tenerla activada
+     */
 
+    private void intentarObtenerLoc(){
+        Timer timer = new Timer();
+        TimerTask tarea = new TimerTask() {
+            @Override
+            public void run() {
+                if (ultimaLocalizacion == null){
+                    obtenerPosicionActualMapa();
+                }
+            }
+        };
+        //Hacemos esto cada 5 segundos
+        timer.schedule(tarea, 0, 5000);;
+    }
+
+    /**
+     * Método para obtener la posición actual
+     */
     private void obtenerPosicionActualMapa() {
         try {
             mPosicion = LocationServices.getFusedLocationProviderClient(getActivity());
