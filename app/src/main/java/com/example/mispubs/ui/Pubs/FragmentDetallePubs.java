@@ -138,9 +138,9 @@ public class FragmentDetallePubs extends Fragment {
         this.tvDetallePubsModoBoton = getView().findViewById(R.id.tvDetallePubsModoBoton);
         this.cvDetallePubBotonModo = getView().findViewById(R.id.cvDetallePubBotonModo);
         this.btnDetallePubBotonModo = getView().findViewById(R.id.btnDetallePubBotonModo);
-        this.btnDetallePubBotonModo.setOnClickListener(listenerBotones);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.estilos, android.R.layout.simple_spinner_dropdown_item);
+        this.btnDetallePubBotonModo.setOnClickListener(listenerBotones);  ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.estilos, android.R.layout.simple_spinner_dropdown_item);
         spinnerEstilos.setAdapter(adapter);
+
 
 
 
@@ -220,7 +220,7 @@ public class FragmentDetallePubs extends Fragment {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), contentURI);
                     this.ivDetallePubs.setImageBitmap(bitmap);
                 } catch (IOException e) {
-                    Snackbar.make(getView(), "Fallo en la galería", Snackbar.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Fallo en la galería", Toast.LENGTH_LONG).show();
                 }
             }
         } else if (requestCode == CAMARA) {
@@ -229,7 +229,7 @@ public class FragmentDetallePubs extends Fragment {
                 thumbnail = (Bitmap) data.getExtras().get("data");
                 this.ivDetallePubs.setImageBitmap(thumbnail);
             } catch (Exception e) {
-                Snackbar.make(getView(), "Fallo en la cámara", Snackbar.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Fallo en la cámara", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -326,8 +326,14 @@ public class FragmentDetallePubs extends Fragment {
                             webPub.getEditText().getText().toString(),
                             convertida
                     );
+                    if (ultimaLocalizacion != null){
+                        guardarPub(insertarPub);
+                    }else{
+                        Toast.makeText(getContext(), "Debes activar la localización para" +
+                                " añadir un pub", Toast.LENGTH_LONG).show();
+                        obtenerPosicionActualMapa();
+                    }
 
-                    guardarPub(insertarPub);
                 }
 
                 break;
@@ -462,6 +468,8 @@ public class FragmentDetallePubs extends Fragment {
             case "Pop":
                 spinnerEstilos.setSelection(5);
                 break;
+            default:
+                break;
         }
     }
 
@@ -593,8 +601,8 @@ public class FragmentDetallePubs extends Fragment {
                             longitude = ultimaLocalizacion.getLongitude();
 
                         } else {
-                            Snackbar.make(getView(), "No se puede establecer la posición actual",
-                                    Snackbar.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "AVISO: Tienes que activar la localización para añadir un Pub",
+                                    Toast.LENGTH_LONG).show();
                         }
 
                     } else {
@@ -607,6 +615,4 @@ public class FragmentDetallePubs extends Fragment {
             Log.e("Exception: %s", e.getMessage());
         }
     }
-
-
 }

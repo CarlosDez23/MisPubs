@@ -190,12 +190,13 @@ public class FragmentPubs extends Fragment {
             spinnerFiltros.setSelection(3);
         }else if(secuencia.contains("electronica")){
             palabraClave = "Electronica";
+            spinnerFiltros.setSelection(4);
         }else if(secuencia.contains("indie")){
             palabraClave = "Indie";
-            spinnerFiltros.setSelection(4);
+            spinnerFiltros.setSelection(5);
         }else if(secuencia.contains("pop")){
             palabraClave = "Pop";
-            spinnerFiltros.setSelection(5);
+            spinnerFiltros.setSelection(6);
         }
 
         if (palabraClave.equals("")){
