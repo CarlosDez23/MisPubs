@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         pedirPermisos();
 
         usuario = (Usuario) this.getIntent().getExtras().getSerializable("usuario");
-        System.out.println("Registro");
+        System.out.println("Mapa y contraseña");
     }
 
     private void pedirPermisos(){
