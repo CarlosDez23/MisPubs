@@ -84,7 +84,7 @@ public class FragmentMapas extends Fragment implements OnMapReadyCallback,Google
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
         //Ajustamos el mapa y obtenemos nuestra posicion
-        map.setMinZoomPreference(17.0f);
+        map.setMinZoomPreference(14.0f);
         map.setOnMarkerClickListener(this);
         map.setMyLocationEnabled(true);
         UiSettings uiSettings = map.getUiSettings();
@@ -107,7 +107,7 @@ public class FragmentMapas extends Fragment implements OnMapReadyCallback,Google
                         ultimaLocalizacion = task.getResult();
                         if (ultimaLocalizacion != null) {
                             posicionActual = new LatLng(ultimaLocalizacion.getLatitude(),ultimaLocalizacion.getLongitude());
-                            map.moveCamera(CameraUpdateFactory.newLatLng(posicionActual));
+                            //map.moveCamera(CameraUpdateFactory.newLatLng(posicionActual));
                         } else {
                             Toast.makeText(getContext(), "No puede obternerse la situacion actual",Toast.LENGTH_LONG).show();
                         }
@@ -130,5 +130,6 @@ public class FragmentMapas extends Fragment implements OnMapReadyCallback,Google
                 .snippet(pub.getEstilo())
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcador))//defaultMarker(BitmapDescriptorFactory.HUE_VIOLET
         );
+        map.moveCamera(CameraUpdateFactory.newLatLng(pos));
     }
 }
