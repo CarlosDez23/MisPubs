@@ -17,15 +17,57 @@
         android:layout_height="match_parent"
         android:layout_below="@id/spinnerPubsEstilos" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabPubs"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rvPubs"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="-70dp"
-        android:layout_marginEnd="18dp"
-        android:backgroundTint="@color/colorBoton"
-        android:clickable="true"
-        app:srcCompat="@android:drawable/btn_star" />
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:id="@+id/fabVoz"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorBoton"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_popupmenu"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            android:layout_gravity="center_horizontal"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:id="@+id/fabPubs"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorBoton"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_popupmenu"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            android:layout_gravity="center_horizontal"/>
+
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rvPubs"
+            app:fabSize="normal"
+            android:layout_marginEnd="0dp"
+            android:backgroundTint="@color/colorBoton"
+            android:clickable="true"
+            android:focusable="true"
+            app:srcCompat="@android:drawable/btn_star" />
+
+    </LinearLayout>
+
+
+
 </RelativeLayout>

@@ -38,11 +38,16 @@ public class FragmentPubs extends Fragment {
 
     private RecyclerView recyclerView;
     private FloatingActionButton fabPub;
+    private FloatingActionButton fabMenu;
+    private FloatingActionButton fabVoz;
     private Spinner spinnerFiltros;
     private int modoVer = 1;
 
+    //Clase para gestion del menú de fabs
+    MFabButtons menuFabs;
 
 
+    //Lista de pubs
     private ArrayList<Pub> listaPubs = new ArrayList<>();
 
 
@@ -67,33 +72,23 @@ public class FragmentPubs extends Fragment {
         recyclerView = getView().findViewById(R.id.rvPubs);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         listarPubs();
-        this.fabPub = getView().findViewById(R.id.fabPubs);
-        this.fabPub.setOnClickListener(listenerBotones);
+        gestionMenuFabs();
         this.spinnerFiltros = getView().findViewById(R.id.spinnerPubsEstilos);
         gestionSpinner();
     }
 
-    private View.OnClickListener listenerBotones = new View.OnClickListener() {
+    /**
+     * Para gestionar el menú de FABS
+     */
+    private void gestionMenuFabs(){
 
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()){
-                case R.id.fabPubs:
+        this.fabPub = getView().findViewById(R.id.fabPubs);
+        this.fabMenu = getView().findViewById(R.id.fabMenu);
+        this.fabVoz = getView().findViewById(R.id.fabVoz);
+        menuFabs = new MFabButtons(getContext(),fabMenu, fabPub, fabVoz, getFragmentManager());
 
-                    FragmentDetallePubs detallePubs = new FragmentDetallePubs();
-                    FragmentManager fm = getFragmentManager();
-                    FragmentTransaction transaction = fm.beginTransaction();
-                    transaction.replace(R.id.nav_host_fragment,detallePubs );
-                    transaction.addToBackStack(null);
-                    transaction.commit();
+    }
 
-
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
 
     private void gestionSpinner(){
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.filtroEstilos, android.R.layout.simple_spinner_dropdown_item);
@@ -103,29 +98,32 @@ public class FragmentPubs extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String tipoFiltro = "";
                 switch(spinnerFiltros.getSelectedItemPosition()){
-                    case 0:
+                    case 1:
                         tipoFiltro = "Rock";
                         break;
-                    case 1:
+                    case 2:
                         tipoFiltro = "Reggaeton";
                         break;
-                    case 2:
+                    case 3:
                         tipoFiltro = "Clasica";
                         break;
-                    case 3:
+                    case 4:
                         tipoFiltro = "Electronica";
                         break;
-                    case 4:
+                    case 5:
                         tipoFiltro = "Indie";
                         break;
-                    case 5:
+                    case 6:
                         tipoFiltro = "Pop";
                         break;
                     default:
                         break;
                 }
-
-                listarEstilos(tipoFiltro);
+                if (tipoFiltro.equals("")){
+                    listarPubs();
+                }else{
+                    listarEstilos(tipoFiltro);
+                }
             }
 
             @Override
