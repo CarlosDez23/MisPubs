@@ -21,6 +21,7 @@ import com.example.mispubs.Modelo.Pub;
 import com.example.mispubs.R;
 import com.example.mispubs.Utilidades.Util;
 import com.example.mispubs.ui.Valoraciones.FragmentValoraciones;
+import com.google.android.gms.dynamic.IFragmentWrapper;
 
 import java.util.ArrayList;
 
@@ -64,7 +65,11 @@ public class PubsAdapter extends RecyclerView.Adapter<PubsAdapter.ViewHolder> {
         final Pub pubLista = listaPubs.get(position);
         holder.tvPubsNombre.setText(pubLista.getNombre());
         holder.tvPubsEstilo.setText(pubLista.getEstilo());
-        holder.ivPubs.setImageBitmap(Util.base64ToBitmap(pubLista.getImagen()));
+        if (pubLista.getImagen() != null){
+            holder.ivPubs.setImageBitmap(Util.base64ToBitmap(pubLista.getImagen()));
+        }else{
+            holder.ivPubs.setImageResource(R.drawable.fondo_por_defecto);
+        }
         holder.ivMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

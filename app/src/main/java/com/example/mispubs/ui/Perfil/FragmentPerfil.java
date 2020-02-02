@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -88,7 +89,7 @@ public class FragmentPerfil extends Fragment {
         this.etPerfilCorreo = getView().findViewById(R.id.etPerfilCorreo);
         this.etPerfilCorreo.setText(usuario.getCorreo());
         this.etPerfilPassword = getView().findViewById(R.id.etPerfilPassword);
-        this.etPerfilPassword.setText(usuario.getPassword());
+        this.etPerfilPassword.setText("PASSWORD");
         this.btnPerfilEliminarUsuario = getView().findViewById(R.id.btnPerfilEliminarUsuario);
         this.btnPerfilEliminarUsuario.setOnClickListener(listenerBotones);
         this.btnPerfilCerrarSesion = getView().findViewById(R.id.btnPerfilCerrarSesion);
@@ -181,9 +182,11 @@ public class FragmentPerfil extends Fragment {
             imageViewEdit.setVisibility(View.INVISIBLE);
             imageViewModificar.setVisibility(View.VISIBLE);
             ivImagenPerfil.setEnabled(true);
+            this.etPerfilPassword.setText(this.usuario.getPassword());
         } else {
             imageViewModificar.setVisibility(View.INVISIBLE);
             imageViewEdit.setVisibility(View.VISIBLE);
+            etPerfilPassword.setText("PASSWORD");
         }
     }
 

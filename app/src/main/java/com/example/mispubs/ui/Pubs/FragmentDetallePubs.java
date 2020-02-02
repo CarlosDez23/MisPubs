@@ -242,7 +242,13 @@ public class FragmentDetallePubs extends Fragment {
         this.nombrePub.getEditText().setText(this.pub.getNombre());
         this.webPub.getEditText().setText(this.pub.getWeb());
         this.visitasPub.getEditText().setText(Integer.toString(this.pub.getVisitas()));
-        this.ivDetallePubs.setImageBitmap(Util.base64ToBitmap(this.pub.getImagen()));
+        if (this.pub.getImagen() != null){
+            this.ivDetallePubs.setImageBitmap(Util.base64ToBitmap(this.pub.getImagen()));
+        }else{
+            this.ivDetallePubs.setImageResource(R.drawable.fondo_por_defecto);
+        }
+
+
 
         seleccionarEstiloPub();
     }
