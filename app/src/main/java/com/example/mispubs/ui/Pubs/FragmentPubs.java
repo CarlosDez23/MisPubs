@@ -180,7 +180,6 @@ public class FragmentPubs extends Fragment {
                     componerFiltro(secuencia);
                 }
             }
-
         }
     }
 
