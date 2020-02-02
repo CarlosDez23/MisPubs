@@ -6,6 +6,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,6 +38,7 @@ public class FragmentPubs extends Fragment {
 
     private RecyclerView recyclerView;
     private FloatingActionButton fabPub;
+    private Spinner spinnerFiltros;
     private int modoVer = 1;
 
 
@@ -65,6 +69,7 @@ public class FragmentPubs extends Fragment {
         listarPubs();
         this.fabPub = getView().findViewById(R.id.fabPubs);
         this.fabPub.setOnClickListener(listenerBotones);
+        this.spinnerFiltros = getView().findViewById(R.id.spinnerPubsEstilos);
     }
 
     private View.OnClickListener listenerBotones = new View.OnClickListener() {
@@ -89,6 +94,46 @@ public class FragmentPubs extends Fragment {
         }
     };
 
+    private void gestionSpinner(){
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.filtroEstilos, android.R.layout.simple_spinner_dropdown_item);
+        spinnerFiltros.setAdapter(adapter);
+        spinnerFiltros.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String tipoFiltro = "";
+                switch(spinnerFiltros.getSelectedItemPosition()){
+                    case 1:
+                        tipoFiltro = "Rock";
+                        break;
+                    case 2:
+                        tipoFiltro = "Reggaeton";
+                        break;
+                    case 3:
+                        tipoFiltro = "Clasica";
+                        break;
+                    case 4:
+                        tipoFiltro = "Electronica";
+                        break;
+                    case 5:
+                        tipoFiltro = "Indie";
+                        break;
+                    case 6:
+                        tipoFiltro = "Pop";
+                        break;
+                    default:
+                        break;
+                }
+
+                listarEstilos(tipoFiltro);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
 
 
     /**
@@ -105,6 +150,30 @@ public class FragmentPubs extends Fragment {
                     recyclerView.setAdapter(new PubsAdapter(listaPubs,getContext(),getActivity(), getFragmentManager()));
                 }
             }
+            @Override
+            public void onFailure(Call<List<Pub>> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+    /**
+     * Método para consumir el REST, esta vez utilizando algún tipo de filtro
+     */
+    private void listarEstilos (String estilo){
+        Call<List<Pub>> call = pubRest.findByEstilo(estilo);
+        call.enqueue(new Callback<List<Pub>>() {
+            @Override
+            public void onResponse(Call<List<Pub>> call, Response<List<Pub>> response) {
+                if (response.isSuccessful()){
+                    if (response.code() == 200){
+                        listaPubs = (ArrayList<Pub>) response.body();
+                        recyclerView.setAdapter(new PubsAdapter(listaPubs,getContext(),getActivity(), getFragmentManager()));
+                    }
+                }
+            }
+
             @Override
             public void onFailure(Call<List<Pub>> call, Throwable t) {
 

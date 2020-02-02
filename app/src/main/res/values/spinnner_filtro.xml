@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="filtroEstilos">
+        <item>Rock</item>
+        <item>Reggaeton</item>
+        <item>Clasica</item>
+        <item>Electronica</item>
+        <item>Indie</item>
+        <item>Pop</item>
+    </string-array>
+</resources>

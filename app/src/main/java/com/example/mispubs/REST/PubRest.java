@@ -29,4 +29,7 @@ public interface PubRest {
 
     @DELETE("pubs/{id}")
     Call<Pub> eliminarPub(@Path("id") Integer id);
+
+    @GET("pubs/estilos/{estilo}")
+    Call<List<Pub>> findByEstilo(@Path("estilo") String estilo);
 }
