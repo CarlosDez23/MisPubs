@@ -85,6 +85,9 @@ public class FragmentDetallePubs extends Fragment {
     private static final int GALERIA = 1;
     private static final int CAMARA = 2;
 
+    //Para el hilo que se encarga de comprobar localización
+    private Timer timer;
+
 
     public FragmentDetallePubs() {
         this.modo = 0;
@@ -591,7 +594,7 @@ public class FragmentDetallePubs extends Fragment {
      */
 
     private void intentarObtenerLoc(){
-        Timer timer = new Timer();
+        timer = new Timer();
         TimerTask tarea = new TimerTask() {
             @Override
             public void run() {
@@ -634,5 +637,11 @@ public class FragmentDetallePubs extends Fragment {
         } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        timer.cancel();
     }
 }
