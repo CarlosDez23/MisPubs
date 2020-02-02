@@ -70,6 +70,7 @@ public class FragmentPubs extends Fragment {
         this.fabPub = getView().findViewById(R.id.fabPubs);
         this.fabPub.setOnClickListener(listenerBotones);
         this.spinnerFiltros = getView().findViewById(R.id.spinnerPubsEstilos);
+        gestionSpinner();
     }
 
     private View.OnClickListener listenerBotones = new View.OnClickListener() {
