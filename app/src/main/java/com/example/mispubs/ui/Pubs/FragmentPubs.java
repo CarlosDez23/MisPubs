@@ -103,22 +103,22 @@ public class FragmentPubs extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String tipoFiltro = "";
                 switch(spinnerFiltros.getSelectedItemPosition()){
-                    case 1:
+                    case 0:
                         tipoFiltro = "Rock";
                         break;
-                    case 2:
+                    case 1:
                         tipoFiltro = "Reggaeton";
                         break;
-                    case 3:
+                    case 2:
                         tipoFiltro = "Clasica";
                         break;
-                    case 4:
+                    case 3:
                         tipoFiltro = "Electronica";
                         break;
-                    case 5:
+                    case 4:
                         tipoFiltro = "Indie";
                         break;
-                    case 6:
+                    case 5:
                         tipoFiltro = "Pop";
                         break;
                     default:
