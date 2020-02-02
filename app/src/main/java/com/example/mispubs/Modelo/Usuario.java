@@ -1,5 +1,7 @@
 package com.example.mispubs.Modelo;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -87,5 +89,4 @@ public class Usuario implements Serializable {
                 ", imagen='" + imagen + '\'' +
                 '}';
     }
-
 }
