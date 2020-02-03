@@ -604,7 +604,7 @@ public class FragmentDetallePubs extends Fragment {
             }
         };
         //Hacemos esto cada 5 segundos
-        timer.schedule(tarea, 0, 5000);;
+        timer.schedule(tarea, 0, 5000);
     }
 
     /**
