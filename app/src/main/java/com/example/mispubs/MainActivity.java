@@ -3,6 +3,8 @@ package com.example.mispubs;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.mispubs.Controlador.ControladorBD;
 import com.example.mispubs.Modelo.Usuario;
+import com.example.mispubs.Utilidades.Util;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -97,6 +100,11 @@ public class MainActivity extends AppCompatActivity {
             aux = new Usuario(c.getString(1), c.getString(2),
                     c.getString(3), c.getString(4));
             aux.setId(c.getInt(0));
+        }
+        if (aux.getImagen() == null){
+            Bitmap icon = BitmapFactory.decodeResource(this.getApplicationContext().getResources(),
+                    R.drawable.man);
+            aux.setImagen(Util.bitmapToBase64(icon));
         }
         bd.close();
         controlador.close();

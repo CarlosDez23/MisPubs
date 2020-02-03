@@ -3,6 +3,7 @@ package com.example.mispubs.ui.Valoraciones;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,6 +94,11 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
                     if (response.code() == 200){
                         Usuario u = response.body();
                         holder.tvValoracionUsuario.setText(u.getNombre());
+                        if (u.getImagen() == null){
+                            Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
+                                    R.drawable.man);
+                            u.setImagen(Util.bitmapToBase64(icon));
+                        }
                         holder.ivImagenUsuario.setImageBitmap(Util.base64ToBitmap(u.getImagen()));
                         imgUsuario = u.getImagen();
                     }
