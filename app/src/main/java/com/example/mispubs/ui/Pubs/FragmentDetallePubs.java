@@ -642,6 +642,8 @@ public class FragmentDetallePubs extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        timer.cancel();
+        if(timer != null){
+            timer.cancel();
+        }
     }
 }
