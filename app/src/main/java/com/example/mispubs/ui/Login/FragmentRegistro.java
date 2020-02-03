@@ -205,7 +205,13 @@ public class FragmentRegistro extends Fragment {
                 if (email.length() > 0 && password.length() > 0 && usuario.length() > 0) {
                     if (esApto) {
                         Usuario u = new Usuario(usuario, email, cifrada, null);
-                        insertarUsuario(u);
+                        if (Util.isOnline(getContext())){
+                            insertarUsuario(u);
+
+                        }else{
+                            Toast.makeText(getContext(), "Debes activar una conexión a internet ", Toast.LENGTH_LONG).show();
+
+                        }
                     } else {
                         Toast.makeText(getContext(), "Se deben cumplir todos los requisitos",
                                 Toast.LENGTH_LONG).show();
@@ -224,13 +230,6 @@ public class FragmentRegistro extends Fragment {
             }
         });
     }
-
-    /*
-     String texto="Saludos desde Apuntesdejava.com";
-        String encriptMD5=DigestUtils.md5Hex(texto);
-        System.out.println("md5:"+encriptMD5);
-     */
-
 
     /**
      * Método para insertar un usuario utilizando el servicio REST. Primero comprobamos

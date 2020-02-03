@@ -91,7 +91,13 @@ public class FragmentLogin extends Fragment {
                         relativeLoginBoton.setClickable(false);
                         byte[]datos = password.getBytes();
                         String cifrada = Util.resumirPassword(datos);
-                        comprobarUsuario(correo,cifrada);
+                        if (Util.isOnline(getContext())){
+                            comprobarUsuario(correo,cifrada);
+                        }else{
+                            Toast.makeText(getContext(), "Debes activar una conexión a internet ", Toast.LENGTH_LONG).show();
+                            relativeLoginBoton.setClickable(true);
+                        }
+
 
                     }
 
