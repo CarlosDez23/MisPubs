@@ -1,11 +1,14 @@
 package com.example.mispubs;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.example.mispubs.Controlador.ControladorBD;
 import com.example.mispubs.Modelo.Usuario;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.karumi.dexter.Dexter;
@@ -49,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
         pedirPermisos();
 
-        usuario = (Usuario) this.getIntent().getExtras().getSerializable("usuario");
-        System.out.println("PASSWORD");
+        usuario = consultarUsuarioLocal();
+
     }
 
     private void pedirPermisos(){
@@ -79,5 +82,26 @@ public class MainActivity extends AppCompatActivity {
                 .onSameThread()
                 .check();
     }
+
+    /**
+     * Consultamos la id del usuario que tenemos almacenado localmente
+     * @return
+     */
+    private Usuario consultarUsuarioLocal(){
+        Usuario aux = null;
+        ControladorBD controlador = new ControladorBD(this.getApplicationContext(), "BDConfig", null, 1);
+        SQLiteDatabase bd = controlador.getReadableDatabase();
+        String[]campos = new String[] {"id", "nombre", "correo", "password", "imagen"};
+        Cursor c = bd.query("USUARIO", campos, null, null, null, null,null);
+        if (c.moveToFirst()){
+            aux = new Usuario(c.getString(1), c.getString(2),
+                    c.getString(3), c.getString(4));
+            aux.setId(c.getInt(0));
+        }
+        bd.close();
+        controlador.close();
+        return aux;
+    }
+
 
 }

@@ -257,7 +257,7 @@ public class FragmentRegistro extends Fragment {
                                 if (response.code() == 200) {
                                     Toast.makeText(getContext(), "Usuario registrado",
                                             Toast.LENGTH_LONG).show();
-                                    insertarUsuarioLocal(response.body());
+                                    //insertarUsuarioLocal(response.body());
                                     getFragmentManager().beginTransaction()
                                             .replace(R.id.fragment, new FragmentLogin()).commit();
 

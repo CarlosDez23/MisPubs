@@ -135,6 +135,7 @@ public class FragmentLogin extends Fragment {
 
                     if (response.code() == 200){
                         Usuario usuario = response.body();
+                        insertarUsuarioLocal(usuario);
                         String[] fechas = fechaActual();
                         Sesion sesion = new Sesion (usuario.getId(),generarToken(usuario.getNombre()),fechas[0],fechas[1]);
                         Call<Sesion> call2 = sesionRest.nuevaSesion(sesion);
@@ -200,6 +201,22 @@ public class FragmentLogin extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         fechaLimite= sdf.format(calendar.getTime());
         return fechaLimite;
+    }
+
+    //Insertamos también al usuario en la BD local
+
+    private void insertarUsuarioLocal(Usuario u){
+        ControladorBD controlador = new ControladorBD(getContext(), "BDConfig", null, 1);
+        SQLiteDatabase bd = controlador.getWritableDatabase();
+        ContentValues contenido = new ContentValues();
+        contenido.put("id", u.getId());
+        contenido.put("nombre", u.getNombre());
+        contenido.put("correo", u.getCorreo());
+        contenido.put("password", u.getPassword());
+        contenido.put("imagen", u.getImagen());
+        bd.insert("USUARIO",null,contenido);
+        bd.close();
+        controlador.close();
     }
 
     private void insertarSesionLocal(Sesion s){
