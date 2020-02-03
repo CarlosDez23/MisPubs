@@ -25,6 +25,7 @@ import com.example.mispubs.R;
 import com.example.mispubs.REST.APIUtils;
 import com.example.mispubs.REST.UsuarioRest;
 import com.example.mispubs.Modelo.Usuario;
+import com.example.mispubs.Utilidades.Util;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -198,9 +199,12 @@ public class FragmentRegistro extends Fragment {
                         password = password_input.getText().toString(),
                         usuario = usuario_input.getText().toString();
 
+                byte[] datos = usuario.getBytes();
+                String cifrada = Util.resumirPassword(datos);
+
                 if (email.length() > 0 && password.length() > 0 && usuario.length() > 0) {
                     if (esApto) {
-                        Usuario u = new Usuario(usuario, email, password, null);
+                        Usuario u = new Usuario(usuario, email, cifrada, null);
                         insertarUsuario(u);
                     } else {
                         Toast.makeText(getContext(), "Se deben cumplir todos los requisitos",
@@ -220,6 +224,12 @@ public class FragmentRegistro extends Fragment {
             }
         });
     }
+
+    /*
+     String texto="Saludos desde Apuntesdejava.com";
+        String encriptMD5=DigestUtils.md5Hex(texto);
+        System.out.println("md5:"+encriptMD5);
+     */
 
 
     /**
