@@ -2,6 +2,8 @@ package com.example.mispubs.ui.Login;
 
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -21,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mispubs.Controlador.ControladorBD;
 import com.example.mispubs.R;
 import com.example.mispubs.REST.APIUtils;
 import com.example.mispubs.REST.UsuarioRest;
@@ -254,7 +257,7 @@ public class FragmentRegistro extends Fragment {
                                 if (response.code() == 200) {
                                     Toast.makeText(getContext(), "Usuario registrado",
                                             Toast.LENGTH_LONG).show();
-
+                                    insertarUsuarioLocal(response.body());
                                     getFragmentManager().beginTransaction()
                                             .replace(R.id.fragment, new FragmentLogin()).commit();
 
@@ -277,10 +280,26 @@ public class FragmentRegistro extends Fragment {
 
             @Override
             public void onFailure(Call<Usuario> call, Throwable t) {
-                Toast.makeText(getContext(), "Mal", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Servicio no activo", Toast.LENGTH_SHORT).show();
                 Log.e("ERROR: ", t.getMessage());
             }
         });
 
+    }
+
+    //Insertamos también al usuario en la BD local
+
+    private void insertarUsuarioLocal(Usuario u){
+        ControladorBD controlador = new ControladorBD(getContext(), "BDConfig", null, 1);
+        SQLiteDatabase bd = controlador.getWritableDatabase();
+        ContentValues contenido = new ContentValues();
+        contenido.put("id", u.getId());
+        contenido.put("nombre", u.getNombre());
+        contenido.put("correo", u.getCorreo());
+        contenido.put("password", u.getPassword());
+        contenido.put("imagen", u.getImagen());
+        bd.insert("USUARIO",null,contenido);
+        bd.close();
+        controlador.close();
     }
 }
