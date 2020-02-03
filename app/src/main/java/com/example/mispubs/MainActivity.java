@@ -102,6 +102,4 @@ public class MainActivity extends AppCompatActivity {
         controlador.close();
         return aux;
     }
-
-
 }
