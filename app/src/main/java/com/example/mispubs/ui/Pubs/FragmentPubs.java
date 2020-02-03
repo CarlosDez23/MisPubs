@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +21,7 @@ import com.example.mispubs.Modelo.Pub;
 import com.example.mispubs.R;
 import com.example.mispubs.REST.APIUtils;
 import com.example.mispubs.REST.PubRest;
+import com.example.mispubs.Utilidades.Util;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -72,7 +74,11 @@ public class FragmentPubs extends Fragment {
     private void llamarVistas() {
         recyclerView = getView().findViewById(R.id.rvPubs);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        listarPubs();
+        if (Util.isOnline(getContext())) {
+            listarPubs();
+        } else {
+            Toast.makeText(getContext(), "Debes activar una conexión a internet ", Toast.LENGTH_LONG).show();
+        }
         gestionMenuFabs();
         this.spinnerFiltros = getView().findViewById(R.id.spinnerPubsEstilos);
         gestionSpinner();
@@ -124,9 +130,18 @@ public class FragmentPubs extends Fragment {
                         break;
                 }
                 if (tipoFiltro.equals("")) {
-                    listarPubs();
+                    if (Util.isOnline(getContext())) {
+                        listarPubs();
+                    } else {
+                        Toast.makeText(getContext(), "Debes activar una conexión a internet ", Toast.LENGTH_LONG).show();
+                    }
                 } else {
-                    listarEstilos(tipoFiltro);
+
+                    if (Util.isOnline(getContext())) {
+                        listarEstilos(tipoFiltro);
+                    } else {
+                        Toast.makeText(getContext(), "Debes activar una conexión a internet ", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 
@@ -200,9 +215,17 @@ public class FragmentPubs extends Fragment {
         }
 
         if (palabraClave.equals("")){
-            listarPubs();
+            if (Util.isOnline(getContext())) {
+                listarPubs();
+            } else {
+                Toast.makeText(getContext(), "Debes activar una conexión a internet ", Toast.LENGTH_LONG).show();
+            }
         }else{
-            listarEstilos(palabraClave);
+            if (Util.isOnline(getContext())) {
+                listarEstilos(palabraClave);
+            } else {
+                Toast.makeText(getContext(), "Debes activar una conexión a internet ", Toast.LENGTH_LONG).show();
+            }
         }
     }
 

@@ -15,6 +15,7 @@ import com.example.mispubs.MainActivity;
 import com.example.mispubs.Modelo.Valoracion;
 import com.example.mispubs.R;
 import com.example.mispubs.REST.ValoracionRest;
+import com.example.mispubs.Utilidades.Util;
 import com.google.android.material.textfield.TextInputLayout;
 
 import retrofit2.Call;
@@ -74,7 +75,12 @@ public class ValoracionDialog extends AppCompatDialogFragment {
                             Valoracion v = new Valoracion(MainActivity.getUsuario().getId(),
                                     idPub, (int) rbValoracion.getRating(),
                                     tvValoracion.getEditText().getText().toString());
-                            realizarValoracion(v);
+
+                            if (Util.isOnline(getContext())) {
+                                realizarValoracion(v);
+                            } else {
+                                Toast.makeText(getContext(), "Debes activar una conexión a internet ", Toast.LENGTH_LONG).show();
+                            }
                         }
                     }
                 });
@@ -84,6 +90,10 @@ public class ValoracionDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
+    /**
+     * Metodo para realizar una valoracion
+     * @param valoracion
+     */
     private void realizarValoracion(Valoracion valoracion) {
         Call<Valoracion> call = valoracionRest.insertarValoracion(valoracion);
         call.enqueue(new Callback<Valoracion>() {
@@ -106,6 +116,10 @@ public class ValoracionDialog extends AppCompatDialogFragment {
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
         //Actualizamos la lista de valoraciones
-        fragmentValoraciones.listarValoraciones();
+        if (Util.isOnline(getContext())) {
+            fragmentValoraciones.listarValoraciones();
+        } else {
+            Toast.makeText(getContext(), "Debes activar una conexión a internet ", Toast.LENGTH_LONG).show();
+        }
     }
 }

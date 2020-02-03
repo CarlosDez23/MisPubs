@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.mispubs.Modelo.Pub;
@@ -26,6 +27,7 @@ import com.example.mispubs.R;
 import com.example.mispubs.REST.APIUtils;
 import com.example.mispubs.REST.UsuarioRest;
 import com.example.mispubs.REST.ValoracionRest;
+import com.example.mispubs.Utilidades.Util;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
@@ -88,7 +90,11 @@ public class FragmentValoraciones extends Fragment {
         GridLayoutManager manager = new GridLayoutManager(getActivity(),
                 2, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
-        listarValoraciones();
+        if (Util.isOnline(getContext())) {
+            listarValoraciones();
+        } else {
+            Toast.makeText(getContext(), "Debes activar una conexión a internet ", Toast.LENGTH_LONG).show();
+        }
         fabValoracionesAdd = getView().findViewById(R.id.fabValoracionesAdd);
         fabValoracionesAdd.setOnClickListener(listenerBotones);
         tvNombrePub = getView().findViewById(R.id.tvNombrePub);
@@ -103,6 +109,9 @@ public class FragmentValoraciones extends Fragment {
         }
     };
 
+    /**
+     * Metodo para listar las valoraciones de la base de datos
+     */
     public void listarValoraciones() {
         Call<List<Valoracion>> call = valoracionRest.findValoracionesPub(pub.getId());
         call.enqueue(new Callback<List<Valoracion>>() {

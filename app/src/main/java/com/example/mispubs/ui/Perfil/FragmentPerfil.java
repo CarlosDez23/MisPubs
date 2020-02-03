@@ -151,14 +151,11 @@ public class FragmentPerfil extends Fragment {
                     imageViewEdit.setVisibility(View.VISIBLE);
                     ivImagenPerfil.setEnabled(true);
 
-                    modificarUsuario(actualizarUsuario);
-
-                    etPerfilNombre.setText(actualizarUsuario.getNombre());
-                    etPerfilCorreo.setText(actualizarUsuario.getCorreo());
-                    Bitmap img = ((BitmapDrawable) ivImagenPerfil.getDrawable()).getBitmap();
-                    Bitmap comprimido = Util.comprimirImagen(img);
-                    String convertida = Util.bitmapToBase64(comprimido);
-                    usuario.setImagen(convertida);
+                    if (Util.isOnline(getContext())) {
+                        modificarUsuario(actualizarUsuario);
+                    } else {
+                        Toast.makeText(getContext(), "Debes activar una conexión a internet ", Toast.LENGTH_LONG).show();
+                    }
 
                     break;
                 case R.id.profile:
@@ -171,6 +168,16 @@ public class FragmentPerfil extends Fragment {
             }
         }
     };
+
+    private void actualizarSesion(){
+        Log.e("Entroooo", actualizarUsuario.getNombre() + usuario.getNombre());
+        etPerfilNombre.setText(actualizarUsuario.getNombre());
+        etPerfilCorreo.setText(actualizarUsuario.getCorreo());
+        Bitmap img = ((BitmapDrawable) ivImagenPerfil.getDrawable()).getBitmap();
+        Bitmap comprimido = Util.comprimirImagen(img);
+        String convertida = Util.bitmapToBase64(comprimido);
+        usuario.setImagen(convertida);
+    }
 
 
     /**
@@ -221,7 +228,11 @@ public class FragmentPerfil extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        eliminarUsuario();
+                        if (Util.isOnline(getContext())) {
+                            eliminarUsuario();
+                        } else {
+                            Toast.makeText(getContext(), "Debes activar una conexión a internet ", Toast.LENGTH_LONG).show();
+                        }
                         break;
                     case 1:
                         Toast.makeText(getContext(), "Cuenta no eliminada",
@@ -323,18 +334,22 @@ public class FragmentPerfil extends Fragment {
         }
     }
 
+
     /**
-     * Modificamos el usuario
+     * Modificamos el usuario, asegurandonos de que no exista en la base de dato el mismo nombre de usuario
      *
      * @param user
      */
     private void modificarUsuario(Usuario user) {
-        Call<Usuario> call = usuarioRest.modificarUsuario(user.getId(), user);
-        call.enqueue(new Callback<Usuario>() {
+
+        Call<Usuario> callupdate = usuarioRest.modificarUsuario(user.getId(), user, user.getNombre());
+        callupdate.enqueue(new Callback<Usuario>() {
             @Override
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                 System.out.println("Modificando");
                 if (response.code() == 200) {
+                    System.out.println("si");
+                    actualizarSesion();
                     Toast.makeText(getContext(), "Actualizando Cambios",
                             Toast.LENGTH_LONG).show();
                 }

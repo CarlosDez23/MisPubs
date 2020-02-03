@@ -24,8 +24,8 @@ public interface UsuarioRest {
     @DELETE("usuarios/{id}")
     Call<Usuario> borrarUsuario(@Path("id") Integer id);
 
-    @PUT("usuarios/{id}")
-    Call<Usuario> modificarUsuario(@Path("id") Integer id, @Body Usuario usuario);
+    @PUT("usuarios/{id}/{nombre}")
+    Call<Usuario> modificarUsuario(@Path("id") Integer id, @Body Usuario usuario, @Path("nombre") String nombre);
 
     @GET("usuarios/{id}")
     Call<Usuario> findByIdUsuarios(@Path("id") Integer id);

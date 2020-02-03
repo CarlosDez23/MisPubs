@@ -23,6 +23,7 @@ import com.example.mispubs.Modelo.Usuario;
 import com.example.mispubs.R;
 import com.example.mispubs.REST.APIUtils;
 import com.example.mispubs.REST.UsuarioRest;
+import com.example.mispubs.Utilidades.Util;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -79,9 +80,12 @@ public class ActualizarDialog extends AppCompatDialogFragment {
                                 password = password_input_dialog.getText().toString(),
                                 usuario = usuario_input_dialog.getText().toString();
 
+                        byte[] datos = usuario.getBytes();
+                        String cifrada = Util.resumirPassword(datos);
+
                         if (password.length() > 0 && usuario.length() > 0) {
                             if (esApto) {
-                                u = new Usuario(usuario, user.getCorreo(), password, "imagen");
+                                u = new Usuario(usuario, user.getCorreo(), cifrada, "imagen");
                                 if (u != null){
                                     fragmentPerfil.crearActualizarUsuario(u.getNombre(),u.getPassword());
 

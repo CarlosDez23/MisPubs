@@ -331,7 +331,11 @@ public class FragmentDetallePubs extends Fragment {
                             convertida
                     );
                     if (ultimaLocalizacion != null){
-                        guardarPub(insertarPub);
+                        if (Util.isOnline(getContext())) {
+                            guardarPub(insertarPub);
+                        } else {
+                            Toast.makeText(getContext(), "Debes activar una conexión a internet ", Toast.LENGTH_LONG).show();
+                        }
                     }else{
                         Toast.makeText(getContext(), "Debes activar la localización para" +
                                 " añadir un pub", Toast.LENGTH_LONG).show();
@@ -355,7 +359,11 @@ public class FragmentDetallePubs extends Fragment {
                     Pub p = new Pub(nombre, 0.0, 0.0, estilo, visitas, web, convertida);
                     p.setId(pub.getId());
 
-                    modificarPub(p);
+                    if (Util.isOnline(getContext())) {
+                        modificarPub(p);
+                    } else {
+                        Toast.makeText(getContext(), "Debes activar una conexión a internet ", Toast.LENGTH_LONG).show();
+                    }
                 }
 
                 break;
@@ -381,7 +389,11 @@ public class FragmentDetallePubs extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which){
                     case 0:
-                        eliminarPub();
+                        if (Util.isOnline(getContext())) {
+                            eliminarPub();
+                        } else {
+                            Toast.makeText(getContext(), "Debes activar una conexión a internet ", Toast.LENGTH_LONG).show();
+                        }
                         break;
                     case 1:
                         Toast.makeText(getContext(), "Pub no eliminada",
