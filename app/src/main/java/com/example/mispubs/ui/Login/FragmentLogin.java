@@ -5,6 +5,7 @@ package com.example.mispubs.ui.Login;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mispubs.Controlador.ControladorBD;
+import com.example.mispubs.Controlador.UtilSQL;
 import com.example.mispubs.MainActivity;
 import com.example.mispubs.Modelo.Sesion;
 import com.example.mispubs.Modelo.Usuario;
@@ -135,16 +137,16 @@ public class FragmentLogin extends Fragment {
 
                     if (response.code() == 200){
                         Usuario usuario = response.body();
-                        insertarUsuarioLocal(usuario);
-                        String[] fechas = fechaActual();
-                        Sesion sesion = new Sesion (usuario.getId(),generarToken(usuario.getNombre()),fechas[0],fechas[1]);
+                        UtilSQL.insertarUsuarioLocal(usuario,getContext());
+                        String[] fechas = Util.gestionFechas();
+                        Sesion sesion = new Sesion (usuario.getId(),Util.generarToken(usuario.getNombre()),fechas[0],fechas[1]);
                         Call<Sesion> call2 = sesionRest.nuevaSesion(sesion);
                         call2.enqueue(new Callback<Sesion>() {
                             @Override
                             public void onResponse(Call<Sesion> call, Response<Sesion> response) {
                                 if (response.isSuccessful()){
                                     if (response.code() == 200){
-                                        insertarSesionLocal(response.body());
+                                        UtilSQL.insertarSesionLocal(response.body(),getContext());
                                     }
                                 }
                             }
@@ -176,61 +178,4 @@ public class FragmentLogin extends Fragment {
             }
         });
     }
-
-    private String generarToken(String nombreUsuario){
-        String cadena = nombreUsuario+"mispubs";
-        byte[]datos = cadena.getBytes();
-        String token = Util.resumirPassword(datos);
-        return token;
-    }
-
-    private String[] fechaActual(){
-        String[] fechas = new String[2];
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String fechaComoCadena = sdf.format(new Date());
-        fechas[0] = fechaComoCadena;
-        fechas[1] = fechaLimite();
-        return fechas;
-    }
-
-    public String fechaLimite(){
-        String fechaLimite = "";
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(Calendar.DAY_OF_YEAR, 7);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        fechaLimite= sdf.format(calendar.getTime());
-        return fechaLimite;
-    }
-
-    //Insertamos también al usuario en la BD local
-
-    private void insertarUsuarioLocal(Usuario u){
-        ControladorBD controlador = new ControladorBD(getContext(), "BDConfig", null, 1);
-        SQLiteDatabase bd = controlador.getWritableDatabase();
-        ContentValues contenido = new ContentValues();
-        contenido.put("id", u.getId());
-        contenido.put("nombre", u.getNombre());
-        contenido.put("correo", u.getCorreo());
-        contenido.put("password", u.getPassword());
-        contenido.put("imagen", u.getImagen());
-        bd.insert("USUARIO",null,contenido);
-        bd.close();
-        controlador.close();
-    }
-
-    private void insertarSesionLocal(Sesion s){
-        ControladorBD controlador = new ControladorBD(getContext(), "BDConfig", null, 1);
-        SQLiteDatabase bd = controlador.getWritableDatabase();
-        ContentValues contenido = new ContentValues();
-        contenido.put("id", s.getId());
-        contenido.put("idusuario", s.getIdusuario());
-        contenido.put("token", s.getToken());
-        contenido.put("fechainicio", s.getFechainicio());
-        contenido.put("fechafin", s.getFechafin());
-        bd.insert("SESION", null, contenido);
-        bd.close();
-        controlador.close();
-    }
-
 }

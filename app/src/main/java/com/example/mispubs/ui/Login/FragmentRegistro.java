@@ -257,10 +257,8 @@ public class FragmentRegistro extends Fragment {
                                 if (response.code() == 200) {
                                     Toast.makeText(getContext(), "Usuario registrado",
                                             Toast.LENGTH_LONG).show();
-                                    //insertarUsuarioLocal(response.body());
                                     getFragmentManager().beginTransaction()
                                             .replace(R.id.fragment, new FragmentLogin()).commit();
-
                                 } else {
                                     Toast.makeText(getContext(),
                                             "Ya existe un usuario con ese correo",
@@ -287,19 +285,4 @@ public class FragmentRegistro extends Fragment {
 
     }
 
-    //Insertamos también al usuario en la BD local
-
-    private void insertarUsuarioLocal(Usuario u){
-        ControladorBD controlador = new ControladorBD(getContext(), "BDConfig", null, 1);
-        SQLiteDatabase bd = controlador.getWritableDatabase();
-        ContentValues contenido = new ContentValues();
-        contenido.put("id", u.getId());
-        contenido.put("nombre", u.getNombre());
-        contenido.put("correo", u.getCorreo());
-        contenido.put("password", u.getPassword());
-        contenido.put("imagen", u.getImagen());
-        bd.insert("USUARIO",null,contenido);
-        bd.close();
-        controlador.close();
-    }
 }

@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.mispubs.Controlador.UtilSQL;
 import com.example.mispubs.MainActivity;
 import com.example.mispubs.Modelo.Usuario;
 import com.example.mispubs.R;
@@ -271,6 +272,9 @@ public class FragmentPerfil extends Fragment {
 
 
     private void cerrarSesion() {
+        int id = UtilSQL.consultarSesion(getContext()).getId();
+        //Borramos la sesión local
+        UtilSQL.eliminarSesionLocal(id,getContext());
         startActivity(new Intent(getActivity(), ActivityLogin.class));
         getActivity().finish();
     }

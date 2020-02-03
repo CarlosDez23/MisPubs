@@ -2,8 +2,6 @@ package com.example.mispubs.ui.Valoraciones;
 
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +21,6 @@ import com.example.mispubs.R;
 import com.example.mispubs.REST.UsuarioRest;
 import com.example.mispubs.Utilidades.Util;
 
-
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -32,14 +29,15 @@ import retrofit2.Response;
 
 public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapter.ViewHolder> {
 
+    //Listado de valoraciones
     private ArrayList<Valoracion> listValoraciones;
+
+    //Contexto y fragment manager para nuestras operaciones con la interfaz
     private Context context;
     private FragmentManager fm;
 
+    //Para consumir el rest
     private UsuarioRest usuarioRest;
-
-    //Necesitamos la imagen para pasársela al detalle de la valoración
-    private String imgUsuario;
 
 
     public ValoracionesAdapter(ArrayList<Valoracion> listValoraciones, Context context, UsuarioRest usuarioRest, FragmentManager fm) {
@@ -94,13 +92,7 @@ public class ValoracionesAdapter extends RecyclerView.Adapter<ValoracionesAdapte
                     if (response.code() == 200){
                         Usuario u = response.body();
                         holder.tvValoracionUsuario.setText(u.getNombre());
-                        if (u.getImagen() == null){
-                            Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
-                                    R.drawable.man);
-                            u.setImagen(Util.bitmapToBase64(icon));
-                        }
                         holder.ivImagenUsuario.setImageBitmap(Util.base64ToBitmap(u.getImagen()));
-                        imgUsuario = u.getImagen();
                     }
                 }
             }

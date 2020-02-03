@@ -10,11 +10,16 @@ import android.util.Base64;
 import java.io.ByteArrayOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Util {
 
     /**
      * Método para convertir una cadena en base64 a Bitmap
+     *
      * @param b64String cadena Base 64
      * @return Bitmap
      */
@@ -39,22 +44,28 @@ public class Util {
 
     /**
      * Método para comprimir una imagen antes de transformarla a Base64
+     *
      * @param myBitmap
      * @return
      */
     public static Bitmap comprimirImagen(Bitmap myBitmap) {
         Bitmap bitmap = null;
-        try{
+        try {
             float porcentaje = 360 / (float) myBitmap.getWidth();
-            bitmap= Bitmap.createScaledBitmap(myBitmap, 360, (int) (myBitmap.getHeight()*porcentaje), false);
-        }catch(Exception ex){
+            bitmap = Bitmap.createScaledBitmap(myBitmap, 360, (int) (myBitmap.getHeight() * porcentaje), false);
+        } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
         return bitmap;
     }
 
-
-    public static String resumirPassword (byte[] datos)  {
+    /**
+     * Para resumir la contraseña y devolverla como una string en Hexadecimal
+     *
+     * @param datos
+     * @return
+     */
+    public static String resumirPassword(byte[] datos) {
         MessageDigest md = null;
         try {
             md = MessageDigest.getInstance("MD5");
@@ -67,20 +78,84 @@ public class Util {
         return Hexadecimal(md.digest());
     }
 
-    private static String Hexadecimal(byte []resumen){
-        String hex="";
-        for (int i=0;i<resumen.length;i++){
+    private static String Hexadecimal(byte[] resumen) {
+        String hex = "";
+        for (int i = 0; i < resumen.length; i++) {
             String h = Integer.toHexString(resumen[i] & 0xFF);
-            if (h.length() == 1) hex+=0;
-            hex+=h;
+            if (h.length() == 1) hex += 0;
+            hex += h;
         }
         return hex;
     }
 
+    /**
+     * Método para comprobar que el dispositivo tiene conexión a internet
+     *
+     * @param context
+     * @return
+     */
     public static boolean isOnline(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected();
+    }
+
+    /**
+     * Método que recibe una cadena con una fecha (en la BBDD las guardamos como cadenas)
+     * y la convierte a un objeto Date, con el que podemos operar para saber la diferencia
+     * de días y así poder validar el token de la sesión
+     * @param fecha
+     * @return
+     */
+    public static Date parseFecha(String fecha) {
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        Date fechaDate = null;
+        try {
+            fechaDate = formato.parse(fecha);
+        } catch (ParseException ex) {
+            System.out.println(ex);
+        }
+        return fechaDate;
+    }
+
+    /**
+     * Para generar el token del usuario
+     * @param nombreUsuario
+     * @return
+     */
+    public static String generarToken(String nombreUsuario){
+        String cadena = nombreUsuario+"mispubs";
+        byte[]datos = cadena.getBytes();
+        String token = resumirPassword(datos);
+        return token;
+    }
+
+    /**
+     * Devuelve las fechas de inicio y fin del token
+     * @return
+     */
+
+    public static String[] gestionFechas(){
+        String[] fechas = new String[2];
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String fechaComoCadena = sdf.format(new Date());
+        fechas[0] = fechaComoCadena;
+        fechas[1] = fechaLimite();
+        return fechas;
+    }
+
+    /**
+     * Generamos la fecha de caducidad sumándole 7 días a la de inicio
+     * @return
+     */
+    private static String fechaLimite(){
+        String fechaLimite;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DAY_OF_YEAR, 7);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        fechaLimite= sdf.format(calendar.getTime());
+        return fechaLimite;
     }
 
 

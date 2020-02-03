@@ -10,8 +10,10 @@ import android.os.Handler;
 import android.view.WindowManager;
 
 import com.example.mispubs.Controlador.ControladorBD;
+import com.example.mispubs.Controlador.UtilSQL;
 import com.example.mispubs.Modelo.Sesion;
 import com.example.mispubs.Modelo.Usuario;
+import com.example.mispubs.Utilidades.Util;
 import com.example.mispubs.ui.Login.ActivityLogin;
 
 import java.io.File;
@@ -37,67 +39,20 @@ public class ActivitySplash extends AppCompatActivity {
                     Intent intent = new Intent(ActivitySplash.this, ActivityLogin.class);
                     startActivity(intent);
                 }else{
-                    int idUsuario = consultarUsuarioLocal();
-                    System.out.println(idUsuario);
-                    Sesion sesion = consultarSesion();
-                    Date fechainicio = parseFecha(sesion.getFechainicio());
-                    Date fechafin = parseFecha(sesion.getFechafin());
-                    int dias=(int) ((fechainicio.getTime()-fechafin.getTime())/86400000);
-                    if (dias >= 7){
+                    Sesion sesion = UtilSQL.consultarSesion(getApplicationContext());
+                    Date fechaActual = new Date();
+                    Date fechafin = Util.parseFecha(sesion.getFechafin());
+                    int dias=(int) ((fechafin.getTime()-fechaActual.getTime())/86400000);
+                    if (dias < 0){
                         Intent intent = new Intent(ActivitySplash.this, ActivityLogin.class);
                         startActivity(intent);
                     }else{
                         Intent intent = new Intent(ActivitySplash.this, MainActivity.class);
                         startActivity(intent);
                     }
-
-
                 }
-
                 finish();
             }
         },3000);//tiempo que debe estar ejecutandose
-    }
-
-    /**
-     * Consultamos la id del usuario que tenemos almacenado localmente
-     * @return
-     */
-    private int consultarUsuarioLocal(){
-        int id = 0;
-        ControladorBD controlador = new ControladorBD(this.getApplicationContext(), "BDConfig", null, 1);
-        SQLiteDatabase bd = controlador.getReadableDatabase();
-        String[]campos = new String[] {"id"};
-        Cursor c = bd.query("USUARIO", campos, null, null, null, null,null);
-        if (c.moveToFirst()){
-            id = c.getInt(0);
-        }
-        bd.close();
-        controlador.close();
-        return id;
-    }
-
-    private Sesion consultarSesion(){
-        Sesion aux = null;
-        ControladorBD controlador = new ControladorBD(this.getApplicationContext(), "BDConfig", null, 1);
-        SQLiteDatabase bd = controlador.getReadableDatabase();
-        String[]campos = new String[] {"id", "idusuario", "token","fechainicio","fechafin"};
-        Cursor c = bd.query("SESION", campos, null, null, null, null,null);
-        if (c.moveToFirst()){
-            aux = new Sesion(c.getInt(1), c.getString(2),c.getString(3),c.getString(4));
-            aux.setId(c.getInt(0));
-        }
-        return aux;
-    }
-
-    private Date parseFecha(String fecha) {
-        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-        Date fechaDate = null;
-        try {
-            fechaDate = formato.parse(fecha);
-        } catch (ParseException ex) {
-            System.out.println(ex);
-        }
-        return fechaDate;
     }
 }

@@ -1,10 +1,13 @@
 package com.example.mispubs.Controlador;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+
+import com.example.mispubs.Modelo.Usuario;
 
 public class ControladorBD extends SQLiteOpenHelper {
 
@@ -37,6 +40,6 @@ public class ControladorBD extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        onCreate(db);
     }
 }
