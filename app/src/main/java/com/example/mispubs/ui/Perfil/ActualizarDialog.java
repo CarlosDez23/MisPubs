@@ -33,9 +33,9 @@ public class ActualizarDialog extends AppCompatDialogFragment {
     private Usuario u;
     private FragmentPerfil fragmentPerfil;
     //Elementos de la interfaz
-    private EditText email_input_dialog, password_input_dialog, usuario_input_dialog;
-    private TextView email_error_dialog, password_error_dialog, usuario_error_dialog;
-    private CardView min8caraacteres_dialog, una_mayus_dialog, un_numero_dialog, emailok_dialog;
+    private EditText password_input_dialog, usuario_input_dialog;
+    private TextView password_error_dialog, usuario_error_dialog;
+    private CardView min8caraacteres_dialog, una_mayus_dialog, un_numero_dialog;
 
     //Vista
     private View root;
@@ -46,7 +46,6 @@ public class ActualizarDialog extends AppCompatDialogFragment {
             tieneCaracteres = false,
             tieneMayus = false,
             tieneNumero = false,
-            emailCorrecto = false,
             esApto = false;
 
 
@@ -69,33 +68,34 @@ public class ActualizarDialog extends AppCompatDialogFragment {
                 .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        fragmentPerfil.crearActualizarUsuario(user.getNombre(), user.getCorreo(), user.getPassword());
+                        fragmentPerfil.crearActualizarUsuario(user.getNombre(), user.getPassword());
                     }
                 })
                 .setPositiveButton("Actualizar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        String email = email_input_dialog.getText().toString(),
+                        String
                                 password = password_input_dialog.getText().toString(),
                                 usuario = usuario_input_dialog.getText().toString();
 
-                        if (email.length() > 0 && password.length() > 0 && usuario.length() > 0) {
+                        if (password.length() > 0 && usuario.length() > 0) {
                             if (esApto) {
-                                u = new Usuario(usuario, email, password, "imagen");
+                                u = new Usuario(usuario, user.getCorreo(), password, "imagen");
                                 if (u != null){
-                                    fragmentPerfil.crearActualizarUsuario(u.getNombre(),u.getCorreo(),u.getPassword());
+                                    fragmentPerfil.crearActualizarUsuario(u.getNombre(),u.getPassword());
+
                                 }
                             } else {
                                 Toast.makeText(getContext(), "Se deben cumplir todos los requisitos",
                                         Toast.LENGTH_LONG).show();
-                                fragmentPerfil.crearActualizarUsuario(user.getNombre(), user.getCorreo(), user.getPassword());
+                                fragmentPerfil.crearActualizarUsuario(user.getNombre(), user.getPassword());
 
                             }
                         } else {
                             Toast.makeText(getContext(), "Tienes que rellenar todos los campos",
                                     Toast.LENGTH_LONG).show();
-                            fragmentPerfil.crearActualizarUsuario(user.getNombre(), user.getCorreo(), user.getPassword());
+                            fragmentPerfil.crearActualizarUsuario(user.getNombre(), user.getPassword());
                         }
                     }
                 });
@@ -110,14 +110,14 @@ public class ActualizarDialog extends AppCompatDialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        fragmentPerfil.crearActualizarUsuario(user.getNombre(), user.getCorreo(), user.getPassword());
+        if(!esApto){
+            fragmentPerfil.crearActualizarUsuario(user.getNombre(), user.getPassword());
+        }
     }
 
 
     private void llamarVistas() {
 
-        email_input_dialog = root.findViewById(R.id.email_input_field_dialog);
-        email_error_dialog = root.findViewById(R.id.email_error_text_dialog);
         password_error_dialog = root.findViewById(R.id.password_error_text_dialog);
         password_input_dialog = root.findViewById(R.id.password_input_field_dialog);
         usuario_input_dialog = root.findViewById(R.id.usuario_input_field_dialog);
@@ -125,28 +125,10 @@ public class ActualizarDialog extends AppCompatDialogFragment {
         min8caraacteres_dialog = root.findViewById(R.id.p_item_1_icon_parent_dialog);
         una_mayus_dialog = root.findViewById(R.id.p_item_2_icon_parent_dialog);
         un_numero_dialog = root.findViewById(R.id.p_item_3_icon_parent_dialog);
-        emailok_dialog = root.findViewById(R.id.p_item_4_icon_parent_dialog);
 
     }
 
     private void inputChange() {
-        email_input_dialog.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                registrationDataCheck();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
         password_input_dialog.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
@@ -169,10 +151,9 @@ public class ActualizarDialog extends AppCompatDialogFragment {
     @SuppressLint("ResourceType")
     private void registrationDataCheck() {
         String password = password_input_dialog.getText().toString(),
-                email = email_input_dialog.getText().toString(),
                 usuario = usuario_input_dialog.getText().toString();
 
-        checkEmpty(email, password, usuario);
+        checkEmpty(password, usuario);
 
         if (password.length() >= 8) {
             tieneCaracteres = true;
@@ -196,23 +177,12 @@ public class ActualizarDialog extends AppCompatDialogFragment {
             un_numero_dialog.setCardBackgroundColor(Color.parseColor(getString(R.color.colorCheckNo)));
         }
 
-        if (email.matches("^(.+)@(.+)$")) {
-            emailCorrecto = true;
-            emailok_dialog.setCardBackgroundColor(Color.parseColor(getString(R.color.colorCheckOk)));
-        } else {
-            emailCorrecto = false;
-            emailok_dialog.setCardBackgroundColor(Color.parseColor(getString(R.color.colorCheckNo)));
-        }
-
-        checkAllData(email);
+        checkAllData();
     }
 
-    private void checkEmpty(String email, String password, String usuario) {
+    private void checkEmpty(String password, String usuario) {
         if (password.length() > 0 && password_error_dialog.getVisibility() == View.VISIBLE) {
             password_error_dialog.setVisibility(View.GONE);
-        }
-        if (email.length() > 0 && email_error_dialog.getVisibility() == View.VISIBLE) {
-            email_error_dialog.setVisibility(View.GONE);
         }
         if (usuario.length() > 0 && usuario_error_dialog.getVisibility() == View.VISIBLE) {
             usuario_error_dialog.setVisibility(View.GONE);
@@ -220,8 +190,8 @@ public class ActualizarDialog extends AppCompatDialogFragment {
     }
 
     @SuppressLint("ResourceType")
-    private void checkAllData(String email) {
-        if (tieneCaracteres && tieneMayus && tieneNumero && emailCorrecto && email.length() > 0) {
+    private void checkAllData() {
+        if (tieneCaracteres && tieneMayus && tieneNumero) {
             esApto = true;
             //btnRegistroParent.setCardBackgroundColor(Color.parseColor(getString(R.color.colorCheckOk)));
         } else {

@@ -60,14 +60,14 @@ public class FragmentPerfil extends Fragment {
 
     //Para la interfaz
     private EditText etPerfilNombre, etPerfilCorreo, etPerfilPassword;
-    private RelativeLayout btnPerfilEliminarUsuario , btnPerfilCerrarSesion;
+    private RelativeLayout btnPerfilEliminarUsuario, btnPerfilCerrarSesion;
     private ImageView imageViewEdit, imageViewModificar, ivImagenPerfil;
 
     //Para la gestión de imágenes
     private static final int GALERIA = 1;
     private static final int CAMARA = 2;
 
-    public FragmentPerfil getFragment(){
+    public FragmentPerfil getFragment() {
         return this;
     }
 
@@ -110,9 +110,9 @@ public class FragmentPerfil extends Fragment {
         this.ivImagenPerfil.setEnabled(false);
 
         //Para la gestión de imágenes
-        if (usuario.getImagen() != null){
+        if (usuario.getImagen() != null) {
             this.ivImagenPerfil.setImageBitmap(Util.base64ToBitmap(usuario.getImagen()));
-        }else{
+        } else {
             this.ivImagenPerfil.setImageResource(R.drawable.man);
         }
 
@@ -151,22 +151,14 @@ public class FragmentPerfil extends Fragment {
                     imageViewEdit.setVisibility(View.VISIBLE);
                     ivImagenPerfil.setEnabled(true);
 
+                    modificarUsuario(actualizarUsuario);
 
-                    String u = usuario.toString();
-                    String us = actualizarUsuario.toString();
-
-                    //Comprobamos si ha cambiado algo el usuario
-                    if (u.equals(us)){
-
-                        Toast.makeText(getContext(), "No has realizado ningun cambio",
-                                Toast.LENGTH_LONG).show();
-                    }else{
-                        modificarUsuario(actualizarUsuario);
-
-                        etPerfilNombre.setText(usuario.getNombre());
-                        etPerfilCorreo.setText(usuario.getCorreo());
-                        ivImagenPerfil.setImageBitmap(Util.base64ToBitmap(usuario.getImagen()));
-                    }
+                    etPerfilNombre.setText(actualizarUsuario.getNombre());
+                    etPerfilCorreo.setText(actualizarUsuario.getCorreo());
+                    Bitmap img = ((BitmapDrawable) ivImagenPerfil.getDrawable()).getBitmap();
+                    Bitmap comprimido = Util.comprimirImagen(img);
+                    String convertida = Util.bitmapToBase64(comprimido);
+                    usuario.setImagen(convertida);
 
                     break;
                 case R.id.profile:
@@ -180,21 +172,22 @@ public class FragmentPerfil extends Fragment {
         }
     };
 
+
     /**
      * Metodo encargado de crear un usuario, para modificar el usuario de la sesion en la base de datos y en la sesion
      */
-    public void crearActualizarUsuario(String nombre, String email, String password) {
+    public void crearActualizarUsuario(String nombre, String password) {
 
-        actualizarUsuario = new Usuario(nombre, email, password, "imagen");
+        actualizarUsuario = new Usuario(nombre, usuario.getCorreo(), password, "imagen");
         actualizarUsuario.setId(usuario.getId());
     }
 
     /**
      * Para modificar la imagen en el nuevo usuario
      */
-    private void cambiarImagen(){
+    private void cambiarImagen() {
 
-        Bitmap img = ((BitmapDrawable)ivImagenPerfil.getDrawable()).getBitmap();
+        Bitmap img = ((BitmapDrawable) ivImagenPerfil.getDrawable()).getBitmap();
         Bitmap comprimido = Util.comprimirImagen(img);
         String convertida = Util.bitmapToBase64(comprimido);
         actualizarUsuario.setImagen(convertida);
@@ -242,7 +235,7 @@ public class FragmentPerfil extends Fragment {
         deleteDialog.show();
     }
 
-    private void mostrarDialogoCerrarSesion(){
+    private void mostrarDialogoCerrarSesion() {
         AlertDialog.Builder deleteDialog = new AlertDialog.Builder(getContext());
         deleteDialog.setTitle(usuario.getNombre() + ", ¿Estás seguro de querer cerrar sesion?");
         String[] deleteDialogitems = {"Sí", "No"};
@@ -266,7 +259,7 @@ public class FragmentPerfil extends Fragment {
     }
 
 
-    private void cerrarSesion(){
+    private void cerrarSesion() {
         startActivity(new Intent(getActivity(), ActivityLogin.class));
         getActivity().finish();
     }
@@ -294,14 +287,14 @@ public class FragmentPerfil extends Fragment {
         fotoDialogo.show();
     }
 
-    private void elegirFotoGaleria(){
+    private void elegirFotoGaleria() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, GALERIA);
     }
 
 
-    private void tomarFotoCamara(){
+    private void tomarFotoCamara() {
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, CAMARA);
     }
@@ -342,7 +335,7 @@ public class FragmentPerfil extends Fragment {
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                 System.out.println("Modificando");
                 if (response.code() == 200) {
-                    Toast.makeText(getContext(), "Usuario actualizado",
+                    Toast.makeText(getContext(), "Actualizando Cambios",
                             Toast.LENGTH_LONG).show();
                 }
             }

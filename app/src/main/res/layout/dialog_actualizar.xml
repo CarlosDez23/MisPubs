@@ -27,77 +27,7 @@
                 android:paddingBottom="30dp">
 
                 <RelativeLayout
-                    android:id="@+id/email_parent_dialog"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/email_title_dialog"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:text="Introduce tu email"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="16dp" />
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/email_input_box_parent_dialog"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_below="@+id/email_title_dialog"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="15dp"
-                        app:cardCornerRadius="20dp"
-                        app:cardBackgroundColor="@color/colorCardViewBackground"
-                        app:cardElevation="0dp">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <EditText
-                                android:id="@+id/email_input_field_dialog"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_centerVertical="true"
-                                android:layout_marginLeft="15dp"
-                                android:layout_marginRight="15dp"
-                                android:background="@null"
-                                android:hint="email"
-                                android:imeOptions="actionNext"
-                                android:inputType="text"
-                                android:maxLines="1"
-                                android:textColor="@color/black_overlay"
-                                android:textSize="15dp"
-                                tools:ignore="TextFields"/>
-
-                        </RelativeLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <TextView
-                        android:id="@+id/email_error_text_dialog"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/email_input_box_parent_dialog"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginRight="15dp"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:text="Email requerido"
-                        android:textColor="@color/colorError"
-                        android:textSize="13dp"
-                        android:visibility="gone" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
                     android:id="@+id/usuario_parent_dialog"
-                    android:layout_below="@id/email_parent_dialog"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp">
@@ -121,8 +51,8 @@
                         android:layout_marginLeft="15dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="15dp"
-                        app:cardCornerRadius="20dp"
                         app:cardBackgroundColor="@color/colorCardViewBackground"
+                        app:cardCornerRadius="20dp"
                         app:cardElevation="0dp">
 
                         <RelativeLayout
@@ -138,13 +68,13 @@
                                 android:layout_marginRight="15dp"
                                 android:background="@null"
                                 android:hint="usuario"
-                                android:maxLength="15"
                                 android:imeOptions="actionNext"
                                 android:inputType="text"
+                                android:maxLength="15"
                                 android:maxLines="1"
                                 android:textColor="@color/black_overlay"
                                 android:textSize="15dp"
-                                tools:ignore="TextFields"/>
+                                tools:ignore="TextFields" />
 
                         </RelativeLayout>
 
@@ -194,8 +124,8 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="15dp"
                         app:cardBackgroundColor="@color/colorCardViewBackground"
-                        app:cardElevation="0dp"
-                        app:cardCornerRadius="20dp">
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="0dp">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -207,13 +137,13 @@
                                 android:layout_height="match_parent"
                                 android:layout_centerVertical="true"
                                 android:background="@null"
-                                android:inputType="textPassword"
-                                android:maxLines="1"
                                 android:hint="password"
+                                android:inputType="textPassword"
                                 android:maxLength="15"
+                                android:maxLines="1"
                                 android:paddingStart="10dp"
                                 android:textColor="@color/black_overlay"
-                                android:textSize="15dp"/>
+                                android:textSize="15dp" />
 
                         </RelativeLayout>
 
@@ -384,53 +314,9 @@
 
                         </RelativeLayout>
 
-                        <RelativeLayout
-                            android:id="@+id/p_item_4_parent_dialog"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_below="@+id/p_item_3_parent_dialog"
-                            android:layout_marginTop="5dp">
-
-                            <androidx.cardview.widget.CardView
-                                android:id="@+id/p_item_4_icon_parent_dialog"
-                                android:layout_width="22dp"
-                                android:layout_height="22dp"
-                                android:layout_centerVertical="true"
-                                app:cardBackgroundColor="@color/colorCheckNo"
-                                app:cardCornerRadius="11dp">
-
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent">
-
-                                    <ImageView
-                                        android:layout_width="17dp"
-                                        android:layout_height="17dp"
-                                        android:layout_centerHorizontal="true"
-                                        android:layout_centerVertical="true"
-                                        android:background="@drawable/ic_done" />
-
-                                </RelativeLayout>
-
-                            </androidx.cardview.widget.CardView>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_marginLeft="8dp"
-                                android:layout_toEndOf="@+id/p_item_4_icon_parent_dialog"
-                                android:ellipsize="end"
-                                android:lines="1"
-                                android:text="Email correcto"
-                                android:textColor="@color/black_overlay"
-                                android:textSize="13dp" />
-
-                        </RelativeLayout>
                     </RelativeLayout>
 
                 </RelativeLayout>
-
 
 
             </RelativeLayout>
