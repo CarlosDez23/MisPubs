@@ -25,6 +25,7 @@ import com.example.mispubs.R;
 import com.example.mispubs.REST.APIUtils;
 import com.example.mispubs.REST.UsuarioRest;
 import com.example.mispubs.Modelo.Usuario;
+import com.example.mispubs.Utilidades.Util;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -198,10 +199,19 @@ public class FragmentRegistro extends Fragment {
                         password = password_input.getText().toString(),
                         usuario = usuario_input.getText().toString();
 
+                byte[] datos = usuario.getBytes();
+                String cifrada = Util.resumirPassword(datos);
+
                 if (email.length() > 0 && password.length() > 0 && usuario.length() > 0) {
                     if (esApto) {
-                        Usuario u = new Usuario(usuario, email, password, null);
-                        insertarUsuario(u);
+                        Usuario u = new Usuario(usuario, email, cifrada, null);
+                        if (Util.isOnline(getContext())){
+                            insertarUsuario(u);
+
+                        }else{
+                            Toast.makeText(getContext(), "Debes activar una conexión a internet ", Toast.LENGTH_LONG).show();
+
+                        }
                     } else {
                         Toast.makeText(getContext(), "Se deben cumplir todos los requisitos",
                                 Toast.LENGTH_LONG).show();
@@ -220,7 +230,6 @@ public class FragmentRegistro extends Fragment {
             }
         });
     }
-
 
     /**
      * Método para insertar un usuario utilizando el servicio REST. Primero comprobamos

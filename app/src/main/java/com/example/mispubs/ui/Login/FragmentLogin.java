@@ -23,6 +23,7 @@ import com.example.mispubs.Modelo.Usuario;
 import com.example.mispubs.R;
 import com.example.mispubs.REST.APIUtils;
 import com.example.mispubs.REST.UsuarioRest;
+import com.example.mispubs.Utilidades.Util;
 import com.google.android.material.snackbar.Snackbar;
 
 import retrofit2.Call;
@@ -88,10 +89,17 @@ public class FragmentLogin extends Fragment {
                         Toast.makeText(getContext(), "Debes rellenar todos los campos", Toast.LENGTH_SHORT).show();
                     }else{
                         relativeLoginBoton.setClickable(false);
-                        comprobarUsuario(correo,password);
+                        byte[]datos = password.getBytes();
+                        String cifrada = Util.resumirPassword(datos);
+                        if (Util.isOnline(getContext())){
+                            comprobarUsuario(correo,cifrada);
+                        }else{
+                            Toast.makeText(getContext(), "Debes activar una conexión a internet ", Toast.LENGTH_LONG).show();
+                            relativeLoginBoton.setClickable(true);
+                        }
+
 
                     }
-
 
                     break;
                 default:

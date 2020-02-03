@@ -3,17 +3,13 @@ package com.example.mispubs.Utilidades;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class Util {
 
@@ -57,40 +53,35 @@ public class Util {
         return bitmap;
     }
 
-    public static int getDominantColor(Bitmap bitmap) {
-        if (bitmap == null) {
-            return Color.TRANSPARENT;
+
+    public static String resumirPassword (byte[] datos)  {
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("MD5");
+            md.update(datos);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
         }
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        int size = width * height;
-        int pixels[] = new int[size];
-        //Bitmap bitmap2 = bitmap.copy(Bitmap.Config.ARGB_4444, false);
-        bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
-        int color;
-        int r = 0;
-        int g = 0;
-        int b = 0;
-        int a;
-        int count = 0;
-        for (int i = 0; i < pixels.length; i++) {
-            color = pixels[i];
-            a = Color.alpha(color);
-            if (a > 0) {
-                r += Color.red(color);
-                g += Color.green(color);
-                b += Color.blue(color);
-                count++;
-            }
-        }
-        r /= count;
-        g /= count;
-        b /= count;
-        r = (r << 16) & 0x00FF0000;
-        g = (g << 8) & 0x0000FF00;
-        b = b & 0x000000FF;
-        color = 0xFF000000 | r | g | b;
-        return color;
+        System.out.println(Hexadecimal(md.digest()));
+
+        return Hexadecimal(md.digest());
     }
+
+    private static String Hexadecimal(byte []resumen){
+        String hex="";
+        for (int i=0;i<resumen.length;i++){
+            String h = Integer.toHexString(resumen[i] & 0xFF);
+            if (h.length() == 1) hex+=0;
+            hex+=h;
+        }
+        return hex;
+    }
+
+    public static boolean isOnline(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected();
+    }
+
 
 }
