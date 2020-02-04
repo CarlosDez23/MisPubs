@@ -200,10 +200,10 @@ public class FragmentPubs extends Fragment {
         }else if(secuencia.contains("reggaeton")){
             palabraClave = "Reggaeton";
             spinnerFiltros.setSelection(2);
-        }else if(secuencia.contains("clasica")){
+        }else if(secuencia.contains("clásica")){
             palabraClave = "Clasica";
             spinnerFiltros.setSelection(3);
-        }else if(secuencia.contains("electronica")){
+        }else if(secuencia.contains("electrónica")){
             palabraClave = "Electronica";
             spinnerFiltros.setSelection(4);
         }else if(secuencia.contains("indie")){
