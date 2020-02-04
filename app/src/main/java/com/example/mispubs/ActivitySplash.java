@@ -34,25 +34,30 @@ public class ActivitySplash extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                File bd = new File ("/data/data/com.example.mispubs/databases/BDConfig");
-                if (!bd.exists()){
+                File bd = new File("/data/data/com.example.mispubs/databases/BDConfig");
+                if (!bd.exists()) {
                     Intent intent = new Intent(ActivitySplash.this, ActivityLogin.class);
                     startActivity(intent);
-                }else{
+                } else {
                     Sesion sesion = UtilSQL.consultarSesion(getApplicationContext());
-                    Date fechaActual = new Date();
-                    Date fechafin = Util.parseFecha(sesion.getFechafin());
-                    int dias=(int) ((fechafin.getTime()-fechaActual.getTime())/86400000);
-                    if (dias < 0){
+                    if (sesion == null) {
                         Intent intent = new Intent(ActivitySplash.this, ActivityLogin.class);
                         startActivity(intent);
-                    }else{
-                        Intent intent = new Intent(ActivitySplash.this, MainActivity.class);
-                        startActivity(intent);
+                    } else {
+                        Date fechaActual = new Date();
+                        Date fechafin = Util.parseFecha(sesion.getFechafin());
+                        int dias = (int) ((fechafin.getTime() - fechaActual.getTime()) / 86400000);
+                        if (dias < 0) {
+                            Intent intent = new Intent(ActivitySplash.this, ActivityLogin.class);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(ActivitySplash.this, MainActivity.class);
+                            startActivity(intent);
+                        }
                     }
                 }
                 finish();
             }
-        },3000);//tiempo que debe estar ejecutandose
+        }, 3000);//tiempo que debe estar ejecutandose
     }
 }

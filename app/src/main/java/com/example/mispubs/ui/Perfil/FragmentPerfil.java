@@ -275,6 +275,7 @@ public class FragmentPerfil extends Fragment {
         int id = UtilSQL.consultarSesion(getContext()).getId();
         //Borramos la sesión local
         UtilSQL.eliminarSesionLocal(id,getContext());
+        UtilSQL.eliminarUsuarioLocal(usuario.getId(),getContext());
         startActivity(new Intent(getActivity(), ActivityLogin.class));
         getActivity().finish();
     }

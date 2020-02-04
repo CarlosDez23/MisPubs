@@ -83,4 +83,11 @@ public class UtilSQL {
         SQLiteDatabase bd = controlador.getWritableDatabase();
         bd.delete("SESION","id="+idSesion, null);
     }
+
+    public static void eliminarUsuarioLocal(int idUsuario, Context context){
+        ControladorBD controlador = new ControladorBD(context, NOMBRE_BD, null, VERSION_BD);
+        SQLiteDatabase bd = controlador.getWritableDatabase();
+        bd.delete("USUARIO", "id="+idUsuario, null);
+
+    }
 }
