@@ -177,6 +177,10 @@ public class FragmentPerfil extends Fragment {
         Bitmap comprimido = Util.comprimirImagen(img);
         String convertida = Util.bitmapToBase64(comprimido);
         actualizarUsuario.setImagen(convertida);
+
+        UtilSQL.actualizarUsuarioLocal(actualizarUsuario,getContext());
+        usuario = UtilSQL.consultarUsuarioLocal(getContext());
+
     }
 
 

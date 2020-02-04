@@ -82,12 +82,16 @@ public class UtilSQL {
         ControladorBD controlador = new ControladorBD(context, NOMBRE_BD, null, VERSION_BD);
         SQLiteDatabase bd = controlador.getWritableDatabase();
         bd.delete("SESION", "id=" + idSesion, null);
+        bd.close();
+        controlador.close();
     }
 
     public static void eliminarUsuarioLocal(int idUsuario, Context context) {
         ControladorBD controlador = new ControladorBD(context, NOMBRE_BD, null, VERSION_BD);
         SQLiteDatabase bd = controlador.getWritableDatabase();
         bd.delete("USUARIO", "id=" + idUsuario, null);
+        bd.close();
+        controlador.close();
     }
 
     public static void actualizarUsuarioLocal(Usuario u, Context context) {
@@ -105,5 +109,7 @@ public class UtilSQL {
             contenido.put("imagen", u.getImagen());
         }
         bd.update("USUARIO", contenido, "id="+u.getId(), null);
+        bd.close();
+        controlador.close();
     }
 }
