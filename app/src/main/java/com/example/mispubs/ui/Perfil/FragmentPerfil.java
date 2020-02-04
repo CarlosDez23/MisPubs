@@ -139,7 +139,6 @@ public class FragmentPerfil extends Fragment {
                     ivImagenPerfil.setEnabled(true);
                     ActualizarDialog dialog = new ActualizarDialog(getFragment(), usuario);
                     dialog.show(fm, "Actualizar Usuario");
-                    ivImagenPerfil.setEnabled(true);
 
 
                     break;
@@ -150,7 +149,7 @@ public class FragmentPerfil extends Fragment {
                     //ponemos invisible el boton pulsado, mostramos el de editar y deshabilitamos los campos
                     imageViewModificar.setVisibility(View.INVISIBLE);
                     imageViewEdit.setVisibility(View.VISIBLE);
-                    ivImagenPerfil.setEnabled(true);
+                    ivImagenPerfil.setEnabled(false);
 
                     if (Util.isOnline(getContext())) {
                         modificarUsuario(actualizarUsuario);
@@ -177,7 +176,7 @@ public class FragmentPerfil extends Fragment {
         Bitmap img = ((BitmapDrawable) ivImagenPerfil.getDrawable()).getBitmap();
         Bitmap comprimido = Util.comprimirImagen(img);
         String convertida = Util.bitmapToBase64(comprimido);
-        usuario.setImagen(convertida);
+        actualizarUsuario.setImagen(convertida);
     }
 
 
