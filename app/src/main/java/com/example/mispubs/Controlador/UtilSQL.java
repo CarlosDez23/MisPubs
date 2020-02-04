@@ -45,7 +45,7 @@ public class UtilSQL {
         return aux;
     }
 
-    public static void insertarUsuarioLocal(Usuario u, Context context){
+    public static void insertarUsuarioLocal(Usuario u, Context context) {
         ControladorBD controlador = new ControladorBD(context, NOMBRE_BD, null, VERSION_BD);
         SQLiteDatabase bd = controlador.getWritableDatabase();
         ContentValues contenido = new ContentValues();
@@ -53,18 +53,18 @@ public class UtilSQL {
         contenido.put("nombre", u.getNombre());
         contenido.put("correo", u.getCorreo());
         contenido.put("password", u.getPassword());
-        if (u.getImagen() == null){
+        if (u.getImagen() == null) {
             contenido.put("imagen", Util.bitmapToBase64
                     (BitmapFactory.decodeResource(context.getResources(), R.drawable.man)));
-        }else{
+        } else {
             contenido.put("imagen", u.getImagen());
         }
-        bd.insert("USUARIO",null,contenido);
+        bd.insert("USUARIO", null, contenido);
         bd.close();
         controlador.close();
     }
 
-    public static void insertarSesionLocal(Sesion s, Context context){
+    public static void insertarSesionLocal(Sesion s, Context context) {
         ControladorBD controlador = new ControladorBD(context, NOMBRE_BD, null, VERSION_BD);
         SQLiteDatabase bd = controlador.getWritableDatabase();
         ContentValues contenido = new ContentValues();
@@ -78,16 +78,32 @@ public class UtilSQL {
         controlador.close();
     }
 
-    public static void eliminarSesionLocal(int idSesion, Context context){
+    public static void eliminarSesionLocal(int idSesion, Context context) {
         ControladorBD controlador = new ControladorBD(context, NOMBRE_BD, null, VERSION_BD);
         SQLiteDatabase bd = controlador.getWritableDatabase();
-        bd.delete("SESION","id="+idSesion, null);
+        bd.delete("SESION", "id=" + idSesion, null);
     }
 
-    public static void eliminarUsuarioLocal(int idUsuario, Context context){
+    public static void eliminarUsuarioLocal(int idUsuario, Context context) {
         ControladorBD controlador = new ControladorBD(context, NOMBRE_BD, null, VERSION_BD);
         SQLiteDatabase bd = controlador.getWritableDatabase();
-        bd.delete("USUARIO", "id="+idUsuario, null);
+        bd.delete("USUARIO", "id=" + idUsuario, null);
+    }
 
+    public static void actualizarUsuarioLocal(Usuario u, Context context) {
+        ControladorBD controlador = new ControladorBD(context, NOMBRE_BD, null, VERSION_BD);
+        SQLiteDatabase bd = controlador.getWritableDatabase();
+        ContentValues contenido = new ContentValues();
+        contenido.put("id", u.getId());
+        contenido.put("nombre", u.getNombre());
+        contenido.put("correo", u.getCorreo());
+        contenido.put("password", u.getPassword());
+        if (u.getImagen() == null) {
+            contenido.put("imagen", Util.bitmapToBase64
+                    (BitmapFactory.decodeResource(context.getResources(), R.drawable.man)));
+        } else {
+            contenido.put("imagen", u.getImagen());
+        }
+        bd.update("USUARIO", contenido, "id="+u.getId(), null);
     }
 }
