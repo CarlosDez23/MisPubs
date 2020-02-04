@@ -509,13 +509,20 @@ public class FragmentDetallePubs extends Fragment {
                                     Toast.makeText(getContext(), "Pub registrado",
                                             Toast.LENGTH_LONG).show();
 
+                                    Pub aux = response.body();
+                                    nombrePub.getEditText().setText(aux.getNombre());
+                                    webPub.getEditText().setText(aux.getWeb());
+                                    visitasPub.getEditText().setText(aux.getVisitas().toString());
+                                    ivDetallePubs.setImageBitmap(Util.base64ToBitmap(aux.getImagen()));
+
+                                    /*
                                     FragmentPubs pubs = new FragmentPubs();
                                     FragmentManager fm = getFragmentManager();
                                     FragmentTransaction transaction = fm.beginTransaction();
                                     transaction.replace(R.id.nav_host_fragment, pubs);
                                     transaction.addToBackStack(null);
                                     transaction.commit();
-
+                                    */
                                 }
                             }
 
@@ -554,12 +561,15 @@ public class FragmentDetallePubs extends Fragment {
                     Toast.makeText(getContext(), "Pub actualizado",
                             Toast.LENGTH_LONG).show();
 
+                    /*
                     FragmentPubs pubs = new FragmentPubs();
                     FragmentManager fm = getFragmentManager();
                     FragmentTransaction transaction = fm.beginTransaction();
                     transaction.replace(R.id.nav_host_fragment, pubs);
                     transaction.addToBackStack(null);
                     transaction.commit();
+                    */
+
                 }
             }
 
@@ -583,12 +593,14 @@ public class FragmentDetallePubs extends Fragment {
                         Toast.makeText(getContext(), response.body().getNombre() + "Eliminado",
                                 Toast.LENGTH_LONG).show();
 
+                        /*
                         FragmentPubs pubs = new FragmentPubs();
                         FragmentManager fm = getFragmentManager();
                         FragmentTransaction transaction = fm.beginTransaction();
                         transaction.replace(R.id.nav_host_fragment, pubs);
                         transaction.addToBackStack(null);
                         transaction.commit();
+                        */
                     }
                 }
             }
