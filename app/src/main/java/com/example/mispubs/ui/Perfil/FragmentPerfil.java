@@ -358,7 +358,6 @@ public class FragmentPerfil extends Fragment {
                             Toast.LENGTH_LONG).show();
                 }
             }
-
             @Override
             public void onFailure(Call<Usuario> call, Throwable t) {
                 Log.e("ERROR: ", t.getMessage());
