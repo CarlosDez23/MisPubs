@@ -26,6 +26,8 @@ public class UtilSQL {
             aux = new Sesion(c.getInt(1), c.getString(2), c.getString(3), c.getString(4));
             aux.setId(c.getInt(0));
         }
+        bd.close();
+        controlador.close();
         return aux;
     }
 
@@ -98,6 +100,7 @@ public class UtilSQL {
         ControladorBD controlador = new ControladorBD(context, NOMBRE_BD, null, VERSION_BD);
         SQLiteDatabase bd = controlador.getWritableDatabase();
         ContentValues contenido = new ContentValues();
+        System.out.println(u.toString());
         contenido.put("id", u.getId());
         contenido.put("nombre", u.getNombre());
         contenido.put("correo", u.getCorreo());

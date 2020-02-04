@@ -40,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
         return usuario;
     }
 
+    public static void setUsuario(Usuario user){
+        usuario = user;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

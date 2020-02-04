@@ -4,6 +4,7 @@ package com.example.mispubs.ui.Login;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -207,7 +208,8 @@ public class FragmentRegistro extends Fragment {
 
                 if (email.length() > 0 && password.length() > 0 && usuario.length() > 0) {
                     if (esApto) {
-                        Usuario u = new Usuario(usuario, email, cifrada, null);
+                        Usuario u = new Usuario(usuario, email, cifrada, Util.bitmapToBase64
+                                (BitmapFactory.decodeResource(getContext().getResources(), R.drawable.man)));
                         if (Util.isOnline(getContext())){
                             insertarUsuario(u);
 

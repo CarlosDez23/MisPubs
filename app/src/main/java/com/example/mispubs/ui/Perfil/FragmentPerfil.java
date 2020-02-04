@@ -30,6 +30,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.mispubs.Controlador.UtilSQL;
 import com.example.mispubs.MainActivity;
+import com.example.mispubs.Modelo.Sesion;
 import com.example.mispubs.Modelo.Usuario;
 import com.example.mispubs.R;
 import com.example.mispubs.REST.APIUtils;
@@ -179,7 +180,9 @@ public class FragmentPerfil extends Fragment {
         actualizarUsuario.setImagen(convertida);
 
         UtilSQL.actualizarUsuarioLocal(actualizarUsuario,getContext());
-        usuario = UtilSQL.consultarUsuarioLocal(getContext());
+        //usuario = UtilSQL.consultarUsuarioLocal(getContext());
+        MainActivity.setUsuario(actualizarUsuario);
+
 
     }
 
@@ -233,6 +236,7 @@ public class FragmentPerfil extends Fragment {
                 switch (which) {
                     case 0:
                         if (Util.isOnline(getContext())) {
+                            UtilSQL.eliminarUsuarioLocal(usuario.getId(),getContext());
                             eliminarUsuario();
                         } else {
                             Toast.makeText(getContext(), "Debes activar una conexión a internet ", Toast.LENGTH_LONG).show();
@@ -279,6 +283,7 @@ public class FragmentPerfil extends Fragment {
         //Borramos la sesión local
         UtilSQL.eliminarSesionLocal(id,getContext());
         UtilSQL.eliminarUsuarioLocal(usuario.getId(),getContext());
+        eliminarSesion(id);
         startActivity(new Intent(getActivity(), ActivityLogin.class));
         getActivity().finish();
     }
@@ -382,7 +387,9 @@ public class FragmentPerfil extends Fragment {
                 if (response.isSuccessful()) {
                     System.out.println("OK");
                     if (response.code() == 200) {
-                        System.out.println("Eliminado");
+                        int id = UtilSQL.consultarSesion(getContext()).getId();
+                        eliminarSesion(id);
+                        UtilSQL.eliminarSesionLocal(id, getContext());
                         Toast.makeText(getContext(), response.body().getNombre() + " eliminado",
                                 Toast.LENGTH_LONG).show();
                         startActivity(new Intent(getActivity(), ActivityLogin.class));
@@ -395,6 +402,26 @@ public class FragmentPerfil extends Fragment {
             @Override
             public void onFailure(Call<Usuario> call, Throwable t) {
                 System.out.println("Mal");
+            }
+        });
+    }
+
+    private void eliminarSesion(int id){
+        Call<Sesion> call = sesionRest.eliminarSesion(id);
+        call.enqueue(new Callback<Sesion>() {
+            @Override
+            public void onResponse(Call<Sesion> call, Response<Sesion> response) {
+                if(response.isSuccessful()){
+                    if (response.code() == 200 ){
+                        Toast.makeText(getContext(), " Sesión finalizada",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Sesion> call, Throwable t) {
+
             }
         });
     }
