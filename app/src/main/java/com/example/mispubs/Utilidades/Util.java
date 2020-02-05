@@ -78,6 +78,12 @@ public class Util {
         return Hexadecimal(md.digest());
     }
 
+    /**
+     * Método para convertir en hexadecimal un array de bytes con el resumen de una
+     * cadena
+     * @param resumen
+     * @return
+     */
     private static String Hexadecimal(byte[] resumen) {
         String hex = "";
         for (int i = 0; i < resumen.length; i++) {
