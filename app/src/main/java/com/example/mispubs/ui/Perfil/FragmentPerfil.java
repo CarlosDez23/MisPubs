@@ -132,7 +132,6 @@ public class FragmentPerfil extends Fragment {
                     break;
                 case R.id.edit:
                     //ponemos invisible el boton pulsado, mostramos el de modificar y habilitamos los campos
-                    //modoActualizar(true);
                     imageViewEdit.setVisibility(View.INVISIBLE);
                     imageViewModificar.setVisibility(View.VISIBLE);
                     ivImagenPerfil.setEnabled(true);
@@ -144,7 +143,6 @@ public class FragmentPerfil extends Fragment {
                 case R.id.ivPerfilModificar:
 
                     cambiarImagen();
-
                     //ponemos invisible el boton pulsado, mostramos el de editar y deshabilitamos los campos
                     imageViewModificar.setVisibility(View.INVISIBLE);
                     imageViewEdit.setVisibility(View.VISIBLE);

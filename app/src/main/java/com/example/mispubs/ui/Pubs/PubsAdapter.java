@@ -84,22 +84,21 @@ public class PubsAdapter extends RecyclerView.Adapter<PubsAdapter.ViewHolder> {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
-                            case R.id.itemmenu1:
+                            case R.id.itemmenu1://valoraciones
                                 FragmentValoraciones fragmentValoraciones = new FragmentValoraciones(pubLista);
                                 transaction = fm.beginTransaction();
                                 transaction.replace(R.id.nav_host_fragment, fragmentValoraciones);
                                 transaction.addToBackStack(null);
                                 transaction.commit();
                                 break;
-                            case R.id.itemmenu2:
-                                //Toast.makeText(context,"Modificar "+pubLista.getNombre(),Toast.LENGTH_LONG).show();
+                            case R.id.itemmenu2://modificar
                                 detallePubs = new FragmentDetallePubs(listaPubs.get(position),2);
                                 transaction = fm.beginTransaction();
                                 transaction.replace(R.id.nav_host_fragment,detallePubs );
                                 transaction.addToBackStack(null);
                                 transaction.commit();
                                 break;
-                            case R.id.itemmenu3:
+                            case R.id.itemmenu3://borrar
                                 //Toast.makeText(context,"Borrar "+pubLista.getNombre(),Toast.LENGTH_LONG).show();
                                 FragmentDetallePubs detallePubs = new FragmentDetallePubs(listaPubs.get(position),3);
                                 transaction = fm.beginTransaction();
