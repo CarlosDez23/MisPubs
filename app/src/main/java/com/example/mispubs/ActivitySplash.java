@@ -40,58 +40,74 @@ public class ActivitySplash extends AppCompatActivity {
 
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.getSupportActionBar().hide();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                File bd = new File("/data/data/com.example.mispubs/databases/BDConfig");
-                if (!bd.exists()) {
-                    irLogin();
-                } else {
-                    sesion = UtilSQL.consultarSesion(getApplicationContext());
-                    if (sesion == null) {
-                        irLogin();
-                    } else {
-                        Date fechaActual = new Date();
-                        Date fechafin = Util.parseFecha(sesion.getFechafin());
-                        int dias = (int) ((fechafin.getTime() - fechaActual.getTime()) / 86400000);
-                        if (dias < 0) {
-                            UtilSQL.eliminarSesionLocal(sesion.getId(), getApplicationContext());
-                            eliminarSesion(sesion.getId());
-                            irLogin();
-                        } else {
-                            irMain();
-                        }
-                    }
+        if (Util.isOnline(getApplicationContext())) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    gestionarInicioApp();
+                    finish();
                 }
-                finish();
-            }
-        }, 3000);//tiempo que debe estar ejecutandose
+            }, 3000);//tiempo que debe estar ejecutandose
+
+        } else {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "Debes tener una conexión a internet " +
+                            "para empezar ", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }, 3000);//tiempo que debe estar ejecutandose
+        }
     }
 
-    private void irLogin(){
+    private void gestionarInicioApp() {
+        File bd = new File("/data/data/com.example.mispubs/databases/BDConfig");
+        if (!bd.exists()) {
+            irLogin();
+        } else {
+            sesion = UtilSQL.consultarSesion(getApplicationContext());
+            if (sesion == null) {
+                irLogin();
+            } else {
+                Date fechaActual = new Date();
+                Date fechafin = Util.parseFecha(sesion.getFechafin());
+                int dias = (int) ((fechafin.getTime() - fechaActual.getTime()) / 86400000);
+                if (dias < 0) {
+                    UtilSQL.eliminarSesionLocal(sesion.getId(), getApplicationContext());
+                    eliminarSesion(sesion.getId());
+                    irLogin();
+                } else {
+                    irMain();
+                }
+            }
+        }
+    }
+
+    private void irLogin() {
         Intent intent = new Intent(ActivitySplash.this, ActivityLogin.class);
         startActivity(intent);
     }
 
-    private void irMain(){
+    private void irMain() {
         Intent intent = new Intent(ActivitySplash.this, MainActivity.class);
         startActivity(intent);
     }
 
-    private void eliminarSesion(int id){
+    private void eliminarSesion(int id) {
         sesionRest = APIUtils.getServiceSesiones();
         Call<Sesion> call = sesionRest.eliminarSesion(id);
         call.enqueue(new Callback<Sesion>() {
             @Override
             public void onResponse(Call<Sesion> call, Response<Sesion> response) {
-                if(response.isSuccessful()){
-                    if (response.code() == 200 ){
+                if (response.isSuccessful()) {
+                    if (response.code() == 200) {
                         Toast.makeText(getApplicationContext(), " Sesión expirada",
                                 Toast.LENGTH_LONG).show();
                     }
                 }
             }
+
             @Override
             public void onFailure(Call<Sesion> call, Throwable t) {
 
