@@ -47,6 +47,11 @@ public class ValoracionDialog extends AppCompatDialogFragment {
         this.fragmentValoraciones = fragmentValoraciones;
     }
 
+    /**
+     * Creamos el dialog para realizar una valoración
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -65,6 +70,9 @@ public class ValoracionDialog extends AppCompatDialogFragment {
                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        /**
+                         * Comprobamos que no sea una valoración vacía
+                         */
                         if (rbValoracion.getRating() == 0.0) {
                             Toast.makeText(getContext(), "Tienes que valorar el pub",
                                     Toast.LENGTH_LONG).show();
@@ -72,6 +80,9 @@ public class ValoracionDialog extends AppCompatDialogFragment {
                             Toast.makeText(getContext(), "Tienes que realizar un comentario",
                                     Toast.LENGTH_LONG).show();
                         } else {
+                            /**
+                             * Si se cumplen los requisitos, realizamos una valoración
+                             */
                             Valoracion v = new Valoracion(MainActivity.getUsuario().getId(),
                                     idPub, (int) rbValoracion.getRating(),
                                     tvValoracion.getEditText().getText().toString());
@@ -107,7 +118,7 @@ public class ValoracionDialog extends AppCompatDialogFragment {
 
             @Override
             public void onFailure(Call<Valoracion> call, Throwable t) {
-
+                Toast.makeText(getContext(), "No se ha podido registrar tu valoración", Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -4,9 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -14,19 +12,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.mispubs.Controlador.UtilSQL;
 import com.example.mispubs.MainActivity;
@@ -38,9 +32,6 @@ import com.example.mispubs.REST.SesionRest;
 import com.example.mispubs.REST.UsuarioRest;
 import com.example.mispubs.Utilidades.Util;
 import com.example.mispubs.ui.Login.ActivityLogin;
-import com.example.mispubs.ui.Mapas.FragmentMapas;
-import com.example.mispubs.ui.Pubs.FragmentDetallePubs;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
@@ -92,6 +83,10 @@ public class FragmentPerfil extends Fragment {
 
     }
 
+    /**
+     * Llamando a las vistas del layout
+     */
+
     private void llamarVistas() {
 
         this.etPerfilNombre = getView().findViewById(R.id.etPerfilNombre);
@@ -122,6 +117,9 @@ public class FragmentPerfil extends Fragment {
 
     }
 
+    /**
+     * Listener para los botones
+     */
 
     private View.OnClickListener listenerBotones = new View.OnClickListener() {
         @Override
@@ -170,6 +168,10 @@ public class FragmentPerfil extends Fragment {
         }
     };
 
+    /**
+     * Actualizamos los datos tanto de nuestro usuario local como del remoto
+     */
+
     private void actualizarSesion(){
         Log.e("Entroooo", actualizarUsuario.getNombre() + usuario.getNombre());
         etPerfilNombre.setText(actualizarUsuario.getNombre());
@@ -207,25 +209,9 @@ public class FragmentPerfil extends Fragment {
         actualizarUsuario.setImagen(convertida);
     }
 
-
-   /* private void modoActualizar(boolean modo) {
-
-        etPerfilNombre.setEnabled(modo);
-        etPerfilCorreo.setEnabled(modo);
-        etPerfilPassword.setEnabled(modo);
-
-        if (modo) {
-            imageViewEdit.setVisibility(View.INVISIBLE);
-            imageViewModificar.setVisibility(View.VISIBLE);
-            ivImagenPerfil.setEnabled(true);
-            this.etPerfilPassword.setText(this.usuario.getPassword());
-        } else {
-            imageViewModificar.setVisibility(View.INVISIBLE);
-            imageViewEdit.setVisibility(View.VISIBLE);
-            etPerfilPassword.setText("PASSWORD");
-        }
-    }*/
-
+    /**
+     * Dialog de confirmación del usuario
+     */
     private void mostrarDialogoEliminar() {
         AlertDialog.Builder deleteDialog = new AlertDialog.Builder(getContext());
         deleteDialog.setTitle(usuario.getNombre() + ", ¿Estás seguro de querer eliminar tu cuenta?");
@@ -254,6 +240,9 @@ public class FragmentPerfil extends Fragment {
         deleteDialog.show();
     }
 
+    /**
+     * Dialog de confirmación del usuario
+     */
     private void mostrarDialogoCerrarSesion() {
         AlertDialog.Builder deleteDialog = new AlertDialog.Builder(getContext());
         deleteDialog.setTitle(usuario.getNombre() + ", ¿Estás seguro de querer cerrar sesion?");
@@ -277,6 +266,10 @@ public class FragmentPerfil extends Fragment {
         deleteDialog.show();
     }
 
+    /**
+     * Cerramos la sesión, borramos los datos de la sesión y del usuario de la base de datos
+     * local y llamamos al servicio para también borrar la sesión del servicio
+     */
 
     private void cerrarSesion() {
         int id = UtilSQL.consultarSesion(getContext()).getId();
@@ -288,6 +281,9 @@ public class FragmentPerfil extends Fragment {
         getActivity().finish();
     }
 
+    /**
+     * Dialog para elegir foto de la galería o sacarla con la cámara
+     */
     private void gestionImagen() {
         AlertDialog.Builder fotoDialogo = new AlertDialog.Builder(getContext());
         fotoDialogo.setTitle("Elige un método de entrada");
@@ -406,6 +402,10 @@ public class FragmentPerfil extends Fragment {
         });
     }
 
+    /**
+     * Consumimos el rest para eliminar la sesión
+     * @param id
+     */
     private void eliminarSesion(int id){
         Call<Sesion> call = sesionRest.eliminarSesion(id);
         call.enqueue(new Callback<Sesion>() {

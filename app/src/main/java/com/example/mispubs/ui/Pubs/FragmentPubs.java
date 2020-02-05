@@ -247,7 +247,7 @@ public class FragmentPubs extends Fragment {
 
             @Override
             public void onFailure(Call<List<Pub>> call, Throwable t) {
-
+                Toast.makeText(getContext(), "No se han podido recuperar los pubs ", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -271,6 +271,7 @@ public class FragmentPubs extends Fragment {
 
             @Override
             public void onFailure(Call<List<Pub>> call, Throwable t) {
+                Toast.makeText(getContext(), "No se han podido recuperar los pubs ", Toast.LENGTH_LONG).show();
 
             }
         });

@@ -71,6 +71,11 @@ public class PubsAdapter extends RecyclerView.Adapter<PubsAdapter.ViewHolder> {
             holder.ivPubs.setImageResource(R.drawable.fondo_por_defecto);
         }
         holder.ivMenu.setOnClickListener(new View.OnClickListener() {
+
+            /**
+             * Parte de gestión del menú contextual que se despliega en cada item del layout
+             * @param v
+             */
             @Override
             public void onClick(View v) {
                 PopupMenu popupMenu = new PopupMenu(context, holder.ivMenu);
