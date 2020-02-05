@@ -76,9 +76,13 @@ public class FragmentPerfil extends Fragment {
         super.onActivityCreated(savedInstanceState);
         //Cojemos el objeto usuario
         fm = getFragmentManager();
-        usuario = MainActivity.getUsuario();
-        usuarioRest = APIUtils.getService();
-        sesionRest = APIUtils.getServiceSesiones();
+        if(Util.isOnline(getContext())){
+            usuario = MainActivity.getUsuario();
+            usuarioRest = APIUtils.getService();
+            sesionRest = APIUtils.getServiceSesiones();
+        }else{
+            Toast.makeText(getContext(),"Necesitas una conexión a internet", Toast.LENGTH_LONG).show();
+        }
         llamarVistas();
 
     }
@@ -171,7 +175,6 @@ public class FragmentPerfil extends Fragment {
      */
 
     private void actualizarSesion(){
-        Log.e("Entroooo", actualizarUsuario.getNombre() + usuario.getNombre());
         etPerfilNombre.setText(actualizarUsuario.getNombre());
         etPerfilCorreo.setText(actualizarUsuario.getCorreo());
         Bitmap img = ((BitmapDrawable) ivImagenPerfil.getDrawable()).getBitmap();
