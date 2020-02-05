@@ -74,7 +74,11 @@ public class FragmentRegistro extends Fragment {
         llamarVistas();
         inputChange();
         setOnClickRegistrarse();
-        usuarioRest = APIUtils.getService();
+        if(Util.isOnline(getContext())){
+            usuarioRest = APIUtils.getService();
+        }else{
+            Toast.makeText(getContext(),"Debes tener una conexión a internet", Toast.LENGTH_LONG).show();
+        }
 
     }
 
