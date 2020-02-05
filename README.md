@@ -1,0 +1,4 @@
+MisPubs es una herramienta que se encarga de ofrecer al usuario una lista de pubs y le permite realizar búsquedas en función del estilo musical del pub. Además, el usuario puede modificar, añadir y eliminar pubs, así como consultar su posición en el mapa. Igualmente, el usuario puede realizar una búsqueda por voz del estilo musical que quiere.
+Por otro lado, también puede acceder a un sistema de valoraciones en el que podrá realizar su propia valoración en un pub además de poder ver las realizadas por los demás usuarios. 
+Finalmente, también podrá realizar las acciones clásicas de un perfil de usuario: cambiarse la foto de perfil, la contraseña y el nombre de usuario. También podrá eliminar su cuenta y cerrar sesión. 
+Para la realización de esta documentación, en el momento en el que vayamos a consumir el servicio REST realizado con la tecnología de Spring Boot, también se enseñará el método específico en el servicio
