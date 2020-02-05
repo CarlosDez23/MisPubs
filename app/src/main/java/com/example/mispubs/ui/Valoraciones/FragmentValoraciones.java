@@ -77,9 +77,10 @@ public class FragmentValoraciones extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        valoracionRest = APIUtils.getServiceValoraciones();
-        usuarioRest = APIUtils.getService();
-
+        if (Util.isOnline(getContext())) {
+            valoracionRest = APIUtils.getServiceValoraciones();
+            usuarioRest = APIUtils.getService();
+        }
         llamarVistas();
     }
 
