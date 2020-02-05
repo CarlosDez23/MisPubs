@@ -66,7 +66,12 @@ public class FragmentPubs extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        pubRest = APIUtils.getServicePubs();
+        if(Util.isOnline(getContext())){
+            pubRest = APIUtils.getServicePubs();
+        }else{
+            Toast.makeText(getContext(), "Necesitas una conexión a internet", Toast.LENGTH_LONG).show();
+        }
+
         llamarVistas();
 
     }
