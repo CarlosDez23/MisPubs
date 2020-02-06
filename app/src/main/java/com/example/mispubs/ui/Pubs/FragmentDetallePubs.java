@@ -508,6 +508,7 @@ public class FragmentDetallePubs extends Fragment {
                                 if (response.code() == 200) {
                                     Toast.makeText(getContext(), "Pub registrado",
                                             Toast.LENGTH_LONG).show();
+                                    btnDetallePubBotonModo.setEnabled(false);
 
                                     Pub aux = response.body();
                                     nombrePub.getEditText().setText(aux.getNombre());
@@ -552,6 +553,7 @@ public class FragmentDetallePubs extends Fragment {
                 if (response.code() == 200) {
                     Toast.makeText(getContext(), "Pub actualizado",
                             Toast.LENGTH_LONG).show();
+                    btnDetallePubBotonModo.setEnabled(false);
 
                 }
             }
@@ -573,6 +575,7 @@ public class FragmentDetallePubs extends Fragment {
             public void onResponse(Call<Pub> call, Response<Pub> response) {
                 if (response.isSuccessful()) {
                     if (response.code() == 200) {
+                        btnDetallePubBotonModo.setEnabled(false);
                         Toast.makeText(getContext(), response.body().getNombre() + "Eliminado",
                                 Toast.LENGTH_LONG).show();
 
